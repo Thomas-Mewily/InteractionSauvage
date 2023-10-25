@@ -12,7 +12,18 @@ public class SimulationFactory
         Simulation = (s == null ? new Simulation() : s!);
     }
 
-    public static MachineEtat Mouton = null;
+    public static MachineEtat Mouton;
+
+    static SimulationFactory() 
+    {
+        Mouton = new MachineEtat();
+        Mouton.Etats.Add(new Etat(Etat.ActionEnum.MarcherAleatoire,
+                                  new Transition(
+                                        new Interruption(Interruption.InterruptionEnum.Fatigue), new List<EtatSuivant>() { new EtatSuivant(1, 0) }
+                                        )
+                                  )); 
+    }
+
 
     public Entite GenerateEntity() 
     {

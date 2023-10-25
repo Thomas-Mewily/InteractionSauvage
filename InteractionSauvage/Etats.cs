@@ -48,6 +48,7 @@ public class Etat
     public ActionEnum Action;
     public List<Transition> Transitions;
 
+    public Etat(ActionEnum action, params Transition[] transitions) : this(action, transitions.ToList()) { }
     public Etat(ActionEnum action, List<Transition> transitions)
     {
         Action = action;

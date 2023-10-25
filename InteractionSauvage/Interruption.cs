@@ -16,6 +16,12 @@ public class Interruption
 
         Timer,
     }
+    public InterruptionEnum InterruptionType;
     public int Arg;
 
+    public Interruption(InterruptionEnum interruptionType, int arg = 0)
+    {
+        InterruptionType = interruptionType;
+        Arg = arg;
+    }
 }

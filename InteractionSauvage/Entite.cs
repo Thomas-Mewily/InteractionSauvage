@@ -7,9 +7,9 @@ public class MachineEtat
     public List<Etat> Etats;
     public Etat this[int i] => Etats[i];
 
-    public MachineEtat(List<Etat> machineEtat)
+    public MachineEtat(List<Etat> machineEtat = null)
     {
-        Etats = machineEtat;
+        Etats = (machineEtat == null ? new List<Etat>() : machineEtat);
     }
 }
 
