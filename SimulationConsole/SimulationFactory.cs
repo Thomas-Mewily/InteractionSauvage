@@ -21,7 +21,13 @@ public class SimulationFactory
                                   new Transition(
                                         new Interruption(Interruption.InterruptionEnum.Fatigue), new List<EtatSuivant>() { new EtatSuivant(1, 0) }
                                         )
-                                  )); 
+                                  ));
+
+        Mouton.Etats.Add(new Etat(Etat.ActionEnum.Dormir,
+                                  new Transition(
+                                        new Interruption(Interruption.InterruptionEnum.Repose), new List<EtatSuivant>() { new EtatSuivant(1, 6) }
+                                        )
+                                  ));
     }
 
 
