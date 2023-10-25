@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractionSauvage", "InteractionSauvage\InteractionSauvage.csproj", "{2BAA6A48-1D5D-4011-A79D-DAE403569691}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationConsole", "SimulationConsole\SimulationConsole.csproj", "{F5E186B7-2B78-481A-BC0A-78C0CF19B1C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2BAA6A48-1D5D-4011-A79D-DAE403569691}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BAA6A48-1D5D-4011-A79D-DAE403569691}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BAA6A48-1D5D-4011-A79D-DAE403569691}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5E186B7-2B78-481A-BC0A-78C0CF19B1C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5E186B7-2B78-481A-BC0A-78C0CF19B1C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5E186B7-2B78-481A-BC0A-78C0CF19B1C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5E186B7-2B78-481A-BC0A-78C0CF19B1C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
