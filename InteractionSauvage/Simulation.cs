@@ -14,7 +14,6 @@ public class Simulation //: IEnumerable<Simulation>, IEnumerator<Simulation>
         ToutesLesEntites = new List<Entite>();
         EntitesDeBase = new List<Entite>();
         Reset();
-        Console.WriteLine("Coucou2");
     }
 
     public bool IsOver => Time > MaxTime;
