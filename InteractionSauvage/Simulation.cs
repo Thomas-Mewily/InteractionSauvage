@@ -11,6 +11,7 @@ public class Simulation //: IEnumerable<Simulation>, IEnumerator<Simulation>
 
     public Simulation()
     {
+        ToutesLesEntites = new List<Entite>();
         EntitesDeBase = new List<Entite>();
         Reset();
         Console.WriteLine("Coucou2");

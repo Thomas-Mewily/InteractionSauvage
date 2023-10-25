@@ -2,9 +2,20 @@
 
 namespace InteractionSauvage;
 
+public class MachineEtat
+{
+    public List<Etat> Etats;
+    public Etat this[int i] => Etats[i];
+
+    public MachineEtat(List<Etat> machineEtat)
+    {
+        Etats = machineEtat;
+    }
+}
+
 public class Entite
 {
-    public List<Etat> MachineEtat;
+    MachineEtat MachineEtat;
     public Etat Etat => MachineEtat[Actuel.EtatIndex];
 
     public float Score = 0;
@@ -12,9 +23,9 @@ public class Entite
     public Caracteristiques Actuel;
     public Caracteristiques DeBase;
 
-    public Entite()
+    public Entite(MachineEtat e)
     {
-        MachineEtat = new List<Etat>();
+        MachineEtat = e;
         DeBase = new Caracteristiques();
     }
 

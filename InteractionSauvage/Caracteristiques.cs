@@ -6,7 +6,7 @@ public struct Caracteristiques
     public float Nourriture;
 
     // [0, 1]. Si 0 => Dodo forcé
-    public float Fatigue;
+    public float Energie;
 
     public float Direction;
 
