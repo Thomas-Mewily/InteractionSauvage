@@ -38,6 +38,7 @@ public class SimulationFactory
         e.DeBase.Y = Rng.Next(0, 100);
         e.DeBase.VX = 0;
         e.DeBase.VY = 0;
+        e.DeBase.VitesseMax = 2;
         e.DeBase.Age = 10;
         e.DeBase.Energie = 1;
         e.DeBase.Direction = (float)(Rng.NextDouble() % (2f * Math.PI));

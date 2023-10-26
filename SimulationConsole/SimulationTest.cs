@@ -13,8 +13,15 @@ internal class Program
 
     public void Simulate(Simulation s)
     {
-        Console.WriteLine("Bob");
-        s.ToutesLesEntites.ForEach(entite => {Console.WriteLine(entite.Actuel.Age);});
+        s.Reset();
+        s.ToutesLesEntites.ForEach(entite => {entite.Affiche();});
+        for (int i = 0; i < 100; i++)
+        {
+            Console.WriteLine("-----------" +  i + "-----------");
+            s.OneStep();
+            s.ToutesLesEntites.ForEach(entite => { entite.Affiche(); });
+        }
+        
     }
 
     public Program()

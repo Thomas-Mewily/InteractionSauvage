@@ -30,19 +30,20 @@ public class Transition
 
 public class Etat
 {
+
     public enum ActionEnum
     {
-        Dormir,
+        Dormir, //0
 
-        Crier,
+        Crier, //1
 
-        Attendre,
+        Attendre, //2
 
-        AssurerLaDescendence,
+        AssurerLaDescendence, //3
 
-        MarcherNourriture,
-        MarcherFuir,
-        MarcherAleatoire
+        MarcherNourriture, //4
+        MarcherFuir, //5
+        MarcherAleatoire //6
     }
 
     public ActionEnum Action;
@@ -53,5 +54,11 @@ public class Etat
     {
         Action = action;
         Transitions = transitions;
+    }
+
+
+    override public string ToString()
+    {
+        return Action.ToString();
     }
 }
