@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.ConstrainedExecution;
 using static InteractionSauvage.Etat;
 
@@ -9,7 +10,7 @@ public class MachineEtat
     public List<Etat> Etats;
     public Etat this[int i] => Etats[i];
 
-    public MachineEtat(List<Etat> machineEtat = null)
+    public MachineEtat(List<Etat>? machineEtat = null)
     {
         Etats = (machineEtat == null ? new List<Etat>() : machineEtat);
     }
@@ -23,28 +24,29 @@ public class Entite
 
     public float Score = 0;
     public int TempsDeRepos = 0;
-    public string nom = "Sans Nom";
+    public string Nom;
 
-    public Caracteristiques Actuel;
-    public Caracteristiques DeBase;
+    public double X { get => Actuel.X; set => Actuel.X = value; } 
+    public double Y { get => Actuel.Y; set => Actuel.Y = value; }
+    public double VX { get => Actuel.VX; set => Actuel.VX = value; }
+    public double VY { get => Actuel.VY; set => Actuel.VY = value; }
+    public double Direction { get => Actuel.Direction; set => Actuel.Direction = value; }
+    public double Energie { get => Actuel.Energie; set => Actuel.Energie = value; }
+    public double Nourriture { get => Actuel.Nourriture; set => Actuel.Nourriture = value; }
+    public int Age { get => Actuel.Age; set => Actuel.Age = value; }
 
-    private Random rand; 
+    private Caracteristiques Actuel;
+    public  Caracteristiques DeBase;
 
-    public Entite(MachineEtat e)
+    private Simulation Inside;
+    private Random Rand => Inside.Rand;
+
+    public Entite(Simulation simu, MachineEtat? e, string? nom = null)
     {
-        InitMachine(e);
-    }
-    public Entite(MachineEtat e, string nom)
-    {
-        this.nom = new string(nom);
-        InitMachine(e);
-    }
-
-    private void InitMachine(MachineEtat e)
-    {
-        MachineEtat = e;
+        Inside = simu;
+        Nom = nom == null ? "Sans Nom" : nom;
+        MachineEtat = e == null ? new MachineEtat() : e;
         DeBase = new Caracteristiques();
-        rand = new Random();
 
         Actions[(int)Etat.ActionEnum.Dormir] = Dormir;
         Actions[(int)Etat.ActionEnum.Attendre] = Attendre;
@@ -71,7 +73,7 @@ public class Entite
         int tmpIndex = -1;
         if (Actuel.Energie == 0)
         {
-            TempsDeRepos = rand.Next(10, 20);
+            TempsDeRepos = Rand.Next(10, 20);
             tmpIndex = Etat.transitionTo(new Interruption(Interruption.InterruptionEnum.Fatigue));
             if (tmpIndex != -1) Actuel.EtatIndex = tmpIndex;
         }
@@ -92,7 +94,7 @@ public class Entite
 
     private void GenDirection()
     {
-        Actuel.Direction = (float)(rand.NextDouble() * (2f * Math.PI));
+        Actuel.Direction = (float)(Rand.NextDouble() * (2f * Math.PI));
     }
 
     private void Avancer()
@@ -106,7 +108,7 @@ public class Entite
 
     public void MarcherAleatoire()
     {
-        if (Actuel.Direction == 0 || rand.NextDouble() < 0.1)
+        if (Actuel.Direction == 0 || Rand.NextDouble() < 0.1)
         {
             GenDirection();
         }
@@ -129,7 +131,7 @@ public class Entite
 
     public void Affiche()
     {
-        Console.WriteLine("-------------- " + nom + " --------------");
+        Console.WriteLine("-------------- " + Nom + " --------------");
         Console.WriteLine("Categorie   = "  + Actuel.Categorie);
         Console.WriteLine("Etat        = "  + Etat);
         Console.WriteLine("EtatIndex   = "  + Actuel.EtatIndex);

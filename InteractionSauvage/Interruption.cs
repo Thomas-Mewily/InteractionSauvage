@@ -27,12 +27,10 @@ public class Interruption
         Arg = arg;
     }
 
-    public override bool Equals(object? obj)
-    {
-        if (obj == null) return false;
-        if (obj.GetType() != typeof(Interruption)) return false;
-        if (((Interruption)obj).InterruptionType == this.InterruptionType) return true;
+    public static bool operator ==(Interruption a, Interruption b) => a.InterruptionType == b.InterruptionType;
+    public static bool operator !=(Interruption a, Interruption b) => a.InterruptionType != b.InterruptionType;
+    
 
-        return false;
-    }
+    public override int GetHashCode() => (int)InterruptionType;
+    public override bool Equals(object? obj) => obj != null && obj is Interruption i && i == this;
 }

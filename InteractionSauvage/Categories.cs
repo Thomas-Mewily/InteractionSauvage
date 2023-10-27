@@ -19,17 +19,11 @@ public class Categories
         CategoriesNouritures = new List<CategorieEnum>();
     }
 
-    public override string ToString()
-    {
-        return Categorie.ToString();
-    }
+    public override string ToString() => Categorie.ToString();
 
-    public override bool Equals(object? obj)
-    {
-        if (obj == null) return false;
-        if (obj.GetType() != typeof(Categories)) return false;
-        if (((Categories)obj).Categorie == this.Categorie) return true;
+    public static bool operator ==(Categories a, Categories b) => a.Categorie == b.Categorie;
+    public static bool operator !=(Categories a, Categories b) => a.Categorie != b.Categorie;
 
-        return false;
-    }
+    public override int GetHashCode() => (int)Categorie;
+    public override bool Equals(object? obj) => obj != null && obj is Categories i && i == this;
 }

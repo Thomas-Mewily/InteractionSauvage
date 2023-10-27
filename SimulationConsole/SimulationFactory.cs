@@ -2,6 +2,23 @@
 
 namespace SimulationConsole;
 
+
+public static class EntiteExtension
+{
+    public static Entite WithRandomPosition(this Entite e) 
+    {
+        return e.WithPosition(SimulationFactory.Rng.Next(0, 100), SimulationFactory.Rng.Next(0, 100));
+    }
+
+
+    public static Entite WithPosition(this Entite e, float x, float y) 
+    {
+        e.DeBase.X = x;
+        e.DeBase.Y = y;
+        return e;
+    }
+}
+
 public class SimulationFactory
 {
     public Simulation Simulation { get; }
@@ -12,67 +29,62 @@ public class SimulationFactory
         Simulation = (s == null ? new Simulation() : s!);
     }
 
-    public static MachineEtat Mouton; 
-    public static MachineEtat Herbe;
+    public static MachineEtat MoutonME; 
+    public static MachineEtat HerbeME;
 
-    public static Categories Plantes;
-    public static Categories Herbivores;
+    public static Categories PlantesC;
+    public static Categories HerbivoresC;
 
     static SimulationFactory() 
     {
-        Mouton = new MachineEtat();
-        Mouton.Etats.Add(new Etat(Etat.ActionEnum.MarcherAleatoire,
+        MoutonME = new MachineEtat();
+        MoutonME.Etats.Add(new Etat(Etat.ActionEnum.MarcherAleatoire,
                                   new Transition(
                                         new Interruption(Interruption.InterruptionEnum.Fatigue), new List<EtatSuivant>() { new EtatSuivant(100, 1) }
                                         )
                                   ));
 
-        Mouton.Etats.Add(new Etat(Etat.ActionEnum.Dormir,
+        MoutonME.Etats.Add(new Etat(Etat.ActionEnum.Dormir,
                                   new Transition(
                                         new Interruption(Interruption.InterruptionEnum.Repose), new List<EtatSuivant>() { new EtatSuivant(100, 0) }
                                         )
                                   ));
 
-        Herbe = new MachineEtat();
-        Herbe.Etats.Add(new Etat(Etat.ActionEnum.Attendre, new Transition(
+        HerbeME = new MachineEtat();
+        HerbeME.Etats.Add(new Etat(Etat.ActionEnum.Attendre, new Transition(
                                         new Interruption(Interruption.InterruptionEnum.None), new List<EtatSuivant>() { new EtatSuivant(0, 0) }
                                         )
                                   )); ;
 
-        Plantes = new Categories(Categories.CategorieEnum.Plante);
+        PlantesC = new Categories(Categories.CategorieEnum.Plante);
 
-        Herbivores = new Categories(Categories.CategorieEnum.Herbivore);
-        Herbivores.CategoriesNouritures.Add(Categories.CategorieEnum.Plante);
+        HerbivoresC = new Categories(Categories.CategorieEnum.Herbivore);
+        HerbivoresC.CategoriesNouritures.Add(Categories.CategorieEnum.Plante);
     }
 
 
+
+    public Entite newEntite(MachineEtat? machineEtat, string nom) => new Entite(Simulation, machineEtat, nom);
+
     public Entite GenerateMouton() 
     {
-        Entite e = new Entite(Mouton, "Mouton");
-        e.DeBase.X = Rng.Next(0, 100);
-        e.DeBase.Y = Rng.Next(0, 100);
-        e.DeBase.VX = 0;
-        e.DeBase.VY = 0;
+        Entite e = newEntite(MoutonME, "Mouton").WithRandomPosition();
         e.DeBase.VitesseMax = 2;
         e.DeBase.Age = 10;
         e.DeBase.Energie = 1;
-        e.DeBase.Categorie = Herbivores;
+        e.DeBase.Categorie = HerbivoresC;
         e.DeBase.Direction = (float)(Rng.NextDouble() % (2f * Math.PI));
         return e;
     }
 
     public Entite GenerateHerbe()
     {
-        Entite e = new Entite(Herbe, "Herbe");
-        e.DeBase.X = Rng.Next(0, 100);
-        e.DeBase.Y = Rng.Next(0, 100);
-        e.DeBase.VX = 0;
-        e.DeBase.VY = 0;
+        Entite e = newEntite(HerbeME, "Herbe").WithRandomPosition();
         e.DeBase.VitesseMax = 0;
         e.DeBase.Age = 1;
         e.DeBase.Energie = 1;
         e.DeBase.Direction = 0;
-        e.DeBase.Categorie = Plantes;
+        e.DeBase.Categorie = PlantesC;
         return e;
     }
 

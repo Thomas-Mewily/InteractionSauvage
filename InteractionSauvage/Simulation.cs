@@ -6,13 +6,17 @@ public class Simulation //: IEnumerable<Simulation>, IEnumerator<Simulation>
 {
     public List<Entite> ToutesLesEntites;
     public List<Entite> EntitesDeBase;
+    //public Grille Grille;
     public int MaxTime = 200;
     public int Time;
+
+    public Random Rand;
 
     public Simulation()
     {
         ToutesLesEntites = new List<Entite>();
         EntitesDeBase = new List<Entite>();
+        Rand = new Random();
         Reset();
     }
 

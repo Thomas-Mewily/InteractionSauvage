@@ -4,27 +4,32 @@ namespace SimulationConsole;
 
 internal class Program
 {
-    public Simulation DefaultSimulation() 
+    public static Simulation DefaultSimulation() 
     {
-        SimulationFactory f = new SimulationFactory();
+        SimulationFactory f = new();
         f.AddEntite();
         return f.Simulation;
     }
 
-    public void Simulate(Simulation s)
+    public static void Simulate(Simulation s)
     {
         s.lancerSimulation();
-        
     }
 
     public Program()
+    {
+
+    }
+
+    public void Run() 
     {
         var s = DefaultSimulation();
         Simulate(s);
     }
 
-    static void Main(string[] args)
+    static void Main()
     {
         var p = new Program();
+        p.Run();
     }
 }

@@ -1,14 +1,15 @@
 ﻿using System.Numerics;
+using static InteractionSauvage.Categories;
 
 namespace InteractionSauvage;
 
 public struct Caracteristiques
 {
     // [0, 1]. Si 0 => meurt
-    public float Nourriture;
+    public double Nourriture;
 
     // [0, 1]. Si 0 => Dodo forcé
-    public float Energie;
+    public double Energie;
 
     public double Direction;
 
@@ -24,5 +25,5 @@ public struct Caracteristiques
 
     public Categories Categorie;
 
-    public Caracteristiques() { }
+    public Caracteristiques() { Categorie = new Categories(CategorieEnum.Plante);  }
 }

@@ -1,5 +1,6 @@
 ﻿using InteractionSauvage;
 
+/*
 public class Grille
 {
     private List<Entite>[][] EntiteGrille;
@@ -43,3 +44,4 @@ public class Grille
         EntiteGrille[indiceX][indiceY].Remove(entite);
     }
 }
+*/
