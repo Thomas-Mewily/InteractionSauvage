@@ -28,5 +28,18 @@ public class Simulation //: IEnumerable<Simulation>, IEnumerator<Simulation>
     {
         if (IsOver) { return; }
         Time++;
+        ToutesLesEntites.ForEach(e => e.OneStep());
+    }
+
+    public void lancerSimulation()
+    {
+        Reset();
+        ToutesLesEntites.ForEach(entite => { entite.Affiche(); });
+        for (int i = 0; i < MaxTime; i++)
+        {
+            Console.WriteLine("-----------" + i + "-----------");
+            OneStep();
+            ToutesLesEntites.ForEach(entite => { entite.Affiche(); });
+        }
     }
 }

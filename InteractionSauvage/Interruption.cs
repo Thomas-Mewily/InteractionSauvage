@@ -15,6 +15,8 @@ public class Interruption
         Alerte,
 
         Timer,
+
+        None,
     }
     public InterruptionEnum InterruptionType;
     public int Arg;
@@ -23,5 +25,14 @@ public class Interruption
     {
         InterruptionType = interruptionType;
         Arg = arg;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj == null) return false;
+        if (obj.GetType() != typeof(Interruption)) return false;
+        if (((Interruption)obj).InterruptionType == this.InterruptionType) return true;
+
+        return false;
     }
 }

@@ -13,8 +13,8 @@ internal class Program
 
     public void Simulate(Simulation s)
     {
-        Console.WriteLine("Bob");
-        s.ToutesLesEntites.ForEach(entite => {Console.WriteLine(entite.Actuel.Age);});
+        s.lancerSimulation();
+        
     }
 
     public Program()
@@ -25,7 +25,6 @@ internal class Program
 
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, Thomas");
         var p = new Program();
     }
 }
