@@ -13,14 +13,7 @@ internal class Program
 
     public void Simulate(Simulation s)
     {
-        s.Reset();
-        s.ToutesLesEntites.ForEach(entite => {entite.Affiche();});
-        for (int i = 0; i < 100; i++)
-        {
-            Console.WriteLine("-----------" +  i + "-----------");
-            s.OneStep();
-            s.ToutesLesEntites.ForEach(entite => { entite.Affiche(); });
-        }
+        s.lancerSimulation();
         
     }
 
