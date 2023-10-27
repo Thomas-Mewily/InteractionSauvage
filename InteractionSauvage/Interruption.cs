@@ -15,6 +15,8 @@ public class Interruption
         Alerte,
 
         Timer,
+
+        None,
     }
     public InterruptionEnum InterruptionType;
     public int Arg;

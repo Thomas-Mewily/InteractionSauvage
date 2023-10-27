@@ -22,5 +22,7 @@ public struct Caracteristiques
 
     public int EtatIndex;
 
+    public Categories Categorie;
+
     public Caracteristiques() { }
 }

@@ -1,4 +1,6 @@
-﻿using static InteractionSauvage.Etat;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.ConstrainedExecution;
+using static InteractionSauvage.Etat;
 
 namespace InteractionSauvage;
 
@@ -21,6 +23,7 @@ public class Entite
 
     public float Score = 0;
     public int TempsDeRepos = 0;
+    public string nom = "Sans Nom";
 
     public Caracteristiques Actuel;
     public Caracteristiques DeBase;
@@ -29,14 +32,23 @@ public class Entite
 
     public Entite(MachineEtat e)
     {
+        InitMachine(e);
+    }
+    public Entite(MachineEtat e, string nom)
+    {
+        this.nom = new string(nom);
+        InitMachine(e);
+    }
+
+    private void InitMachine(MachineEtat e)
+    {
         MachineEtat = e;
         DeBase = new Caracteristiques();
         rand = new Random();
 
-        Actions[(int)Etat.ActionEnum.Dormir]           = Dormir;
-
+        Actions[(int)Etat.ActionEnum.Dormir] = Dormir;
+        Actions[(int)Etat.ActionEnum.Attendre] = Attendre;
         Actions[(int)Etat.ActionEnum.MarcherAleatoire] = MarcherAleatoire;
-
     }
 
     public void Reset() 
@@ -48,6 +60,7 @@ public class Entite
     {
         Actuel.Age++;
         FaireTransition();
+
         Actions[(int)Etat.Action]();
 
         TempsDeRepos = TempsDeRepos > 0 ? TempsDeRepos - 1 : 0;
@@ -71,6 +84,7 @@ public class Entite
 
     }
 
+    public void Attendre(){}
     public void Dormir()
     {
         Actuel.Energie++;
@@ -103,8 +117,20 @@ public class Entite
         if (Actuel.Energie    > 0) Actuel.Energie   --;
     }
 
+    public void MarcherNouriture()
+    {
+
+
+        Avancer();
+
+        if (Actuel.Nourriture > 0) Actuel.Nourriture--;
+        if (Actuel.Energie > 0) Actuel.Energie--;
+    }
+
     public void Affiche()
     {
+        Console.WriteLine("-------------- " + nom + " --------------");
+        Console.WriteLine("Categorie   = "  + Actuel.Categorie);
         Console.WriteLine("Etat        = "  + Etat);
         Console.WriteLine("EtatIndex   = "  + Actuel.EtatIndex);
         Console.WriteLine("TempsDeRepos= "  + TempsDeRepos);
