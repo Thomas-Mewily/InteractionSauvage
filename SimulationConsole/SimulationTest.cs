@@ -25,7 +25,6 @@ internal class Program
 
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, Thomas");
         var p = new Program();
     }
 }
