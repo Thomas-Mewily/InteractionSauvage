@@ -20,6 +20,7 @@ public class Entite
     public Action[] Actions = new Action[10];
 
     public float Score = 0;
+    public int TempsDeRepos = 0;
 
     public Caracteristiques Actuel;
     public Caracteristiques DeBase;
@@ -32,7 +33,7 @@ public class Entite
         DeBase = new Caracteristiques();
         rand = new Random();
 
-        Actions[(int) Etat.ActionEnum.Dormir] = Dormir;
+        Actions[(int)Etat.ActionEnum.Dormir]           = Dormir;
 
         Actions[(int)Etat.ActionEnum.MarcherAleatoire] = MarcherAleatoire;
 
@@ -46,7 +47,28 @@ public class Entite
     public void OneStep()
     {
         Actuel.Age++;
+        FaireTransition();
         Actions[(int)Etat.Action]();
+
+        TempsDeRepos = TempsDeRepos > 0 ? TempsDeRepos - 1 : 0;
+    }
+
+    public void FaireTransition()
+    {
+        int tmpIndex = -1;
+        if (Actuel.Energie == 0)
+        {
+            TempsDeRepos = rand.Next(10, 20);
+            tmpIndex = Etat.transitionTo(new Interruption(Interruption.InterruptionEnum.Fatigue));
+            if (tmpIndex != -1) Actuel.EtatIndex = tmpIndex;
+        }
+
+        if (TempsDeRepos == 0)
+        {
+            tmpIndex = Etat.transitionTo(new Interruption(Interruption.InterruptionEnum.Repose));
+            if (tmpIndex != -1) Actuel.EtatIndex = tmpIndex;
+        }
+
     }
 
     public void Dormir()
@@ -84,6 +106,8 @@ public class Entite
     public void Affiche()
     {
         Console.WriteLine("Etat        = "  + Etat);
+        Console.WriteLine("EtatIndex   = "  + Actuel.EtatIndex);
+        Console.WriteLine("TempsDeRepos= "  + TempsDeRepos);
         Console.WriteLine("Nouriture   = "  + Actuel.Nourriture);
         Console.WriteLine("Energie     = "  + Actuel.Energie);
         Console.WriteLine("Age         = "  + Actuel.Age);

@@ -19,13 +19,13 @@ public class SimulationFactory
         Mouton = new MachineEtat();
         Mouton.Etats.Add(new Etat(Etat.ActionEnum.MarcherAleatoire,
                                   new Transition(
-                                        new Interruption(Interruption.InterruptionEnum.Fatigue), new List<EtatSuivant>() { new EtatSuivant(100, 0) }
+                                        new Interruption(Interruption.InterruptionEnum.Fatigue), new List<EtatSuivant>() { new EtatSuivant(100, 1) }
                                         )
                                   ));
 
         Mouton.Etats.Add(new Etat(Etat.ActionEnum.Dormir,
                                   new Transition(
-                                        new Interruption(Interruption.InterruptionEnum.Repose), new List<EtatSuivant>() { new EtatSuivant(1, 6) }
+                                        new Interruption(Interruption.InterruptionEnum.Repose), new List<EtatSuivant>() { new EtatSuivant(100, 0) }
                                         )
                                   ));
     }
