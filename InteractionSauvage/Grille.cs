@@ -1,13 +1,17 @@
 ﻿using InteractionSauvage;
 
-/*
+
 public class Grille
 {
     private List<Entite>[][] EntiteGrille;
-    private int TailleCase;
+    public int TailleCase;
+    public int Hauteur;
+    public int Longueur; 
 
     public Grille(int hauteur, int longueur, int tailleCase)
     {
+        Hauteur = hauteur;
+        Longueur = longueur;
         EntiteGrille = new List<Entite>[hauteur][];
         TailleCase = tailleCase;
 
@@ -23,8 +27,8 @@ public class Grille
 
     public void AjouterEntiteDansGrille(Entite entite)
     {
-        int indiceX = (int)(entite.Actuel.X / TailleCase);
-        int indiceY = (int)(entite.Actuel.Y / TailleCase);
+        int indiceX = (int)(entite.X / TailleCase);
+        int indiceY = (int)(entite.Y / TailleCase);
 
         indiceX = Math.Max(0, Math.Min(indiceX, EntiteGrille.Length - 1));
         indiceY = Math.Max(0, Math.Min(indiceY, EntiteGrille[0].Length - 1));
@@ -34,8 +38,8 @@ public class Grille
 
     public void RetirerEntiteDeGrille(Entite entite)
     {
-        int indiceX = (int)(entite.Actuel.X / TailleCase);
-        int indiceY = (int)(entite.Actuel.Y / TailleCase);
+        int indiceX = (int)(entite.X / TailleCase);
+        int indiceY = (int)(entite.Y / TailleCase);
 
         indiceX = Math.Max(0, Math.Min(indiceX, EntiteGrille.Length - 1));
         indiceY = Math.Max(0, Math.Min(indiceY, EntiteGrille[0].Length - 1));
@@ -44,4 +48,3 @@ public class Grille
         EntiteGrille[indiceX][indiceY].Remove(entite);
     }
 }
-*/

@@ -48,6 +48,8 @@ public class Entite
         MachineEtat = e == null ? new MachineEtat() : e;
         DeBase = new Caracteristiques();
 
+        simu.Grille.AjouterEntiteDansGrille(this);
+
         Actions[(int)Etat.ActionEnum.Dormir] = Dormir;
         Actions[(int)Etat.ActionEnum.Attendre] = Attendre;
         Actions[(int)Etat.ActionEnum.MarcherAleatoire] = MarcherAleatoire;
@@ -99,11 +101,17 @@ public class Entite
 
     private void Avancer()
     {
-        double deltaX = Actuel.VitesseMax * Math.Cos(Actuel.Direction);
-        double deltaY = Actuel.VitesseMax * Math.Sin(Actuel.Direction);
+        double deltaX = Actuel.VitesseMax * Math.Cos(Direction);
+        double deltaY = Actuel.VitesseMax * Math.Sin(Direction);
 
-        Actuel.X += deltaX;
-        Actuel.Y += deltaY;
+        if (X + deltaX > 0 && X + deltaX < Inside.Grille.Hauteur && Y + deltaY > 0 && Y + deltaY < Inside.Grille.Longueur)
+        {
+            X += deltaX;
+            Y += deltaY;
+
+            Inside.Grille.RetirerEntiteDeGrille(this);
+            Inside.Grille.AjouterEntiteDansGrille(this);
+        }
     }
 
     public void MarcherAleatoire()
