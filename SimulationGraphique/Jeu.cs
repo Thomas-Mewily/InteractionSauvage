@@ -7,7 +7,11 @@ namespace SimulationGraphique
     public class LeJeu : Game
     {
         private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        private SpriteBatch SpriteBatch;
+
+
+        Texture2D Platipus;
+        public float X, Y;
 
         public LeJeu()
         {
@@ -25,7 +29,15 @@ namespace SimulationGraphique
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
+
+            Platipus = Content.Load<Texture2D>("Platipus");
+            X = 0;
+            Y = 0;
+
+            //Platipus.Dispose();
+
+
 
             // TODO: use this.Content to load your game content here
         }
@@ -43,6 +55,14 @@ namespace SimulationGraphique
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            Window.AllowUserResizing = true;
+
+            SpriteBatch.Begin(SpriteSortMode.Immediate);
+
+            SpriteBatch.Draw(Platipus, new Vector2(X,Y), null, Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
+
+            SpriteBatch.End();
 
             // TODO: Add your drawing code here
 
