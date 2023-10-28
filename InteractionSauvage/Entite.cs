@@ -45,6 +45,8 @@ public class Entite : SimulationComposante
     
     public int Age { get => Actuel.Age; set => Actuel.Age = value; }
 
+    public int Taille { get => Actuel.Taille; set => Actuel.Taille = value; }
+
     public Categories Categorie { get => Actuel.Categorie;}
     #endregion
 
@@ -91,6 +93,18 @@ public class Entite : SimulationComposante
         Simu.Grille.AjouterEntiteDansGrille(this);
     }
 
+    public bool Collision(double x, double y)
+    {
+        foreach (Entite e in Grille.RecupererCase(x, y))
+        {
+            bool chevauchementX = (x < e.X + e.Taille) && (x + Taille > e.X);
+            bool chevauchementY = (y < e.Y + e.Taille) && (y + Taille > e.Y);
+
+            if (e != this && chevauchementX && chevauchementY) return true; 
+        }
+
+        return false;
+    }
     public void Avancer(double coef = 1)
     {
         double deltaX = coef * VitesseMax * Math.Cos(Direction);
@@ -98,7 +112,7 @@ public class Entite : SimulationComposante
 
         if(deltaX* deltaX + deltaY* deltaY < 0.1) { return; }
 
-        if (X + deltaX > 0 && X + deltaX < Grille.Longueur && Y + deltaY > 0 && Y + deltaY < Grille.Hauteur)
+        if (X + deltaX > 0 && X + deltaX < Grille.Longueur && Y + deltaY > 0 && Y + deltaY < Grille.Hauteur && !Collision(X+deltaX, Y+deltaY))
         {
             X += deltaX;
             Y += deltaY;

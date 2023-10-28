@@ -20,5 +20,6 @@ public class Apres : Interruption
     {
         Temps = temps;
     }
-    public override bool Interrupt => AssocieA.TempsDebutActif - Simu.Time < Temps;
+
+    public override bool Interrupt => Simu.Time - AssocieA.TempsDebutActif > Temps;
 }

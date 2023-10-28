@@ -14,8 +14,9 @@ public struct Caracteristiques
 
     public double Direction;
 
-
+    
     public int Age;
+    public int Taille;
     public double VitesseMax = 0;
     public double X = 0;
     public double Y = 0;

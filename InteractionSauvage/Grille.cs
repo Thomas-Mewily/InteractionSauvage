@@ -31,6 +31,13 @@ public class Grille
         }
     }
 
+    public List<Entite> RecupererCase(double x, double y)
+    {
+        int indiceX = (int)(x / TailleCase);
+        int indiceY = (int)(y / TailleCase);
+
+        return EntiteGrille[indiceX][indiceY];
+    }
     public void AjouterEntiteDansGrille(Entite entite)
     {
         int indiceX = (int)(entite.X / TailleCase);

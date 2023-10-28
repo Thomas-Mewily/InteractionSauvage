@@ -9,7 +9,7 @@ public class Simulation
     public List<Entite> EntitesDeBase;
     
     //public Grille Grille;
-    public Temps MaxTime = 200;
+    public Temps MaxTime = 10000;
     public Temps Time;
     public bool IsOver => Time > MaxTime;
 

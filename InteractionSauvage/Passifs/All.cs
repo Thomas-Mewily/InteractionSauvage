@@ -45,7 +45,7 @@ public class MarcherAleatoire : Passif
 
     public override void Execute()
     {
-        if (Rand.NextDouble() < 0.1) E.RngDirection();
+        if (Rand.NextDouble() < 0.01) E.RngDirection();
 
         E.Avancer(coef);
     }
