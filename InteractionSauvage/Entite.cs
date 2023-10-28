@@ -16,7 +16,15 @@ public class Entite : SimulationComposante
 
     #region Champs Affecté par la simulation
     public Etat? MaybeEtat = null;
-    public Etat Etat { get => MaybeEtat!; set => MaybeEtat = value!; }
+    public Etat Etat 
+    { 
+        get => MaybeEtat!;
+        set { 
+            MaybeEtat?.Fin();
+            MaybeEtat = value!;
+            MaybeEtat.Debut();
+        } 
+    }
 
     public string EtatNom { get => Etat.Nom; set => Etat = MachineEtat[value]; }
 
