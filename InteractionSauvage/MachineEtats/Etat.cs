@@ -49,7 +49,7 @@ public class Etat : EntiteComposante
         {
             if (t.Interrupt()) 
             {
-                t.DoTransition();
+                E.Etat = t.DoTransition();
             }
         }
     }
