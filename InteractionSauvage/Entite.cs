@@ -45,7 +45,7 @@ public class Entite : SimulationComposante
     
     public int Age { get => Actuel.Age; set => Actuel.Age = value; }
 
-    public Categories Categorie { get => Actuel.Categorie; set => Actuel.Categorie = value; }
+    public Categories Categorie { get => Actuel.Categorie;}
     #endregion
 
     private Caracteristiques Actuel;
@@ -124,6 +124,17 @@ public class Entite : SimulationComposante
         Simu.Grille.Add(this);
     }
 
+    public bool Collision(double x, double y)
+    {
+        foreach (Entite e in Grille.RecupererCase(x, y))
+        {
+            double distance = Math.Pow(x - e.X, 2) + Math.Pow(y - e.Y, 2);
+
+            if (e != this && distance <= Math.Pow(Taille + e.Taille, 2)) return true; 
+        }
+
+        return false;
+    }
     public void Avancer(double coef = 1)
     {
         double deltaX = coef * VitesseMax * Math.Cos(Direction);
@@ -131,7 +142,7 @@ public class Entite : SimulationComposante
 
         if(deltaX* deltaX + deltaY* deltaY < 0.1) { return; }
 
-        if (X + deltaX > 0 && X + deltaX < Grille.Longueur && Y + deltaY > 0 && Y + deltaY < Grille.Hauteur)
+        if (X + deltaX > 0 && X + deltaX < Grille.Longueur && Y + deltaY > 0 && Y + deltaY < Grille.Hauteur && !Collision(X+deltaX, Y+deltaY))
         {
             X += deltaX;
             Y += deltaY;

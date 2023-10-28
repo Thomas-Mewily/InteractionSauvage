@@ -9,16 +9,11 @@
     <Import_RootNamespace>SimulationGraphique</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)SpriteBatchExtensions.cs" />
     <Compile Include="..\SimulationGraphique\Jeu.cs" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
-    <None Include="$(MSBuildThisFileDirectory)content\Arial.bmfc" />
     <None Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)Content\Arial.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 </Project>
