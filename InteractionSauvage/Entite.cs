@@ -97,10 +97,9 @@ public class Entite : SimulationComposante
     {
         foreach (Entite e in Grille.RecupererCase(x, y))
         {
-            bool chevauchementX = (x < e.X + e.Taille) && (x + Taille > e.X);
-            bool chevauchementY = (y < e.Y + e.Taille) && (y + Taille > e.Y);
+            double distance = Math.Pow(x - e.X, 2) + Math.Pow(y - e.Y, 2);
 
-            if (e != this && chevauchementX && chevauchementY) return true; 
+            if (e != this && distance <= Math.Pow(Taille + e.Taille, 2)) return true; 
         }
 
         return false;
