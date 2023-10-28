@@ -14,6 +14,7 @@ public class Simulation
     public bool IsOver => Time > MaxTime;
 
     private bool IsInit = false;
+    public Grille Grille;
     public Random Rand;
 
     public Simulation()

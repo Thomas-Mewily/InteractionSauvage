@@ -47,7 +47,7 @@ public class SimulationFactory : SimulationComposante
     public Entite GenerateMouton() 
     {
         Entite e = newEntite("Mouton", MoutonME()).WithRandomPosition();
-        e.DeBase.VitesseMax = 2;
+        e.DeBase.VitesseMax = 400;
         e.DeBase.Age = 10;
         e.DeBase.Energie = 1;
         e.DeBase.Categorie = HerbivoresC();

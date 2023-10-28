@@ -9,6 +9,7 @@ public abstract class SimulationComposante
 
     public Temps Time { get => Simu.Time; set => Simu.Time = value; }
     public Random Rand => Simu.Rand;
+    public Grille Grille => Simu.Grille;
 
     public void Load(Simulation s)
     {

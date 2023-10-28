@@ -1,17 +1,23 @@
 ﻿using InteractionSauvage;
 
-/*
+namespace InteractionSauvage;
+
 public class Grille
 {
-    private List<Entite>[][] EntiteGrille;
-    public int TailleCase;
-    public int Hauteur;
-    public int Longueur; 
+    private List<Entite>[][] EntiteGrille { get; set; }
+
+    public int TailleCase { get; private set; }
+
+    public int Hauteur  => NbCaseHauteur * TailleCase;
+    public int Longueur => NbCaseLongueur * TailleCase;
+
+    public int NbCaseHauteur  { get; private set; }
+    public int NbCaseLongueur { get; private set; }
 
     public Grille(int hauteur, int longueur, int tailleCase)
     {
-        Hauteur = hauteur;
-        Longueur = longueur;
+        NbCaseHauteur = hauteur;
+        NbCaseLongueur = longueur;
         EntiteGrille = new List<Entite>[hauteur][];
         TailleCase = tailleCase;
 

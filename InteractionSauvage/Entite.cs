@@ -1,6 +1,7 @@
 ﻿using InteractionSauvage.Interruptions;
 using InteractionSauvage.MachineEtats;
 using InteractionSauvage.Passifs;
+using System.ComponentModel;
 using Useful;
 using static InteractionSauvage.MachineEtats.Etat;
 
@@ -74,15 +75,32 @@ public class Entite : SimulationComposante
         Actuel.Direction = (Rand.NextDouble() * (2f * Math.PI));
     }
 
+    public void PositionChanger() 
+    {
+        Simu.Grille.RetirerEntiteDeGrille(this);
+        Simu.Grille.AjouterEntiteDansGrille(this);
+    }
+
     public void Avancer(double coef = 1)
     {
         double deltaX = coef * VitesseMax * Math.Cos(Direction);
         double deltaY = coef * VitesseMax * Math.Sin(Direction);
 
-        X += deltaX;
-        Y += deltaY;
+        if(deltaX* deltaX + deltaY* deltaY < 0.1) { return; }
 
-        Energie -= coef;
+        if (X + deltaX > 0 && X + deltaX < Grille.NbCaseHauteur* Grille.TailleCase && Y + deltaY > 0 && Y + deltaY < Grille.NbCaseLongueur)
+        {
+            X += deltaX;
+            Y += deltaY;
+            Energie -= coef;
+
+            PositionChanger();
+        }
+        else 
+        {
+            Avancer(coef / 2);
+            Avancer(coef / 2);
+        }
     }
 
 
