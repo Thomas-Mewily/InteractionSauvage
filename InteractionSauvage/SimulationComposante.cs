@@ -2,7 +2,7 @@
 
 namespace InteractionSauvage;
 
-public abstract class SimulationComposante
+public abstract class SimulationComposante : CheckPointable
 {
     public Simulation? MaybeSimu;
     public Simulation Simu => MaybeSimu!;

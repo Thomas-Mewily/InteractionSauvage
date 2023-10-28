@@ -1,4 +1,4 @@
-﻿using InteractionSauvage.MachinAeEtat;
+﻿using InteractionSauvage.MachineEtats;
 using InteractionSauvage.Passifs;
 using static InteractionSauvage.MachineEtats.Etat;
 

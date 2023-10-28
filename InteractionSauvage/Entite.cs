@@ -45,25 +45,58 @@ public class Entite : SimulationComposante
     
     public int Age { get => Actuel.Age; set => Actuel.Age = value; }
 
-    public Categories Categorie { get => Actuel.Categorie;}
+    public Categories Categorie { get => Actuel.Categorie; set => Actuel.Categorie = value; }
     #endregion
 
     private Caracteristiques Actuel;
-    public  Caracteristiques DeBase;
+    public Caracteristiques DeBase 
+    { 
+        get => CheckPoints.Count == 0 ? Actuel : CheckPoints.Peek(); 
+        set 
+        { 
+            if(CheckPoints.Count == 0) 
+            {
+                Actuel = value;
+            }
+            else 
+            {
+                CheckPoints[0] = value;
+            }
+        } 
+    }
+    public List<Caracteristiques> CheckPoints = new List<Caracteristiques>() { new Caracteristiques() };
 
     public Entite(Simulation simu, string? nom = null, MachineEtat ? e = null)
     {
         Nom = nom ?? "";
         MachineEtat = e ?? new MachineEtat();
-        DeBase = new Caracteristiques();
 
         Load(simu); // because of the need of Simu for rand
     }
 
-    public void Reset() 
+    public override void CheckPointReset()
     {
-        Actuel = DeBase;
         EtatNom = EtatDeBase;
+        base.CheckPointReset();
+    }
+
+    public override void CheckPointAdd()
+    {
+        CheckPoints.Add(Actuel);
+        MachineEtat.CheckPointAdd();
+
+        base.CheckPointAdd();
+    }
+
+    public override void CheckPointRemove()
+    {
+        base.CheckPointRemove();
+    }
+
+    public override void CheckPointRollBack()
+    {
+
+        base.CheckPointRollBack();
     }
 
     public override void Load() 
@@ -87,8 +120,8 @@ public class Entite : SimulationComposante
 
     public void PositionChanger() 
     {
-        Simu.Grille.RetirerEntiteDeGrille(this);
-        Simu.Grille.AjouterEntiteDansGrille(this);
+        Simu.Grille.Remove(this);
+        Simu.Grille.Add(this);
     }
 
     public void Avancer(double coef = 1)

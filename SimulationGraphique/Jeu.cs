@@ -10,15 +10,15 @@ namespace SimulationGraphique;
 
 public class LeJeu : Game
 {
-    private GraphicsDeviceManager _graphics;
-    private SpriteBatch _spriteBatch;
+    private GraphicsDeviceManager Graphics;
+    private SpriteBatch SpriteBatch;
     private SimulationFactory SimuFact;
     public static Texture2D Pixel; 
     SpriteFont Arial;
 
     public LeJeu()
     {
-        _graphics = new GraphicsDeviceManager(this);
+        Graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
     }
@@ -33,7 +33,7 @@ public class LeJeu : Game
 
     protected override void LoadContent()
     {
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
+        SpriteBatch = new SpriteBatch(GraphicsDevice);
         Pixel = new Texture2D(GraphicsDevice, 1, 1);
         Pixel.SetData(new[] { Color.White });
         Arial = Content.Load<SpriteFont>("Arial");
@@ -55,7 +55,7 @@ public class LeJeu : Game
     {
         GraphicsDevice.Clear(Color.GreenYellow);
 
-        _spriteBatch.Begin();
+        SpriteBatch.Begin();
         string label;
 
         foreach (var entite in SimuFact.Simu.ToutesLesEntites)
@@ -69,10 +69,10 @@ public class LeJeu : Game
             int rayonDuCercle = 10;
 
             label = entite.Etat.ToString();
-            _spriteBatch.DrawDisk(position, rayonDuCercle, couleurAleatoire, label, Arial);
+            SpriteBatch.DrawDisk(position, rayonDuCercle, couleurAleatoire, label, Arial);
         }
 
-        _spriteBatch.End();
+        SpriteBatch.End();
 
         base.Draw(gameTime);
     }

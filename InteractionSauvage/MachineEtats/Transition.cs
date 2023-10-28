@@ -4,7 +4,7 @@ using InteractionSauvage.Passifs;
 using Useful;
 using static InteractionSauvage.MachineEtats.Etat;
 
-namespace InteractionSauvage.MachinAeEtat;
+namespace InteractionSauvage.MachineEtats;
 
 public struct EtatSuivant
 {
@@ -56,7 +56,7 @@ public class Transition : EntiteComposante
             }
         }
 
-        Crash.Now("Je blame Mathis pour ça x)");
+        Crash.Now("Je blame encore Mathis pour ça x)");
         return E.MachineEtat[E.MachineEtat.EtatSuggererParDefaut];
     }
 

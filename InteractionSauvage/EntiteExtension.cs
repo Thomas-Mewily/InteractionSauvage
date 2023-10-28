@@ -1,6 +1,5 @@
 ﻿using InteractionSauvage;
 using InteractionSauvage.Interruptions;
-using InteractionSauvage.MachinAeEtat;
 using InteractionSauvage.MachineEtats;
 using InteractionSauvage.Passifs;
 
@@ -15,8 +14,8 @@ public static class EntiteExtension
 
     public static Entite WithPosition(this Entite e, float x, float y) 
     {
-        e.DeBase.X = x;
-        e.DeBase.Y = y;
+        e.X = x;
+        e.Y = y;
         return e;
     }
 }

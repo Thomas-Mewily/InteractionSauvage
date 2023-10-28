@@ -1,6 +1,5 @@
 ﻿using InteractionSauvage;
 using InteractionSauvage.Interruptions;
-using InteractionSauvage.MachinAeEtat;
 using InteractionSauvage.MachineEtats;
 using InteractionSauvage.Passifs;
 using Useful;
@@ -47,11 +46,11 @@ public class SimulationFactory : SimulationComposante
     public Entite GenerateMouton() 
     {
         Entite e = newEntite("Mouton", MoutonME()).WithRandomPosition(Simu);
-        e.DeBase.VitesseMax = 10;
-        e.DeBase.Age = 10;
-        e.DeBase.Energie = 1;
-        e.DeBase.Categorie = HerbivoresC();
-        e.DeBase.Direction = Rand.DoubleUniform(2f * Math.PI);
+        e.VitesseMax = 10;
+        e.Age = 10;
+        e.Energie = 1;
+        e.Categorie = HerbivoresC();
+        e.Direction = Rand.DoubleUniform(2f * Math.PI);
 
         //e.DeBase.EtatDeBase = "marcher";
         return e;
@@ -71,7 +70,7 @@ public class SimulationFactory : SimulationComposante
 
     public void AddEntite() 
     {
-        Simu.EntitesDeBase.Add(GenerateMouton());
+        Simu.Add(GenerateMouton());
         //Simu.EntitesDeBase.Add(GenerateHerbe());
     }
 }
