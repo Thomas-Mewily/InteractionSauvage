@@ -20,6 +20,7 @@ public class Simulation
     {
         ToutesLesEntites = new List<Entite>();
         EntitesDeBase = new List<Entite>();
+        Grille = new Grille(200, 200, 10);
         Rand = new Random();
         Reset();
     }
