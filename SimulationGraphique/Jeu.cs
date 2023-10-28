@@ -6,22 +6,19 @@ using SimulationConsole;
 using System;
 using System.Collections.Generic;
 
-namespace SimulationGraphique;
-
-public class LeJeu : Game
+namespace SimulationGraphique
 {
-    private GraphicsDeviceManager _graphics;
-    private SpriteBatch _spriteBatch;
-    private SimulationFactory SimuFact;
-    public static Texture2D Pixel; 
-    SpriteFont Arial;
-
-    public LeJeu()
+    public class LeJeu : Game
     {
-        _graphics = new GraphicsDeviceManager(this);
-        Content.RootDirectory = "Content";
-        IsMouseVisible = true;
-    }
+        private GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+
+        public LeJeu()
+        {
+            _graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
+            IsMouseVisible = true;
+        }
 
     protected override void Initialize()
     {
@@ -31,14 +28,12 @@ public class LeJeu : Game
         base.Initialize();
     }
 
-    protected override void LoadContent()
-    {
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
-        Pixel = new Texture2D(GraphicsDevice, 1, 1);
-        Pixel.SetData(new[] { Color.White });
-        Arial = Content.Load<SpriteFont>("Arial");
-        // TODO: use this.Content to load your game content here
-    }
+        protected override void LoadContent()
+        {
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // TODO: use this.Content to load your game content here
+        }
 
     protected override void Update(GameTime gameTime)
     {
@@ -72,7 +67,7 @@ public class LeJeu : Game
             _spriteBatch.DrawDisk(position, rayonDuCercle, couleurAleatoire, label, Arial);
         }
 
-        _spriteBatch.End();
+            // TODO: Add your drawing code here
 
         base.Draw(gameTime);
     }
