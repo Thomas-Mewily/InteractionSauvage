@@ -7,7 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InteractionSauvage", "Inter
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimulationConsole", "SimulationConsole\SimulationConsole.csproj", "{F5E186B7-2B78-481A-BC0A-78C0CF19B1C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Useful", "Useful\Useful.csproj", "{CA07341F-DF2A-4D29-931D-E9766B418256}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful", "Useful\Useful.csproj", "{CA07341F-DF2A-4D29-931D-E9766B418256}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SimulationGraphique", "SimulationGraphique\SimulationGraphique.shproj", "{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationWindows", "SimulationWindows\SimulationWindows.csproj", "{7BF1DCB2-C8ED-47C1-B472-C8FDCB1C4892}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,11 +31,19 @@ Global
 		{CA07341F-DF2A-4D29-931D-E9766B418256}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA07341F-DF2A-4D29-931D-E9766B418256}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA07341F-DF2A-4D29-931D-E9766B418256}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BF1DCB2-C8ED-47C1-B472-C8FDCB1C4892}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BF1DCB2-C8ED-47C1-B472-C8FDCB1C4892}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BF1DCB2-C8ED-47C1-B472-C8FDCB1C4892}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BF1DCB2-C8ED-47C1-B472-C8FDCB1C4892}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5992DA21-B9B7-46EF-A0B3-02E55644F060}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		SimulationGraphique\SimulationGraphique.projitems*{7bf1dcb2-c8ed-47c1-b472-c8fdcb1c4892}*SharedItemsImports = 5
+		SimulationGraphique\SimulationGraphique.projitems*{a0cdbd0e-3a41-42b7-9425-a838bc2c7383}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

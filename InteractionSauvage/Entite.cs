@@ -88,7 +88,7 @@ public class Entite : SimulationComposante
 
         if(deltaX* deltaX + deltaY* deltaY < 0.1) { return; }
 
-        if (X + deltaX > 0 && X + deltaX < Grille.NbCaseHauteur* Grille.TailleCase && Y + deltaY > 0 && Y + deltaY < Grille.NbCaseLongueur)
+        if (X + deltaX > 0 && X + deltaX < Grille.Longueur && Y + deltaY > 0 && Y + deltaY < Grille.Hauteur)
         {
             X += deltaX;
             Y += deltaY;
