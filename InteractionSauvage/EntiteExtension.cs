@@ -8,9 +8,9 @@ namespace SimulationConsole;
 
 public static class EntiteExtension
 {
-    public static Entite WithRandomPosition(this Entite e) 
+    public static Entite WithRandomPosition(this Entite e, Simulation simu) 
     {
-        return e.WithPosition(e.Rand.Next(0, 100), e.Rand.Next(0, 100));
+        return e.WithPosition(e.Rand.Next(0, simu.Grille.Longueur), e.Rand.Next(0, simu.Grille.Hauteur));
     }
 
     public static Entite WithPosition(this Entite e, float x, float y) 

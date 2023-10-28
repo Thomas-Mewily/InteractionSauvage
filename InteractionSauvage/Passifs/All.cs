@@ -27,12 +27,17 @@ public class Marcher : Passif
 
     public override void Execute()
     {
-        E.Avancer();
+        E.Avancer(coef);
     }
 }
 
 public class MarcherAleatoire : Passif
 {
+    public double coef;
+    public MarcherAleatoire(double coef = 1)
+    {
+        this.coef = coef;
+    }
     public override void Debut()
     {
         E.RngDirection();
@@ -40,6 +45,8 @@ public class MarcherAleatoire : Passif
 
     public override void Execute()
     {
-        E.Avancer();
+        if (Rand.NextDouble() < 0.1) E.RngDirection();
+
+        E.Avancer(coef);
     }
 }

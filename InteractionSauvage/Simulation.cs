@@ -19,6 +19,7 @@ public class Simulation
 
     public Simulation()
     {
+        Time = new Temps();
         ToutesLesEntites = new List<Entite>();
         EntitesDeBase = new List<Entite>();
         Grille = new Grille(200, 200, 10);

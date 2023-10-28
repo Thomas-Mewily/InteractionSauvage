@@ -36,6 +36,8 @@ public class Entite : SimulationComposante
     public double Nourriture { get => Actuel.Nourriture; set => Actuel.Nourriture = value; }
     
     public int Age { get => Actuel.Age; set => Actuel.Age = value; }
+
+    public Categories Categorie { get => Actuel.Categorie;}
     #endregion
 
     private Caracteristiques Actuel;
