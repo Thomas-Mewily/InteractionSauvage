@@ -31,21 +31,26 @@ public class Entite : SimulationComposante
     public float Score { get => Actuel.Score; set => Actuel.Score = Score; }
     public int TempsDeRepos { get => Actuel.TempsDeRepos; set => Actuel.TempsDeRepos = TempsDeRepos; }
 
-    public double X { get => Actuel.X; set => Actuel.X = value; } 
-    public double Y { get => Actuel.Y; set => Actuel.Y = value; }
+    public float X { get => Actuel.X; set => Actuel.X = value; } 
+    public float Y { get => Actuel.Y; set => Actuel.Y = value; }
 
-    public double VX { get => Actuel.VX; set => Actuel.VX = value; }
-    public double VY { get => Actuel.VY; set => Actuel.VY = value; }
+    public int GrilleIndiceX = 0;
+    public int GrilleIndiceY = 0;
 
-    public double VitesseMax { get => Actuel.VitesseMax; set => Actuel.VitesseMax = value; }
-    public double Direction { get => Actuel.Direction; set => Actuel.Direction = value; }
+    public float VX { get => Actuel.VX; set => Actuel.VX = value; }
+    public float VY { get => Actuel.VY; set => Actuel.VY = value; }
+
+    public float VitesseMax { get => Actuel.VitesseMax; set => Actuel.VitesseMax = value; }
+    public float Direction { get => Actuel.Direction; set => Actuel.Direction = value; }
     
-    public double Energie { get => Actuel.Energie; set => Actuel.Energie = value; }
-    public double Nourriture { get => Actuel.Nourriture; set => Actuel.Nourriture = value; }
+    public float Energie { get => Actuel.Energie; set => Actuel.Energie = value; }
+    public float Nourriture { get => Actuel.Nourriture; set => Actuel.Nourriture = value; }
     
     public int Age { get => Actuel.Age; set => Actuel.Age = value; }
 
-    public Categories Categorie { get => Actuel.Categorie;}
+    public float Taille { get => Actuel.Taille; set => Actuel.Taille = value; }
+
+    public Categories Categorie { get => Actuel.Categorie; set => Actuel.Categorie = value; }
     #endregion
 
     private Caracteristiques Actuel;
@@ -74,31 +79,6 @@ public class Entite : SimulationComposante
         Load(simu); // because of the need of Simu for rand
     }
 
-    public override void CheckPointReset()
-    {
-        EtatNom = EtatDeBase;
-        base.CheckPointReset();
-    }
-
-    public override void CheckPointAdd()
-    {
-        CheckPoints.Add(Actuel);
-        MachineEtat.CheckPointAdd();
-
-        base.CheckPointAdd();
-    }
-
-    public override void CheckPointRemove()
-    {
-        base.CheckPointRemove();
-    }
-
-    public override void CheckPointRollBack()
-    {
-
-        base.CheckPointRollBack();
-    }
-
     public override void Load() 
     {
         MachineEtat.Load(this);
@@ -115,18 +95,14 @@ public class Entite : SimulationComposante
 
     public void RngDirection()
     {
-        Actuel.Direction = (Rand.NextDouble() * (2f * Math.PI));
+        Actuel.Direction = (Rand.NextFloat(2f * MathF.PI));
     }
 
-    public void PositionChanger() 
-    {
-        Simu.Grille.Remove(this);
-        Simu.Grille.Add(this);
-    }
+    public void PositionChanger() => Grille.Add(this);
 
     public bool Collision(double x, double y)
     {
-        foreach (Entite e in Grille.RecupererCase(x, y))
+        foreach (Entite e in Grille.Get(x, y))
         {
             double distance = Math.Pow(x - e.X, 2) + Math.Pow(y - e.Y, 2);
 
@@ -135,10 +111,10 @@ public class Entite : SimulationComposante
 
         return false;
     }
-    public void Avancer(double coef = 1)
+    public void Avancer(float coef = 1)
     {
-        double deltaX = coef * VitesseMax * Math.Cos(Direction);
-        double deltaY = coef * VitesseMax * Math.Sin(Direction);
+        float deltaX = coef * VitesseMax * MathF.Cos(Direction);
+        float deltaY = coef * VitesseMax * MathF.Sin(Direction);
 
         if(deltaX* deltaX + deltaY* deltaY < 0.1) { return; }
 
@@ -174,4 +150,30 @@ public class Entite : SimulationComposante
     }
 
     public override string ToString() => Nom.Length == 0 ? GetType().Name : Nom;
+
+    #region CheckPoint
+    public override void CheckPointReset()
+    {
+        EtatNom = EtatDeBase;
+        base.CheckPointReset();
+    }
+
+    public override void CheckPointAdd()
+    {
+        CheckPoints.Add(Actuel);
+        MachineEtat.CheckPointAdd();
+
+        base.CheckPointAdd();
+    }
+
+    public override void CheckPointRemove()
+    {
+        base.CheckPointRemove();
+    }
+
+    public override void CheckPointRollBack()
+    {
+        base.CheckPointRollBack();
+    }
+    #endregion
 }

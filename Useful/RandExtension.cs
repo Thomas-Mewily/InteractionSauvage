@@ -2,16 +2,22 @@
 
 public static class RandExtension 
 {
-    public static double DoubleUniform(this Random r, double max) => r.DoubleUniform(0, max);
-    public static double DoubleUniform(this Random r, double min, double max)
+    public static float NextFloat(this Random r) => r.NextSingle();
+
+    public static float NextFloat(this Random r, float max) => r.FloatUniform(0, max);
+    public static float FloatUniform(this Random r, float min, float max)
     {
-        if (min > max) { return r.DoubleUniform(max, min); }
-        return r.NextDouble() % (max - min) + min;
+        if (min > max) { return r.FloatUniform(max, min); }
+        return r.NextFloat() % (max - min) + min;
     }
 
-    public static double IntUniform(this Random r, int min, int max)
+    public static int NextInt(this Random r, int max) => r.IntUniform(0, max);
+    /// <summary>
+    /// [min, max]
+    /// </summary>
+    public static int IntUniform(this Random r, int min, int max)
     {
-        if (min > max) { return r.DoubleUniform(max, min); }
-        return r.Next() % (max - min) + min;
+        if (min > max) { return r.IntUniform(max, min); }
+        return r.Next() % (max - min + 1) + min;
     }
 }

@@ -7,21 +7,21 @@ namespace InteractionSauvage;
 public struct Caracteristiques
 {
     // [0, 1]. Si 0 => meurt
-    public double Nourriture;
+    public float Nourriture;
 
     // [0, 1]. Si 0 => Dodo forcé
-    public double Energie;
+    public float Energie;
 
-    public double Direction;
+    public float Direction;
 
     
     public int Age;
-    public int Taille;
-    public double VitesseMax = 0;
-    public double X = 0;
-    public double Y = 0;
-    public double VX = 0;
-    public double VY = 0;
+    public float Taille;
+    public float VitesseMax = 0;
+    public float X = 0;
+    public float Y = 0;
+    public float VX = 0;
+    public float VY = 0;
 
     public float Score = 0;
     public int TempsDeRepos = 0;

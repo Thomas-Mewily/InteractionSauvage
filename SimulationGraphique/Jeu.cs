@@ -70,10 +70,10 @@ public class LeJeu : Game
             Random random = new Random((int)entite.Categorie.Categorie);
             Color couleurAleatoire = new Color(random.Next(256), random.Next(256), random.Next(256));
 
-            int rayonDuCercle = entite.Taille * GraphicsDevice.Viewport.Width / SimuFact.Simu.Grille.Longueur;
+            var rayonDuCercle = entite.Taille * GraphicsDevice.Viewport.Width / SimuFact.Simu.Grille.Longueur;
 
             label = entite.Nom + " : " + entite.Etat.Nom;
-            _spriteBatch.DrawDisk(position, rayonDuCercle, couleurAleatoire, label, Arial);
+            SpriteBatch.DrawDisk(position, rayonDuCercle, couleurAleatoire, label, Arial);
         }
 
         SpriteBatch.End();

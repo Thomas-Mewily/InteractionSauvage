@@ -6,11 +6,11 @@ namespace InteractionSauvage.Passifs;
 public abstract class Passif : EntiteComposante
 {
     public string Nom;
+    public float Coef;
 
-    static Passif() { }
-
-    public Passif()
+    public Passif(float coef = 1)
     {
+        Coef = coef;
         Nom = GetType().Name;
     }
 

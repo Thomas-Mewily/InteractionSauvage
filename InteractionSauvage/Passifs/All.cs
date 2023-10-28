@@ -18,26 +18,16 @@ public class Dormir : Passif
 
 public class Marcher : Passif
 {
-    public double coef;
-
-    public Marcher(double coef = 1)
-    {
-        this.coef = coef;
-    }
-
+    public Marcher(float coef = 1) : base(coef) { }
     public override void Execute()
     {
-        E.Avancer(coef);
+        E.Avancer(Coef);
     }
 }
 
 public class MarcherAleatoire : Passif
 {
-    public double coef;
-    public MarcherAleatoire(double coef = 1)
-    {
-        this.coef = coef;
-    }
+    public MarcherAleatoire(float coef = 1) : base(coef) { }
     public override void Debut()
     {
         E.RngDirection();
@@ -47,6 +37,6 @@ public class MarcherAleatoire : Passif
     {
         if (Rand.NextDouble() < 0.01) E.RngDirection();
 
-        E.Avancer(coef);
+        E.Avancer(Coef);
     }
 }

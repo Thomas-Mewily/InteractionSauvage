@@ -41,32 +41,18 @@ public class Grille
         }
     }
 
-    public List<Entite> RecupererCase(double x, double y)
+    public int GetIndiceX(double x) => Math.Max(0, Math.Min((int)(x / TailleCase),    NbCaseLongueur - 1));
+    public int GetIndiceY(double y) => Math.Max(0, Math.Min((int)(y / NbCaseHauteur), NbCaseHauteur - 1));
+
+    public List<Entite> Get(double x, double y) => EntiteGrille[GetIndiceX(x), GetIndiceY(y)];
+
+    public void Add(Entite e)
     {
-        int indiceX = (int)(x / TailleCase);
-        int indiceY = (int)(y / TailleCase);
-
-        return EntiteGrille[indiceX][indiceY];
-    }
-    public void AjouterEntiteDansGrille(Entite entite)
-    public void Add(Entite entite)
-    {
-        int indiceX = (int)(entite.X / TailleCase);
-        int indiceY = (int)(entite.Y / TailleCase);
-
-        indiceX = Math.Max(0, Math.Min(indiceX, NbCaseLongueur - 1));
-        indiceY = Math.Max(0, Math.Min(indiceY, NbCaseHauteur - 1));
-
-        EntiteGrille[indiceX,indiceY].Add(entite);
+        Remove(e);
+        e.GrilleIndiceX = GetIndiceX(e.X);
+        e.GrilleIndiceY = GetIndiceY(e.Y);
+        EntiteGrille[e.GrilleIndiceX, e.GrilleIndiceY].Add(e);
     }
 
-    public void Remove(Entite entite)
-    {
-        int indiceX = (int)(entite.X / TailleCase);
-        int indiceY = (int)(entite.Y / TailleCase);
-
-        indiceX = Math.Max(0, Math.Min(indiceX, NbCaseLongueur - 1));
-        indiceY = Math.Max(0, Math.Min(indiceY, NbCaseHauteur  - 1));
-        EntiteGrille[indiceX,indiceY].Remove(entite);
-    }
+    private void Remove(Entite e) => EntiteGrille[e.GrilleIndiceX, e.GrilleIndiceY].Remove(e);
 }
