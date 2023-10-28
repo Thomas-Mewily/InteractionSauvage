@@ -1,7 +1,7 @@
 ﻿using InteractionSauvage;
 
 /*
-public class Grille
+public class Grille : Simul
 {
     private List<Entite>[][] EntiteGrille;
     private int TailleCase;

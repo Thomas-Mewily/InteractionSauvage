@@ -2,14 +2,18 @@
 
 namespace InteractionSauvage;
 
-public class Simulation //: IEnumerable<Simulation>, IEnumerator<Simulation>
+
+public class Simulation
 {
     public List<Entite> ToutesLesEntites;
     public List<Entite> EntitesDeBase;
+    
     //public Grille Grille;
-    public int MaxTime = 200;
-    public int Time;
+    public Temps MaxTime = 200;
+    public Temps Time;
+    public bool IsOver => Time > MaxTime;
 
+    private bool IsInit = false;
     public Random Rand;
 
     public Simulation()
@@ -20,29 +24,46 @@ public class Simulation //: IEnumerable<Simulation>, IEnumerator<Simulation>
         Reset();
     }
 
-    public bool IsOver => Time > MaxTime;
-    public void Reset() 
+    private void InitComposants() 
     {
-        Time = 0;
-        ToutesLesEntites = EntitesDeBase.ToList();
-        foreach(var e in ToutesLesEntites) { e.Reset(); }
+        foreach (var e in EntitesDeBase)
+        {
+            // Initialise
+            e.Load(this);
+        }
     }
 
-    public void OneStep() 
+    public void Reset()
+    {
+        if(IsInit == false && EntitesDeBase.Count != 0) 
+        {
+            InitComposants();
+            IsInit = true;
+        }
+
+        Time = 0;
+        ToutesLesEntites = EntitesDeBase.ToList();
+        foreach (var e in ToutesLesEntites) { e.Reset(); }
+    }
+
+    public void Update()
     {
         if (IsOver) { return; }
         Time++;
-        ToutesLesEntites.ForEach(e => e.OneStep());
+        foreach (var e in ToutesLesEntites) 
+        {
+            e.Update();
+        }
     }
 
-    public void lancerSimulation()
+    public void LancerSimulation()
     {
         Reset();
         ToutesLesEntites.ForEach(entite => { entite.Affiche(); });
         for (int i = 0; i < MaxTime; i++)
         {
             Console.WriteLine("-----------" + i + "-----------");
-            OneStep();
+            Update();
             ToutesLesEntites.ForEach(entite => { entite.Affiche(); });
         }
     }

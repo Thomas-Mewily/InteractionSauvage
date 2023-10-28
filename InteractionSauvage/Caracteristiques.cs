@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using InteractionSauvage.MachineEtats;
+using System.Numerics;
 using static InteractionSauvage.Categories;
 
 namespace InteractionSauvage;
@@ -15,13 +16,16 @@ public struct Caracteristiques
 
 
     public int Age;
-    public double VitesseMax;
+    public double VitesseMax = 0;
     public double X = 0;
     public double Y = 0;
     public double VX = 0;
     public double VY = 0;
 
-    public int EtatIndex;
+    public float Score = 0;
+    public int TempsDeRepos = 0;
+
+    public string? EtatDeBase = null;
 
     public Categories Categorie;
 

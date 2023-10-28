@@ -8,12 +8,12 @@ internal class Program
     {
         SimulationFactory f = new();
         f.AddEntite();
-        return f.Simulation;
+        return f.Simu;
     }
 
     public static void Simulate(Simulation s)
     {
-        s.lancerSimulation();
+        s.LancerSimulation();
     }
 
     public Program()

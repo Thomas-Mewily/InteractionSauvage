@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InteractionSauvage\InteractionSauvage.csproj" />
+    <ProjectReference Include="..\Useful\Useful.csproj" />
   </ItemGroup>
 
 </Project>
