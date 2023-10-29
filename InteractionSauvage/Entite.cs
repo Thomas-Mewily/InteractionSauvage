@@ -114,10 +114,11 @@ public class Entite : SimulationComposante
 
         return false;
     }
+
     public void Avancer(float coef = 1)
     {
-        float deltaX = coef * VitesseMax * MathF.Cos(Direction);
-        float deltaY = coef * VitesseMax * MathF.Sin(Direction);
+        float deltaX = coef * VitesseMax * Direction.Cos;
+        float deltaY = coef * VitesseMax * Direction.Sin;
 
         if(deltaX* deltaX + deltaY* deltaY < 0.1) { return; }
 

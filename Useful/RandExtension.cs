@@ -8,7 +8,8 @@ public static class RandExtension
     public static float FloatUniform(this Random r, float min, float max)
     {
         if (min > max) { return r.FloatUniform(max, min); }
-        return r.NextFloat() % (max - min) + min;
+        var tmp = r.NextFloat();
+        return tmp * (max - min) + min;
     }
 
     public static int NextInt(this Random r, int max) => r.IntUniform(0, max);

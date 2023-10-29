@@ -1,4 +1,5 @@
-﻿using InteractionSauvage;
+﻿using Geometry;
+using InteractionSauvage;
 using InteractionSauvage.Interruptions;
 using InteractionSauvage.MachineEtats;
 using InteractionSauvage.Passifs;
@@ -51,7 +52,7 @@ public class SimulationFactory : SimulationComposante
         e.Taille = 10;
         e.Energie = 1;
         e.Categorie = HerbivoresC();
-        e.Direction = Rand.NextFloat(2f * MathF.PI);
+        e.Direction = Angle.FromRadian(Rand.NextFloat(2f * MathF.PI));
 
         //e.DeBase.EtatDeBase = "marcher";
         return e;
