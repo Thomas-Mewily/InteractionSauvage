@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Text;
 using Useful;
 using Geometry;
+using SimulationGraphique.Managers;
+using SharpDX.DirectWrite;
 
 namespace SimulationGraphique;
 
@@ -15,7 +17,7 @@ public static class SpriteBatchExtension
 
     public static void DrawEllipse(this SpriteBatch spriteBatch, Vec2 pos, Vec2 radius, Color color) 
     {
-        All.SpriteBatch.Draw(All.Assets.Circle, pos, null, color, 0, new Vec2(Assets.CircleRadius), radius / (float)Assets.CircleRadius, SpriteEffects.None, 0);
+        spriteBatch.Draw(All.Assets.Circle, pos, null, color, 0, new Vec2(Assets.CircleRadius), radius / (float)Assets.CircleRadius, SpriteEffects.None, 0);
     }
 
     public enum TextSize 
@@ -23,18 +25,20 @@ public static class SpriteBatchExtension
         Normal = 16,
     }
 
-    public static Vec2 Mesure(this SpriteBatch spriteBatch, string text) => All.Assets.Arial.MeasureString(text);
-
-    public static void DrawText(this SpriteBatch spriteBatch, string text, Vec2 pos, Color color, TextSize size = TextSize.Normal)
-        => DrawText(spriteBatch, text, pos, new Vec2(0.5f, 0), color, size);
-    public static void DrawText(this SpriteBatch spriteBatch, string text, Vec2 pos, Vec2 coefCenter, Color color, TextSize size = TextSize.Normal) 
+    public static void DrawText(this SpriteBatch spriteBatch, Font font, string text, Vec2 pos, Vec2 coefCenter, Color color, TextSize size = TextSize.Normal) 
     {
-        var m = spriteBatch.Mesure(text);
+        var m = (Vec2)font.MeasureString(text);
         float scale = (float)size / m.Y;
 
         pos -= m* scale* coefCenter;
-        spriteBatch.DrawString(All.Assets.Arial, text, pos, color, 0, Vec2.Zero, scale, SpriteEffects.None, 0);
+        spriteBatch.DrawString(font, text, pos, color, 0, Vec2.Zero, scale, SpriteEffects.None, 0);
     }
+    public static void DrawText(this SpriteBatch spriteBatch, Font font, string text, Vec2 pos, Color color, TextSize size = TextSize.Normal)
+        => DrawText(spriteBatch, font, text, pos, new Vec2(0.5f, 0), color, size);
+    public static void DrawText(this SpriteBatch spriteBatch, string text, Vec2 pos, Color color, TextSize size = TextSize.Normal)
+        => DrawText(spriteBatch, All.Assets.Arial, text, pos, new Vec2(0.5f, 0), color, size);
+    public static void DrawText(this SpriteBatch spriteBatch, string text, Vec2 pos, Vec2 coefCenter, Color color, TextSize size = TextSize.Normal)
+        => DrawText(spriteBatch, All.Assets.Arial, text, pos, coefCenter, color, size);
 
     /*
     public static void DrawDisk(this SpriteBatch spriteBatch, Vector2 position, float radius, Color color, string label, SpriteFont font, int segments = 128)

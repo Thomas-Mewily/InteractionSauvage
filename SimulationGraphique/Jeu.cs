@@ -34,13 +34,13 @@ public class LeJeu : Game
             Exit();
         }
 
-        All.Update();
+        All.Update(gameTime);
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
-        All.Draw();
+        All.Draw(gameTime);
 
         base.Draw(gameTime);
     }

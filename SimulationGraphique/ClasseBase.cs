@@ -6,6 +6,7 @@ using SimulationConsole;
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
+using SimulationGraphique.Managers;
 
 namespace SimulationGraphique;
 
@@ -22,5 +23,6 @@ public class ClasseBase
     public static SpriteBatch SpriteBatch => All.SpriteBatch;
     public static ContentManager Content => All.Content;
     public static Assets Assets => All.Assets;
+    public static Performance Perf => All.Performance;
 
 }

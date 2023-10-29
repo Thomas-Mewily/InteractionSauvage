@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using InteractionSauvage;
 using Microsoft.Xna.Framework.Content;
+using SimulationGraphique.Managers;
 
 namespace SimulationGraphique;
 
@@ -14,6 +15,8 @@ public class All
     public static SpriteBatch SpriteBatch { get; private set; }
     public static ContentManager Content { get; private set; }
     public static Assets Assets { get; private set; }
+
+    public static Performance Performance { get; private set; }
 
     public static Scene SceneActuel; // Pas Ouf mais ça suffit pour le moment
 
@@ -29,6 +32,7 @@ public class All
         Graphics = jeu.Graphics;
         GraphicsDevice = jeu.GraphicsDevice;
         Assets = new Assets();
+        Performance = new Performance();
 
         SceneActuel = scene;
 
@@ -42,15 +46,21 @@ public class All
         Assets.Unload();
     }
 
-    public static void Update() 
+    public static void Update(GameTime gameTime) 
     {
+        Performance.Update(gameTime);
         SceneActuel.Update();
     }
 
-    public static void Draw() 
+    public static void Draw(GameTime gameTime) 
     {
         GraphicsDevice.Clear(All.BackgroundColor);
+
+        SpriteBatch.Begin();
+        Performance.Draw(gameTime);
         SceneActuel.Draw();
+        SpriteBatch.End();
+
     }
 
 }

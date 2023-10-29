@@ -32,7 +32,8 @@ public class SceneSimu : Scene
 
     public override void Draw()
     {
-        SpriteBatch.Begin();
+
+
         string label;
 
         foreach (var entite in SimuFact.Simu.ToutesLesEntites)
@@ -53,6 +54,5 @@ public class SceneSimu : Scene
             SpriteBatch.DrawText(label, position + new Vec2(0, -32), Color.Black);
         }
 
-        SpriteBatch.End();
     }
 }

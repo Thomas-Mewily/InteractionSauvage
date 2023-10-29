@@ -1,13 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using InteractionSauvage;
-using SimulationConsole;
-using System;
-using System.Collections.Generic;
-using System.Reflection.Metadata;
 
-namespace SimulationGraphique;
+namespace SimulationGraphique.Managers;
 
 public class Assets : ClasseBase
 {
