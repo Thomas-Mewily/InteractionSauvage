@@ -3,11 +3,39 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Useful;
 
 namespace SimulationGraphique;
 
-public static class SpriteBatchExtensions
+public static class SpriteBatchExtension
 {
+    public static void DrawEllipse(this SpriteBatch spriteBatch, Vec2 pos, float radius, Color color)
+        => DrawEllipse(spriteBatch, pos, new Vec2(radius, radius), color);
+
+    public static void DrawEllipse(this SpriteBatch spriteBatch, Vec2 pos, Vec2 radius, Color color) 
+    {
+        All.SpriteBatch.Draw(All.Assets.Circle, pos, null, color, 0, new Vec2(Assets.CircleRadius), radius / (float)Assets.CircleRadius, SpriteEffects.None, 0);
+    }
+
+    public enum TextSize 
+    {
+        Normal = 16,
+    }
+
+    public static Vec2 Mesure(this SpriteBatch spriteBatch, string text) => All.Assets.Arial.MeasureString(text);
+
+    public static void DrawText(this SpriteBatch spriteBatch, string text, Vec2 pos, Color color, TextSize size = TextSize.Normal)
+        => DrawText(spriteBatch, text, pos, new Vec2(0.5f, 0), color, size);
+    public static void DrawText(this SpriteBatch spriteBatch, string text, Vec2 pos, Vec2 coefCenter, Color color, TextSize size = TextSize.Normal) 
+    {
+        var m = spriteBatch.Mesure(text);
+        float scale = (float)size / m.Y;
+
+        pos -= m* scale* coefCenter;
+        spriteBatch.DrawString(All.Assets.Arial, text, pos, color, 0, Vec2.Zero, scale, SpriteEffects.None, 0);
+    }
+
+    /*
     public static void DrawDisk(this SpriteBatch spriteBatch, Vector2 position, float radius, Color color, string label, SpriteFont font, int segments = 128)
     {
         Texture2D pixelTexture = CreatePixelTexture(spriteBatch.GraphicsDevice, color);
@@ -30,8 +58,7 @@ public static class SpriteBatchExtensions
     }
     private static void DrawPolygon(SpriteBatch spriteBatch, Vector2[] points, Color color)
     {
-        if (points.Length < 3)
-            return;
+        if (points.Length < 3) { return; }
 
         Texture2D pixelTexture = CreatePixelTexture(spriteBatch.GraphicsDevice, color);
         for (int i = 1; i < points.Length - 1; i++)
@@ -40,6 +67,7 @@ public static class SpriteBatchExtensions
         }
     }
 
+    
     private static void DrawTriangle(SpriteBatch spriteBatch, Vector2 point1, Vector2 point2, Vector2 point3, Texture2D texture)
     {
         Vector2[] vertices = new Vector2[] { point1, point2, point3 };
@@ -56,5 +84,5 @@ public static class SpriteBatchExtensions
         Texture2D texture = new Texture2D(graphicsDevice, 1, 1);
         texture.SetData(new[] { color });
         return texture;
-    }
+    }*/
 }

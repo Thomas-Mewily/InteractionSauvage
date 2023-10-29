@@ -9,7 +9,15 @@
     <Import_RootNamespace>SimulationGraphique</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)SpriteBatchExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Assets.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)All.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenes\Scene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Scenes\SceneSimu.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ClasseBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpriteBatchExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Typedef.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TypedefMonoGame.cs" />
     <Compile Include="..\SimulationGraphique\Jeu.cs" />
   </ItemGroup>
   <ItemGroup>

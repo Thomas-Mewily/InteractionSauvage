@@ -38,7 +38,7 @@ public class Simulation : CheckPointable
         Actuel.Time = 0;
         Actuel.Entites = new List<Entite>();
 
-        Grille = new Grille(200, 200, 10);
+        Grille = new Grille(96, 54, 10);
         Rand = new Random();
     }
 
