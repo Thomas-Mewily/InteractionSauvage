@@ -6,6 +6,7 @@ using SimulationConsole;
 using System;
 using System.Collections.Generic;
 using static SimulationGraphique.SpriteBatchExtension;
+using Geometry;
 
 namespace SimulationGraphique.Scenes;
 
@@ -36,7 +37,7 @@ public class SceneSimu : Scene
 
         foreach (var entite in SimuFact.Simu.ToutesLesEntites)
         {
-            Vector2 position = new Vector2(entite.X * GraphicsDevice.Viewport.Width / SimuFact.Simu.Grille.Longueur,
+            Vec2 position = new Vec2(entite.X * GraphicsDevice.Viewport.Width / SimuFact.Simu.Grille.Longueur,
                                            entite.Y * GraphicsDevice.Viewport.Height / SimuFact.Simu.Grille.Hauteur);
 
             //Random random = new Random((int)entite.Categorie.Categorie);

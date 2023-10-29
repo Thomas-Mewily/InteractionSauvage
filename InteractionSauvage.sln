@@ -11,7 +11,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Useful", "Useful\Useful.csp
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SimulationGraphique", "SimulationGraphique\SimulationGraphique.shproj", "{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationWindows", "SimulationWindows\SimulationWindows.csproj", "{7BF1DCB2-C8ED-47C1-B472-C8FDCB1C4892}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimulationWindows", "SimulationWindows\SimulationWindows.csproj", "{7BF1DCB2-C8ED-47C1-B472-C8FDCB1C4892}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Geometry", "Geometry\Geometry.csproj", "{24FA48E1-6C5D-44E6-9672-4E0283937944}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{47C7F333-ADE4-46B1-8D23-9BD34304B569}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +42,10 @@ Global
 		{7BF1DCB2-C8ED-47C1-B472-C8FDCB1C4892}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BF1DCB2-C8ED-47C1-B472-C8FDCB1C4892}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BF1DCB2-C8ED-47C1-B472-C8FDCB1C4892}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24FA48E1-6C5D-44E6-9672-4E0283937944}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24FA48E1-6C5D-44E6-9672-4E0283937944}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24FA48E1-6C5D-44E6-9672-4E0283937944}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24FA48E1-6C5D-44E6-9672-4E0283937944}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

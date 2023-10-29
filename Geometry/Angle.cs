@@ -1,15 +1,18 @@
-﻿
-namespace Useful;
+﻿using System;
+
+namespace Geometry;
 
 public struct Angle
 {
+    #region Constructor
     public float Degree
     {
-        get => Radian * TurnDegree / TurnRadian;
-        set => Radian = value * TurnRadian / TurnDegree;
+        get => _Radian * TurnDegree / TurnRadian;
+        set => _Radian = value * TurnRadian / TurnDegree;
     }
-    public float Radian { get; set; }
-    public float One { get { return Degree / TurnDegree; } set { Degree = value * TurnDegree; } }
+    private float _Radian;
+    public float Radian { get => _Radian; set => _Radian = (value % TurnRadian + TurnRadian) % TurnRadian; }
+    public float One { get => _Radian / TurnRadian; set => _Radian = value * TurnRadian; }
 
     public float Cos => MathF.Cos(Radian);
     public float Sin => MathF.Sin(Radian);
@@ -34,7 +37,7 @@ public struct Angle
     /// <param name="fromRadianUsedBySystem"></param>
     public Angle(float fromRadianUsedBySystem)
     {
-        Radian = fromRadianUsedBySystem;
+        _Radian = fromRadianUsedBySystem;
     }
 
     #region Operator
@@ -56,15 +59,16 @@ public struct Angle
 
     #region Basic Method
     public override string ToString() => Degree + "°";
-    public override bool Equals(object? obj) => obj is Angle a && a == this;
+    public override bool Equals(object obj) => obj is Angle a && a == this;
     public override int GetHashCode() => Radian.GetHashCode();
     #endregion
 
     #region Static Methods
-    public static Angle FromDegree(float degree) => new Angle { Degree = degree };
-    public static Angle FromRadian(float radian) => new Angle { Radian = radian };
-    public static Angle AngleFromOne(float one)  => new Angle { One = one };
+    public static Angle FromDegree(float degree) => new() { Degree = degree };
+    public static Angle FromRadian(float radian) => new() { Radian = radian };
+    public static Angle AngleFromOne(float one)  => new() { One = one };
 
     public static Angle Zero => FromRadian(0);
+    #endregion
     #endregion
 }

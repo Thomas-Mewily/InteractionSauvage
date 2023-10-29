@@ -1,4 +1,5 @@
-﻿using InteractionSauvage.Interruptions;
+﻿using Geometry;
+using InteractionSauvage.Interruptions;
 using InteractionSauvage.MachineEtats;
 using InteractionSauvage.Passifs;
 using System.ComponentModel;
@@ -31,17 +32,19 @@ public class Entite : SimulationComposante
     public float Score { get => Actuel.Score; set => Actuel.Score = Score; }
     public int TempsDeRepos { get => Actuel.TempsDeRepos; set => Actuel.TempsDeRepos = TempsDeRepos; }
 
-    public float X { get => Actuel.X; set => Actuel.X = value; } 
-    public float Y { get => Actuel.Y; set => Actuel.Y = value; }
+    public Vec2 Position { get => Actuel.Position; set => Actuel.Position = value; } 
+    public float X { get => Actuel.Position.X; set => Actuel.Position.X = value; }
+    public float Y { get => Actuel.Position.Y; set => Actuel.Position.Y = value; }
 
     public int GrilleIndiceX = 0;
     public int GrilleIndiceY = 0;
 
-    public float VX { get => Actuel.VX; set => Actuel.VX = value; }
-    public float VY { get => Actuel.VY; set => Actuel.VY = value; }
+    public Vec2 Vitesse { get => Actuel.Vitesse; set => Actuel.Vitesse = value; }
+    public float VX { get => Actuel.Vitesse.X; set => Actuel.Vitesse.X = value; }
+    public float VY { get => Actuel.Vitesse.Y; set => Actuel.Vitesse.Y = value; }
 
     public float VitesseMax { get => Actuel.VitesseMax; set => Actuel.VitesseMax = value; }
-    public float Direction { get => Actuel.Direction; set => Actuel.Direction = value; }
+    public Angle Direction { get => Actuel.Direction; set => Actuel.Direction = value; }
     
     public float Energie { get => Actuel.Energie; set => Actuel.Energie = value; }
     public float Nourriture { get => Actuel.Nourriture; set => Actuel.Nourriture = value; }

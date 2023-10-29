@@ -12,5 +12,5 @@ namespace SimulationGraphique;
 
 public static class Extension
 {
-    public static Vec2 ToVec(this Angle a) => new(a.Cos, a.Sin);
+    //public static Vec2 ToVec(this Angle a) => new(a.Cos, a.Sin);
 }

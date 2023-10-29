@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Geometry\Geometry.csproj" />
     <ProjectReference Include="..\Useful\Useful.csproj" />
   </ItemGroup>
 
