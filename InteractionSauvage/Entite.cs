@@ -135,9 +135,15 @@ public class Entite : SimulationComposante
     {
         float distancePlusProche = float.MaxValue;
         Entite plusProche = null;
-        for (int i = 0; i < Grille.NbCaseHauteur; i++)
+
+        int minI = Math.Max(0, (int)((Y - DistanceVision) / Grille.TailleCase));
+        int maxI = Math.Min(Grille.NbCaseHauteur - 1, (int)((Y + DistanceVision) / Grille.TailleCase));
+        int minJ = Math.Max(0, (int)((X - DistanceVision) / Grille.TailleCase));
+        int maxJ = Math.Min(Grille.NbCaseLongueur - 1, (int)((X + DistanceVision) / Grille.TailleCase));
+
+        for (int i = minI; i < maxI; i++)
         {
-            for (int j = 0; j < Grille.NbCaseLongueur; j++)
+            for (int j = minJ; j < maxJ; j++)
             {
                 if (Grille.EstCaseDansVision(i, j, X, Y, DistanceVision, Direction, ChampsVision))
                 {
