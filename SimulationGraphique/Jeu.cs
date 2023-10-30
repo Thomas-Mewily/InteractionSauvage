@@ -19,6 +19,12 @@ public class LeJeu : Game
         Graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+        Graphics.PreferredBackBufferWidth = 800;
+        Graphics.PreferredBackBufferHeight = 600;
+
+        Graphics.IsFullScreen = false;
+        Graphics.PreferMultiSampling = true;
+        Window.AllowUserResizing = true;
     }
 
     protected override void LoadContent()

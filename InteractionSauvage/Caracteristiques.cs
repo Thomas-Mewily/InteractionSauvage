@@ -12,6 +12,9 @@ public struct Caracteristiques
     /// <summary> [0, 1]. Si 0 => Dodo forcé </summary>
     public float Energie;
 
+    public float DistanceVision;
+    public Angle ChampsVision;
+
     public Angle Direction;
     public Vec2 Position;
     public Vec2 Vitesse;

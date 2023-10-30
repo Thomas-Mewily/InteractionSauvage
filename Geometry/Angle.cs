@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Geometry;
 
@@ -16,6 +17,22 @@ public struct Angle
 
     public float Cos => MathF.Cos(Radian);
     public float Sin => MathF.Sin(Radian);
+
+    public bool EstEntre(Angle debut, Angle fin)
+    {
+        float angleNormalise = (Radian % (2 * (float)Math.PI) + 2 * (float)Math.PI) % (2 * (float)Math.PI);
+        float debutNormalise = (debut.Radian % (2 * (float)Math.PI) + 2 * (float)Math.PI) % (2 * (float)Math.PI);
+        float finNormalise = (fin.Radian % (2 * (float)Math.PI) + 2 * (float)Math.PI) % (2 * (float)Math.PI);
+
+        if (debutNormalise <= finNormalise)
+        {
+            return angleNormalise >= debutNormalise && angleNormalise <= finNormalise;
+        }
+        else
+        {
+            return angleNormalise >= debutNormalise || angleNormalise <= finNormalise;
+        }
+    }
 
     #region Const
     public const float TurnRadian = MathF.PI * 2;
@@ -61,6 +78,8 @@ public struct Angle
     public override string ToString() => Degree + "°";
     public override bool Equals(object obj) => obj is Angle a && a == this;
     public override int GetHashCode() => Radian.GetHashCode();
+
+    
     #endregion
 
     #region Static Methods

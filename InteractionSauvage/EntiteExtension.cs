@@ -16,6 +16,7 @@ public static class EntiteExtension
     {
         e.X = x;
         e.Y = y;
+        e.PositionChanger();
         return e;
     }
 }

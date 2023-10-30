@@ -21,14 +21,23 @@ public class SimulationFactory : SimulationComposante
     {
         var MoutonME = new MachineEtat();
         // le 1er état ajouté est l'état suggeré par défaut/l'état d'entrée
-        MoutonME.Add("marcher",  new MarcherAleatoire(0.5f), new Transition("cours ma gazelle", new Apres(20), "courrir"));
-        MoutonME.Add("courrir",  new MarcherAleatoire(1f),   new Transition("je suis epuise",   new Apres(40), "attendre"));
-        MoutonME.Add("attendre", new Attendre(),   new Transition("c'est reparti pour un tour", new Apres(50), "marcher"));
+        MoutonME.Add("marcher",  new MarcherVersNouriture(0.5f), new Transition("cours ma gazelle", new Apres(Rand.IntUniform(10, 40)), "courrir"));
+        MoutonME.Add("courrir",  new MarcherVersNouriture(1f),   new Transition("je suis epuise",   new Apres(Rand.IntUniform(30, 80)), "attendre"));
+        MoutonME.Add("attendre", new Attendre(),   new Transition("c'est reparti pour un tour", new Apres(Rand.IntUniform(40, 90)), "marcher"));
 
         //MoutonME.Add("courrir", new Marcher(1), new Transition("je suis epuise", new Apres(2), new EtatSuivant(4, "attendre"), new EtatSuivant(8, "marcher")));
         //MoutonME.Add("courrir", new Marcher(1), new Transition("je suis epuise", new Apres(2), new List<EtatSuivant> { new EtatSuivant(4, "attendre"), new EtatSuivant(8, "marcher") }));
 
         return MoutonME;
+    }
+
+    public MachineEtat HerbeME()
+    {
+        var HerbeME = new MachineEtat();
+
+        HerbeME.Add("rien", new Attendre(), new Transition("trasitionne pas", new Jamais(), "rien"));
+
+        return HerbeME;
     }
 
     public Categories PlantesC() => PlantesCat;
@@ -47,32 +56,40 @@ public class SimulationFactory : SimulationComposante
     public Entite GenerateMouton() 
     {
         Entite e = NewEntite("Mouton", MoutonME()).WithRandomPosition(Simu);
+
         e.VitesseMax = 2;
         e.Age = 10;
         e.Taille = 10;
         e.Energie = 1;
         e.Categorie = HerbivoresC();
         e.Direction = Angle.FromRadian(Rand.NextFloat(2f * MathF.PI));
-
+        //e.Direction = Angle.FromDegree(225f);
+        e.ChampsVision = Angle.FromDegree(180f);
+        e.DistanceVision = 100f;
         //e.DeBase.EtatDeBase = "marcher";
         return e;
     }
 
-    public void GenerateHerbe()
+    public Entite GenerateHerbe()
     {
-        /*
-        Entite e = newEntite(HerbeME(), "Herbe").WithRandomPosition();
-        e.DeBase.VitesseMax = 0;
-        e.DeBase.Age = 1;
-        e.DeBase.Energie = 1;
-        e.DeBase.Direction = 0;
-        e.DeBase.Categorie = PlantesC();
-        return e;*/
+
+        Entite e = NewEntite("Herbe", HerbeME()).WithRandomPosition(Simu);
+        e.VitesseMax = 0;
+        e.Age = 1;
+        e.Taille = 5;
+        e.Energie = 1;
+        e.Categorie = PlantesC();
+        e.Direction = 0;
+        e.ChampsVision = Angle.FromDegree(0);
+        e.DistanceVision = 0f;
+
+        return e;
     }
 
     public void AddEntite() 
     {
         Simu.Add(GenerateMouton());
+        Simu.Add(GenerateHerbe());
         //Simu.EntitesDeBase.Add(GenerateHerbe());
     }
 }
