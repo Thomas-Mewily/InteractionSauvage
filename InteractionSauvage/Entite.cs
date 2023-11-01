@@ -1,11 +1,6 @@
 ﻿using Geometry;
-using InteractionSauvage.Interruptions;
 using InteractionSauvage.MachineEtats;
-using InteractionSauvage.Passifs;
-using System.ComponentModel;
-using System.Linq;
 using Useful;
-using static InteractionSauvage.MachineEtats.Etat;
 
 namespace InteractionSauvage;
 
@@ -15,6 +10,8 @@ public class Entite : SimulationComposante
 
     public MachineEtat MachineEtat;
     public string EtatDeBase => DeBase.EtatDeBase ?? MachineEtat.EtatSuggererParDefaut;
+
+    public AnimationBase? Animation = null;
 
     #region Champs Affecté par la simulation
     public Etat? MaybeEtat = null;
@@ -97,6 +94,8 @@ public class Entite : SimulationComposante
 
     public void Update()
     {
+        Animation?.Update(this);
+
         Actuel.Age++;
         TempsDeRepos = TempsDeRepos > 0 ? TempsDeRepos - 1 : 0;
 

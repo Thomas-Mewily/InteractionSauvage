@@ -3,9 +3,10 @@ using InteractionSauvage;
 using InteractionSauvage.Interruptions;
 using InteractionSauvage.MachineEtats;
 using InteractionSauvage.Passifs;
+using SimulationConsole;
 using Useful;
 
-namespace SimulationConsole;
+namespace InteractionSauvage;
 
 public class SimulationFactory : SimulationComposante
 {

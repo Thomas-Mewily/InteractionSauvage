@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using InteractionSauvage;
-using SimulationConsole;
+
 using System;
 using System.Collections.Generic;
 using static SimulationGraphique.SpriteBatchExtension;
@@ -16,12 +16,12 @@ public class SceneSimu : Scene
 {
     private Camera Cam;
 
-    public SimulationFactory SimuFact;
+    public SimulationFactoryGraphique SimuFact;
     public Simulation Simu => SimuFact.Simu;
 
     public override void Load()
     {
-        SimuFact = new SimulationFactory();
+        SimuFact = new SimulationFactoryGraphique();
         for (int i = 0; i < 50; i++)
         {
             SimuFact.AddEntite();
@@ -81,7 +81,8 @@ public class SceneSimu : Scene
 
         foreach (var e in Simu.ToutesLesEntites)
         {
-            SpriteBatch.Draw(Assets.Sheep, e.Position, null, Color.White, e.Direction, ((Point2)Assets.Sheep.Bounds.Size) / 2, new Vec2(1.0f/ Assets.Sheep.Width, 1.0f / Assets.Sheep.Height)* e.Rayon*2, SpriteEffects.None, 0);
+            e.Animation?.Draw(e);
+            //SpriteBatch.Draw(Assets.Sheep, e.Position, null, Color.White, e.Direction, ((Point2)Assets.Sheep.Bounds.Size) / 2, new Vec2(1.0f/ Assets.Sheep.Width, 1.0f / Assets.Sheep.Height)* e.Rayon*2, SpriteEffects.None, 0);
         }
 
         // Afficher le texte par devant
@@ -89,7 +90,7 @@ public class SceneSimu : Scene
         {
             if ((Camera.Peek().WorldPosition(All.Input.Mouse.X, All.Input.Mouse.Y) - e.Position).Length < e.Rayon)
             {
-                SpriteBatch.DrawText(e.Nom + " : " + e.Etat.Nom, e.Position - new Vec2(0, e.Rayon+32), Color.Black);
+                e.Animation?.DrawExtraInfo(e);
             }
         }
 

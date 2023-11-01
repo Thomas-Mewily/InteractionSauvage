@@ -13,6 +13,7 @@ public class Assets : ClasseBase
     public SpriteFont Arial { get; private set; }
 
     public Texture2D  Sheep { get; private set; }
+    public Texture2D  Grass { get; private set; }
 
 
     public override void Load()
@@ -22,6 +23,7 @@ public class Assets : ClasseBase
 
         Circle = Content.Load<Texture2D>("circle");
         Sheep  = Content.Load<Texture2D>("sheep");
+        Grass  = Content.Load<Texture2D>("grass");
         Arial  = Content.Load<SpriteFont>("Arial");
     }
 
