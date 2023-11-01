@@ -9,9 +9,10 @@
     <Import_RootNamespace>SimulationGraphique</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\CameraExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Vec2Extension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Managers\Assets.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)All.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Managers\Camera.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Managers\Input.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Managers\Screen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Managers\Performance.cs" />

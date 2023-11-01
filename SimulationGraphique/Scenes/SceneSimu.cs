@@ -76,32 +76,21 @@ public class SceneSimu : Scene
         Camera.Push(Cam);
         SpriteBatch.Debut();
 
-        SpriteBatch.DrawRectangle(Vec2.Zero, Simu.Grille.Size, Color.Chocolate);
+        SpriteBatch.DrawRectangle(Vec2.Zero, Simu.Grille.Size, new Color(168,90,38));
 
-        //SpriteBatch.DrawEllipse(Simu.Grille.Size / 2, Simu.Grille.Size, Color.Purple);
 
         foreach (var e in Simu.ToutesLesEntites)
         {
-            //string label;
-            /*
-            Vec2 position = new Vec2(entite.X * GraphicsDevice.Viewport.Width / SimuFact.Simu.Grille.Longueur,
-                                           entite.Y * GraphicsDevice.Viewport.Height / SimuFact.Simu.Grille.Hauteur);
-
-            //Random random = new Random((int)entite.Categorie.Categorie);
-            //Color couleurAleatoire = new Color(random.Next(256), random.Next(256), random.Next(256));
-
-            var rayonDuCercle = entite.Taille * GraphicsDevice.Viewport.Width / SimuFact.Simu.Grille.Longueur;
-
-            label = entite.Nom + " : " + entite.Etat.Nom;
-            SpriteBatch.DrawEllipse(position, rayonDuCercle, entite.Categorie.Categorie == Categories.CategorieEnum.Herbivore ? Color.White : Color.Green);
-
-            // petetite bidouille pour le texte
-            //SpriteBatch.DrawText("Beep Beep, I'm a Sheep", position + new Vec2(0, -32), Color.Black);
-            SpriteBatch.DrawText(label, position + new Vec2(0, -32), Color.Black);
-            */
-
-            //SpriteBatch.DrawEllipse(e.Position, e.Rayon, Color.White);
             SpriteBatch.Draw(Assets.Sheep, e.Position, null, Color.White, e.Direction, ((Point2)Assets.Sheep.Bounds.Size) / 2, new Vec2(1.0f/ Assets.Sheep.Width, 1.0f / Assets.Sheep.Height)* e.Rayon*2, SpriteEffects.None, 0);
+        }
+
+        // Afficher le texte par devant
+        foreach (var e in Simu.ToutesLesEntites)
+        {
+            if ((Camera.Peek().WorldPosition(All.Input.Mouse.X, All.Input.Mouse.Y) - e.Position).Length < e.Rayon)
+            {
+                SpriteBatch.DrawText(e.Nom + " : " + e.Etat.Nom, e.Position - new Vec2(0, e.Rayon+32), Color.Black);
+            }
         }
 
 

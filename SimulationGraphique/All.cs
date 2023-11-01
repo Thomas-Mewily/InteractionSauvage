@@ -27,7 +27,7 @@ public class All
 
     public static LeJeu Jeu { get; private set; }
 
-    public static Color BackgroundColor = Color.Tomato;
+    public static Color BackgroundColor = Color.DarkGreen;
 
     public static void Load(LeJeu jeu, Scene scene)
     {
@@ -71,7 +71,7 @@ public class All
     public static int NbDebugText = 0;
     public static void Draw(GameTime gameTime) 
     {
-        Camera.Push(CameraExtension.Default);
+        Camera.Push(Camera.Default);
 
         NbDebugText = 0;
         GraphicsDevice.Clear(BackgroundColor);

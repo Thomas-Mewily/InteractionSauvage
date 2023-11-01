@@ -14,7 +14,8 @@ public struct Vec2
     public float Y;
 
     #region Properties
-    public float Length { get => MathF.Pow(X * X + Y * Y, 0.5f); set { this = Normalized * value; } }
+    public float LengthSquared => X * X + Y * Y;
+    public float Length { get => MathF.Sqrt(LengthSquared); set { this = Normalized * value; } }
     public bool HaveLength => HaveXLength || HaveYLength;
     public bool HaveXLength => X != 0;
     public bool HaveYLength => Y != 0;
@@ -85,7 +86,7 @@ public struct Vec2
     #region Implicit
     //public static implicit operator Vec3(Vec2 a) => new Vec3(a);
     public static implicit operator Angle(Vec2 a) => a.Angle;
-    public static implicit operator Vec2(float a) => new Vec2(a);
+    public static implicit operator Vec2(float a) => new(a);
 
 #if USE_MONOGAME
     public static implicit operator Microsoft.Xna.Framework.Vector2(Vec2 a) => new(a.X,a.Y);

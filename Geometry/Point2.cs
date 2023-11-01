@@ -15,7 +15,8 @@ public struct Point2
     public int X;
     public int Y;
 
-    public float Length => MathF.Pow(X * X + Y * Y, 0.5f);
+    public float LengthSquared => X * X + Y * Y;
+    public float Length => MathF.Sqrt(LengthSquared);
 
     public bool HaveLength => HaveXLength || HaveYLength;
     public bool HaveXLength => X != 0;
@@ -66,11 +67,11 @@ public struct Point2
 
     #region Implicit
     public static implicit operator Vec2(Point2 a) => new(a.X, a.Y);
-    public static implicit operator Point2(int a) => new Point2(a);
+    public static implicit operator Point2(int a) => new(a);
 
 #if USE_MONOGAME
     public static implicit operator Vector2(Point2 a) => new(a.X, a.Y);
-    public static implicit operator Point2(Point a) => new Point2(a.X, a.Y);
+    public static implicit operator Point2(Point a) => new(a.X, a.Y);
 #endif
     public static implicit operator Point3(Point2 a) => new(a.X, a.Y, 0);
     #endregion

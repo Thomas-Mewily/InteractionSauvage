@@ -15,7 +15,8 @@ public struct Point3
     public int Y;
     public int Z;
 
-    public float Length => MathF.Pow(X * X + Y * Y + Z * Z, 0.5f);
+    public float LengthSquared => X * X + Y * Y + Z * Z;
+    public float Length => MathF.Sqrt(LengthSquared);
     
     public bool HaveLength  => HaveXLength || HaveYLength;
     public bool HaveXLength => X != 0;
@@ -68,7 +69,7 @@ public struct Point3
 
     #region Implicit
     public static implicit operator Vec3(Point3 a) => new(a.X, a.Y, a.Z);
-    public static implicit operator Point3(int a) => new Point3(a);
+    public static implicit operator Point3(int a) => new(a);
 
     #endregion
     #endregion

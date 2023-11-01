@@ -14,7 +14,7 @@ public class Entite : SimulationComposante
     public string Nom;
 
     public MachineEtat MachineEtat;
-    public string EtatDeBase => DeBase.EtatDeBase == null ? MachineEtat.EtatSuggererParDefaut : DeBase.EtatDeBase;
+    public string EtatDeBase => DeBase.EtatDeBase ?? MachineEtat.EtatSuggererParDefaut;
 
     #region Champs Affecté par la simulation
     public Etat? MaybeEtat = null;
@@ -52,6 +52,8 @@ public class Entite : SimulationComposante
     
     public int Age { get => Actuel.Age; set => Actuel.Age = value; }
 
+    // Taille & Rayon : même chose
+    public float Taille { get => Actuel.Rayon; set => Actuel.Rayon = value; }
     public float Rayon { get => Actuel.Rayon; set => Actuel.Rayon = value; }
 
     public float DistanceVision { get => Actuel.DistanceVision; set => Actuel.DistanceVision = value; }
@@ -76,7 +78,7 @@ public class Entite : SimulationComposante
             }
         } 
     }
-    public List<Caracteristiques> CheckPoints = new List<Caracteristiques>() { new Caracteristiques() };
+    public List<Caracteristiques> CheckPoints = new() { new Caracteristiques() };
 
     public Entite(Simulation simu, string? nom = null, MachineEtat ? e = null)
     {
@@ -131,25 +133,26 @@ public class Entite : SimulationComposante
 
         return false;
     }
+
     public void NouritureDirection()
     {
         float distancePlusProche = float.MaxValue;
-        Entite plusProche = null;
+        Entite? plusProche = null;
 
-        int minI = Math.Max(0, (int)((Y - DistanceVision) / Grille.TailleCase));
-        int maxI = Math.Min(Grille.NbCaseHauteur - 1, (int)((Y + DistanceVision) / Grille.TailleCase));
-        int minJ = Math.Max(0, (int)((X - DistanceVision) / Grille.TailleCase));
-        int maxJ = Math.Min(Grille.NbCaseLongueur - 1, (int)((X + DistanceVision) / Grille.TailleCase));
+        int minY = Math.Max(0, (int)((Y - DistanceVision) / Grille.TailleCase));
+        int maxY = Math.Min(Grille.NbCaseHauteur - 1, (int)((Y + DistanceVision) / Grille.TailleCase));
+        int minX = Math.Max(0, (int)((X - DistanceVision) / Grille.TailleCase));
+        int maxX = Math.Min(Grille.NbCaseLongueur - 1, (int)((X + DistanceVision) / Grille.TailleCase));
 
-        for (int i = minI; i < maxI; i++)
+        for (int y = minY; y < maxY; y++)
         {
-            for (int j = minJ; j < maxJ; j++)
+            for (int x = minX; x < maxX; x++)
             {
-                if (Grille.EstCaseDansVision(i, j, X, Y, DistanceVision, Direction, ChampsVision))
+                if (Grille.EstCaseDansVision(x, y, X, Y, DistanceVision, Direction, ChampsVision))
                 {
-                    foreach (Entite e in Grille.GetByIndice(i, j))
+                    foreach (Entite e in Grille.GetByIndice(x, y))
                     {
-                        Console.WriteLine(e);
+                        //Console.WriteLine(e);
                         if (Categorie.CategoriesNouritures.Contains(e.Categorie.Categorie))
                         {
                             float distance = (e.X - X) * (e.X - X) + (e.Y - Y) * (e.Y - Y);

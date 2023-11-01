@@ -16,7 +16,8 @@ public struct Vec3
 
     #region Properties
 
-    public float Length { get=> MathF.Pow(X * X + Y * Y + Z * Z, 0.5f); set => this = Normalized * value; }
+    public float LengthSquared => X * X + Y * Y + Z * Z;
+    public float Length { get=> MathF.Sqrt(LengthSquared); set => this = Normalized * value; }
     public bool HaveLength => HaveXLength || HaveYLength || HaveZLength;
     public bool HaveXLength => X != 0;
     public bool HaveYLength => Y != 0;
@@ -83,7 +84,7 @@ public struct Vec3
     #endregion
 
     #region Implicit
-    public static implicit operator Vec3(float a) => new Vec3(a);
+    public static implicit operator Vec3(float a) => new(a);
 
 #if USE_MONOGAME
     public static implicit operator Vector3(Vec3 a) => new((float)a.X, (float)a.Y, (float)a.Z);

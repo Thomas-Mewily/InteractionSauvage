@@ -53,7 +53,7 @@ public class SimulationFactory : SimulationComposante
 
     public Entite NewEntite(string nom, MachineEtat? machineEtat) => new(Simu, nom + "#" + Simu.EntitesDeBase.Count, machineEtat);
 
-    public Entite GenerateMouton() 
+    public virtual Entite GenerateMouton() 
     {
         Entite e = NewEntite("Mouton", MoutonME()).WithRandomPosition(Simu);
 
@@ -70,9 +70,8 @@ public class SimulationFactory : SimulationComposante
         return e;
     }
 
-    public Entite GenerateHerbe()
+    public virtual Entite GenerateHerbe()
     {
-
         Entite e = NewEntite("Herbe", HerbeME()).WithRandomPosition(Simu);
         e.VitesseMax = 0;
         e.Age = 1;

@@ -5,7 +5,7 @@ namespace InteractionSauvage;
 
 public struct SimulationChamps 
 {
-    public List<Entite> Entites = new List<Entite>();
+    public List<Entite> Entites = new();
     public Temps Time;
 
     public SimulationChamps() { }
@@ -14,7 +14,7 @@ public struct SimulationChamps
 public class Simulation : CheckPointable
 {
     SimulationChamps Actuel;
-    public List<SimulationChamps> CheckPoints = new List<SimulationChamps> { };
+    public List<SimulationChamps> CheckPoints = new() { };
 
     public List<Entite> ToutesLesEntites { get => Actuel.Entites; set => Actuel.Entites = value; }
     public List<Entite> EntitesDeBase => CheckPoints.Count == 0 ? Actuel.Entites : CheckPoints[0].Entites;

@@ -6,9 +6,7 @@ using System.Text;
 using Useful;
 using Geometry;
 using SimulationGraphique.Managers;
-using SharpDX.DirectWrite;
 using Render;
-using SharpDX.MediaFoundation;
 
 namespace SimulationGraphique;
 
@@ -21,7 +19,7 @@ public static class SpriteBatchExtension
     {
         Active = true;
         
-        spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, RasterizerState.CullNone, null, Camera.Peek().TransformMatrix());
+        spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, RasterizerState.CullNone, null, Camera.Peek().TransformMatrix);
     }
 
     public static void Fin(this SpriteBatch spriteBatch) { Active = false; spriteBatch.End(); }
@@ -44,7 +42,7 @@ public static class SpriteBatchExtension
 
     public enum TextSize 
     {
-        Normal = 24,
+        Normal = 18,
     }
 
     public static void DrawText(this SpriteBatch spriteBatch, Font font, string text, Vec2 pos, Vec2 coefCenter, Color color, TextSize size = TextSize.Normal) 
@@ -73,7 +71,7 @@ public static class SpriteBatchExtension
             spriteBatch.End();
         }
 
-        Camera.Push(CameraExtension.Default);
+        Camera.Push(Camera.Default);
         spriteBatch.Debut();
 
         spriteBatch.DrawText(text, new Vec2(0, All.NbDebugText++ * (int)TextSize.Normal), Vec2.Zero, Color.Black, TextSize.Normal);
