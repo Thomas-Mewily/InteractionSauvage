@@ -74,6 +74,9 @@ public struct Vec2
     public static Vec2 operator *(float a, Vec2 b) => new(a * b.X, a * b.Y);
     public static Vec2 operator *(Vec2 a, float b) => new(b * a.X, b * a.Y);
 
+    public static Vec2 operator *(Vec2 a, Angle b) => Vec2.MultiplyAngle(a, b);
+
+
     public static Vec2 operator /(Vec2 a, Vec2 b) => new(a.X / b.X, a.Y / b.Y);
     public static Vec2 operator /(float a, Vec2 b) => new(a / b.X, a / b.Y);
     public static Vec2 operator /(Vec2 a, float b) => new(a.X / b, a.Y / b);
@@ -82,6 +85,7 @@ public struct Vec2
     #region Implicit
     //public static implicit operator Vec3(Vec2 a) => new Vec3(a);
     public static implicit operator Angle(Vec2 a) => a.Angle;
+    public static implicit operator Vec2(float a) => new Vec2(a);
 
 #if USE_MONOGAME
     public static implicit operator Microsoft.Xna.Framework.Vector2(Vec2 a) => new(a.X,a.Y);
@@ -105,15 +109,6 @@ public struct Vec2
     public override bool Equals(object obj) => (obj != null && obj is Vec2 v && v == this);
     public override int GetHashCode() => (X * 10000 + Y).GetHashCode();
 #endregion
-
-    #region Other Methods
-    #region Point
-    /*
-    public Point2 GetPointRound() => new Point2((int)Math.Round(X), (int)Math.Round(Y));
-    public Point2 GetPointFloor() => new Point2((int)Math.Floor(X), (int)Math.Floor(Y));
-    public Point2 GetPointCeiling() => new Point2((int)Math.Ceiling(X), (int)Math.Ceiling(Y));*/
-    #endregion
-    #endregion
 
     #region Static Methods
     public static Vec2 Zero => new(0);

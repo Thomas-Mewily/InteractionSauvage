@@ -59,7 +59,7 @@ public class Performance
         }
 
 #if DEBUG
-        All.SpriteBatch.DrawText("fps: " + (int)Fps + " ups: " + (int)Ups, Vec2.Zero, Vec2.Zero, Color.Black, SpriteBatchExtension.TextSize.Normal);
+        All.SpriteBatch.DebugText("fps: " + (int)Fps + " ups: " + (int)Ups);
 #endif
     }
 }

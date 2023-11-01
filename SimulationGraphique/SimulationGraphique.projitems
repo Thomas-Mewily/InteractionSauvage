@@ -9,8 +9,11 @@
     <Import_RootNamespace>SimulationGraphique</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\CameraExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Managers\Assets.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)All.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Managers\Input.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Managers\Screen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Managers\Performance.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenes\Scene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scenes\SceneSimu.cs" />
@@ -23,8 +26,5 @@
   <ItemGroup>
     <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
     <None Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Extensions\" />
   </ItemGroup>
 </Project>

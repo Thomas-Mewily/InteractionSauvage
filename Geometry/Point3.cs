@@ -68,12 +68,14 @@ public struct Point3
 
     #region Implicit
     public static implicit operator Vec3(Point3 a) => new(a.X, a.Y, a.Z);
+    public static implicit operator Point3(int a) => new Point3(a);
+
     #endregion
     #endregion
 
     #region Basic Method
-    public override string ToString() => X.ToString() + " / " + Y.ToString() + " / " + Z.ToString();
-    public string ToString(string format) => X.ToString(format) + " / " + Y.ToString(format) + " / " + Z.ToString(format);
+    public override string ToString() => X.ToString() + " , " + Y.ToString() + " , " + Z.ToString();
+    public string ToString(string format) => X.ToString(format) + " , " + Y.ToString(format) + " , " + Z.ToString(format);
     public override bool Equals(object obj) => (obj != null && obj is Point3 p && p == this);
     public override int GetHashCode() => X * 1031 +  Y + Z * 443;
     #endregion

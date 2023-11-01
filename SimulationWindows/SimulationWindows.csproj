@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Geometry\Geometry.csproj" />
     <ProjectReference Include="..\InteractionSauvage\InteractionSauvage.csproj" />
+    <ProjectReference Include="..\Render\Render.csproj" />
     <ProjectReference Include="..\Useful\Useful.csproj" />
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">

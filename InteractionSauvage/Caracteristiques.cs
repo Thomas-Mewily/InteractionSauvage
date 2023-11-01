@@ -18,7 +18,7 @@ public struct Caracteristiques
 
     public int Age;
 
-    public float Taille;
+    public float Rayon;
     public float VitesseMax = 0;
 
     public float Score = 0;

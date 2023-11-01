@@ -7,11 +7,25 @@ using Useful;
 using Geometry;
 using SimulationGraphique.Managers;
 using SharpDX.DirectWrite;
+using Render;
+using SharpDX.MediaFoundation;
 
 namespace SimulationGraphique;
 
 public static class SpriteBatchExtension
 {
+    private static bool Active = false;
+    public static bool IsActive(this SpriteBatch spriteBatch) => Active;
+
+    public static void Debut(this SpriteBatch spriteBatch) 
+    {
+        Active = true;
+        
+        spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, RasterizerState.CullNone, null, Camera.Peek().TransformMatrix());
+    }
+
+    public static void Fin(this SpriteBatch spriteBatch) { Active = false; spriteBatch.End(); }
+
     public static void DrawEllipse(this SpriteBatch spriteBatch, Vec2 pos, float radius, Color color)
         => DrawEllipse(spriteBatch, pos, new Vec2(radius, radius), color);
 
@@ -20,9 +34,17 @@ public static class SpriteBatchExtension
         spriteBatch.Draw(All.Assets.Circle, pos, null, color, 0, new Vec2(Assets.CircleRadius), radius / (float)Assets.CircleRadius, SpriteEffects.None, 0);
     }
 
+    public static void DrawRectangle(this SpriteBatch spriteBatch, Vec2 pos, Vec2 size, Color color)
+    {
+        spriteBatch.Draw(All.Assets.Pixel, pos, null, color, 0, Vec2.Zero, size, SpriteEffects.None, 0);
+    }
+
+    public static void DrawRectangle(this SpriteBatch spriteBatch, Rect2F rect, Color color)
+        => spriteBatch.DrawRectangle(rect.Min, rect.SizeY, color);
+
     public enum TextSize 
     {
-        Normal = 16,
+        Normal = 24,
     }
 
     public static void DrawText(this SpriteBatch spriteBatch, Font font, string text, Vec2 pos, Vec2 coefCenter, Color color, TextSize size = TextSize.Normal) 
@@ -39,6 +61,31 @@ public static class SpriteBatchExtension
         => DrawText(spriteBatch, All.Assets.Arial, text, pos, new Vec2(0.5f, 0), color, size);
     public static void DrawText(this SpriteBatch spriteBatch, string text, Vec2 pos, Vec2 coefCenter, Color color, TextSize size = TextSize.Normal)
         => DrawText(spriteBatch, All.Assets.Arial, text, pos, coefCenter, color, size);
+
+
+
+
+    public static void DebugText(this SpriteBatch spriteBatch, string text)
+    {
+        bool wasActive = spriteBatch.IsActive();
+        if (wasActive)
+        {
+            spriteBatch.End();
+        }
+
+        Camera.Push(CameraExtension.Default);
+        spriteBatch.Debut();
+
+        spriteBatch.DrawText(text, new Vec2(0, All.NbDebugText++ * (int)TextSize.Normal), Vec2.Zero, Color.Black, TextSize.Normal);
+
+        spriteBatch.Fin();
+        Camera.Pop();
+        if (wasActive)
+        {
+            spriteBatch.Debut();
+        }
+    }
+
 
     /*
     public static void DrawDisk(this SpriteBatch spriteBatch, Vector2 position, float radius, Color color, string label, SpriteFont font, int segments = 128)

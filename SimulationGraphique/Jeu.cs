@@ -18,7 +18,11 @@ public class LeJeu : Game
     {
         Graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
+
         IsMouseVisible = true;
+        Window.AllowUserResizing = true;
+        Window.AllowAltF4 = false;
+        //Window.IsBorderless = true;
     }
 
     protected override void LoadContent()

@@ -83,6 +83,8 @@ public struct Vec3
     #endregion
 
     #region Implicit
+    public static implicit operator Vec3(float a) => new Vec3(a);
+
 #if USE_MONOGAME
     public static implicit operator Vector3(Vec3 a) => new((float)a.X, (float)a.Y, (float)a.Z);
 #endif

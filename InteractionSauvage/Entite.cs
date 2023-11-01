@@ -17,8 +17,8 @@ public class Entite : SimulationComposante
 
     #region Champs Affecté par la simulation
     public Etat? MaybeEtat = null;
-    public Etat Etat 
-    { 
+    public Etat Etat
+    {
         get => MaybeEtat!;
         set { 
             MaybeEtat?.Fin();
@@ -51,7 +51,7 @@ public class Entite : SimulationComposante
     
     public int Age { get => Actuel.Age; set => Actuel.Age = value; }
 
-    public float Taille { get => Actuel.Taille; set => Actuel.Taille = value; }
+    public float Rayon { get => Actuel.Rayon; set => Actuel.Rayon = value; }
 
     public Categories Categorie { get => Actuel.Categorie; set => Actuel.Categorie = value; }
     #endregion
@@ -109,7 +109,7 @@ public class Entite : SimulationComposante
         {
             double distance = Math.Pow(x - e.X, 2) + Math.Pow(y - e.Y, 2);
 
-            if (e != this && distance <= Math.Pow(Taille + e.Taille, 2)) return true; 
+            if (e != this && distance <= Math.Pow(Rayon + e.Rayon, 2)) return true; 
         }
 
         return false;
@@ -149,7 +149,7 @@ public class Entite : SimulationComposante
         Console.WriteLine("Age         = "  + Age);
         Console.WriteLine("VitesseMax  = "  + VitesseMax);
         Console.WriteLine("Direction   = "  + Direction);
-        Console.WriteLine("X, Y        = (" + X  + ", " + Y  + ")");
+        Console.WriteLine("X,  Y       = (" + X  + ", " + Y  + ")");
         Console.WriteLine("VX, VY      = (" + VX + ", " + VY + ")");
     }
 

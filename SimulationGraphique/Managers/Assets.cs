@@ -12,13 +12,17 @@ public class Assets : ClasseBase
 
     public SpriteFont Arial { get; private set; }
 
+    public Texture2D  Sheep { get; private set; }
+
+
     public override void Load()
     {
         Pixel = new Texture2D(All.GraphicsDevice, 1, 1);
         Pixel.SetData(new[] { Color.White });
 
         Circle = Content.Load<Texture2D>("circle");
-        Arial = Content.Load<SpriteFont>("Arial");
+        Sheep  = Content.Load<Texture2D>("sheep");
+        Arial  = Content.Load<SpriteFont>("Arial");
     }
 
     public override void Unload() 

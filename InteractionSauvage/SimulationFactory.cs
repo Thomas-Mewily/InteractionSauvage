@@ -49,7 +49,7 @@ public class SimulationFactory : SimulationComposante
         Entite e = NewEntite("Mouton", MoutonME()).WithRandomPosition(Simu);
         e.VitesseMax = 2;
         e.Age = 10;
-        e.Taille = 10;
+        e.Rayon = 10;
         e.Energie = 1;
         e.Categorie = HerbivoresC();
         e.Direction = Angle.FromRadian(Rand.NextFloat(2f * MathF.PI));

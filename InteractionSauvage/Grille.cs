@@ -1,4 +1,5 @@
-﻿using InteractionSauvage;
+﻿using Geometry;
+using InteractionSauvage;
 
 namespace InteractionSauvage;
 
@@ -8,22 +9,23 @@ public class Grille
 
     public int TailleCase { get; private set; }
 
+    public Vec2 Size => new Vec2(Longueur, Hauteur);
     public int Hauteur  => NbCaseHauteur * TailleCase;
     public int Longueur => NbCaseLongueur * TailleCase;
 
     public int NbCaseHauteur  { get; private set; }
     public int NbCaseLongueur { get; private set; }
 
-    public Grille(int hauteur, int longueur, int tailleCase)
+    public Grille(int longueur, int hauteur, int tailleCase)
     {
-        NbCaseHauteur = hauteur;
+        NbCaseHauteur  = hauteur;
         NbCaseLongueur = longueur;
-        EntiteGrille = new List<Entite>[hauteur, longueur];
-        TailleCase = tailleCase;
+        EntiteGrille   = new List<Entite>[longueur, hauteur];
+        TailleCase     = tailleCase;
 
-        for (int i = 0; i < NbCaseHauteur; i++)
+        for (int i = 0; i < NbCaseLongueur; i++)
         {
-            for (int j = 0; j < NbCaseLongueur; j++)
+            for (int j = 0; j < NbCaseHauteur; j++)
             {
                 EntiteGrille[i,j] = new List<Entite>();
             }
@@ -32,17 +34,17 @@ public class Grille
 
     public void Reset() 
     {
-        for (int i = 0; i < NbCaseHauteur; i++)
+        for (int i = 0; i < NbCaseLongueur; i++)
         {
-            for (int j = 0; j < NbCaseLongueur; j++)
+            for (int j = 0; j < NbCaseHauteur; j++)
             {
                 EntiteGrille[i, j].Clear();
             }
         }
     }
 
-    public int GetIndiceX(double x) => Math.Max(0, Math.Min((int)(x / TailleCase),    NbCaseLongueur - 1));
-    public int GetIndiceY(double y) => Math.Max(0, Math.Min((int)(y / NbCaseHauteur), NbCaseHauteur - 1));
+    public int GetIndiceX(double x) => Math.Max(0, Math.Min((int)(x / TailleCase), NbCaseLongueur - 1));
+    public int GetIndiceY(double y) => Math.Max(0, Math.Min((int)(y / TailleCase), NbCaseHauteur  - 1));
 
     public List<Entite> Get(double x, double y) => EntiteGrille[GetIndiceX(x), GetIndiceY(y)];
 

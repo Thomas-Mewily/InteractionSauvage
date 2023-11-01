@@ -66,9 +66,11 @@ public struct Point2
 
     #region Implicit
     public static implicit operator Vec2(Point2 a) => new(a.X, a.Y);
+    public static implicit operator Point2(int a) => new Point2(a);
+
 #if USE_MONOGAME
     public static implicit operator Vector2(Point2 a) => new(a.X, a.Y);
-    public static implicit operator Point2(Point a) => new Point(a.X, a.Y);
+    public static implicit operator Point2(Point a) => new Point2(a.X, a.Y);
 #endif
     public static implicit operator Point3(Point2 a) => new(a.X, a.Y, 0);
     #endregion
@@ -82,10 +84,9 @@ public struct Point2
     #endregion
 
     #region Basic Method
-    public override string ToString() => X.ToString() + " / " + Y.ToString();
-    public string ToString(string format) => X.ToString(format) + " / " + Y.ToString(format);
+    public override string ToString() => X.ToString() + " , " + Y.ToString();
     public override bool Equals(object obj) => (obj != null && obj is Point2 p && p == this);
-    public override int GetHashCode() => X * 1013 + Y;
+    public override int GetHashCode() => X * 1013 + Y; 
 #endregion
 
 #region Static Method
