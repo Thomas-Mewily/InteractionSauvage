@@ -40,3 +40,19 @@ public class MarcherAleatoire : Passif
         E.Avancer(Coef);
     }
 }
+
+public class MarcherVersNouriture : Passif
+{
+    public MarcherVersNouriture(float coef = 1) : base(coef) { }
+    public override void Debut()
+    {
+        E.NouritureDirection();
+    }
+
+    public override void Execute()
+    {
+        E.NouritureDirection();
+
+        E.Avancer(Coef);
+    }
+}

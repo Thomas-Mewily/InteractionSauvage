@@ -22,6 +22,8 @@ public class LeJeu : Game
         IsMouseVisible = true;
         Window.AllowUserResizing = true;
         Window.AllowAltF4 = false;
+        Graphics.PreferMultiSampling = true;
+
         //Window.IsBorderless = true;
     }
 

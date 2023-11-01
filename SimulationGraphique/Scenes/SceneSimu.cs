@@ -93,7 +93,7 @@ public class SceneSimu : Scene
             var rayonDuCercle = entite.Taille * GraphicsDevice.Viewport.Width / SimuFact.Simu.Grille.Longueur;
 
             label = entite.Nom + " : " + entite.Etat.Nom;
-            SpriteBatch.DrawEllipse(position, rayonDuCercle, Color.White);
+            SpriteBatch.DrawEllipse(position, rayonDuCercle, entite.Categorie.Categorie == Categories.CategorieEnum.Herbivore ? Color.White : Color.Green);
 
             // petetite bidouille pour le texte
             //SpriteBatch.DrawText("Beep Beep, I'm a Sheep", position + new Vec2(0, -32), Color.Black);

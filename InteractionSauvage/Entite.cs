@@ -3,6 +3,7 @@ using InteractionSauvage.Interruptions;
 using InteractionSauvage.MachineEtats;
 using InteractionSauvage.Passifs;
 using System.ComponentModel;
+using System.Linq;
 using Useful;
 using static InteractionSauvage.MachineEtats.Etat;
 
@@ -53,6 +54,9 @@ public class Entite : SimulationComposante
 
     public float Rayon { get => Actuel.Rayon; set => Actuel.Rayon = value; }
 
+    public float DistanceVision { get => Actuel.DistanceVision; set => Actuel.DistanceVision = value; }
+    public Angle ChampsVision { get => Actuel.ChampsVision; set => Actuel.ChampsVision = value; }
+
     public Categories Categorie { get => Actuel.Categorie; set => Actuel.Categorie = value; }
     #endregion
 
@@ -80,6 +84,8 @@ public class Entite : SimulationComposante
         MachineEtat = e ?? new MachineEtat();
 
         Load(simu); // because of the need of Simu for rand
+
+        //simu.Grille.Add(this);
     }
 
     public override void Load() 
@@ -99,6 +105,77 @@ public class Entite : SimulationComposante
     public void RngDirection()
     {
         Actuel.Direction = (Rand.NextFloat(2f * MathF.PI));
+    }
+
+    public bool EstDansVision(int x, int y, float distanceVision, Angle direction, Angle champsVision)
+    {
+        Angle debut = Angle.FromRadian(direction.Radian - champsVision.Radian / 2);
+        Angle fin = Angle.FromRadian(direction.Radian + champsVision.Radian / 2);
+
+
+        float distanceHorizontale = X - x;
+        float distanceVerticale = Y - y;
+
+        float distanceSquared = (float)distanceHorizontale * distanceHorizontale + distanceVerticale * distanceVerticale;
+
+        if (distanceSquared <= distanceVision * distanceVision)
+        {
+            Angle angle = Angle.FromRadian((float)Math.Atan2(distanceVerticale, distanceHorizontale));
+            if (angle < 0)
+            {
+                angle.Radian += 2 * (float)Math.PI;
+            }
+
+            return angle.EstEntre(debut, fin);
+        }
+
+        return false;
+    }
+    public void NouritureDirection()
+    {
+        float distancePlusProche = float.MaxValue;
+        Entite plusProche = null;
+
+        int minI = Math.Max(0, (int)((Y - DistanceVision) / Grille.TailleCase));
+        int maxI = Math.Min(Grille.NbCaseHauteur - 1, (int)((Y + DistanceVision) / Grille.TailleCase));
+        int minJ = Math.Max(0, (int)((X - DistanceVision) / Grille.TailleCase));
+        int maxJ = Math.Min(Grille.NbCaseLongueur - 1, (int)((X + DistanceVision) / Grille.TailleCase));
+
+        for (int i = minI; i < maxI; i++)
+        {
+            for (int j = minJ; j < maxJ; j++)
+            {
+                if (Grille.EstCaseDansVision(i, j, X, Y, DistanceVision, Direction, ChampsVision))
+                {
+                    foreach (Entite e in Grille.GetByIndice(i, j))
+                    {
+                        Console.WriteLine(e);
+                        if (Categorie.CategoriesNouritures.Contains(e.Categorie.Categorie))
+                        {
+                            float distance = (e.X - X) * (e.X - X) + (e.Y - Y) * (e.Y - Y);
+                            if (distance < distancePlusProche)
+                            {
+                                distancePlusProche = distance;
+                                plusProche = e;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        if (distancePlusProche != float.MaxValue) 
+        {
+            Direction = Angle.FromRadian(float.Atan2((plusProche!.Y - Y), (plusProche!.X - X)));
+        }
+        else
+        {
+            if (Rand.NextDouble() < 0.01)
+            {
+                RngDirection();
+            }
+        }
     }
 
     public void PositionChanger() => Grille.Add(this);
