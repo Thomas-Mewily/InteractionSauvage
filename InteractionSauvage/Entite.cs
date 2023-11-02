@@ -53,7 +53,7 @@ public class Entite : SimulationComposante
     public float Taille { get => Actuel.Rayon; set => Actuel.Rayon = value; }
     public float Rayon { get => Actuel.Rayon; set => Actuel.Rayon = value; }
 
-    public float DistanceVision { get => Actuel.DistanceVision; set => Actuel.DistanceVision = value; }
+    public float RayonVision { get => Actuel.RayonVision; set => Actuel.RayonVision = value; }
     public Angle ChampsVision { get => Actuel.ChampsVision; set => Actuel.ChampsVision = value; }
 
     public Categories Categorie { get => Actuel.Categorie; set => Actuel.Categorie = value; }
@@ -133,23 +133,43 @@ public class Entite : SimulationComposante
         return false;
     }
 
-    public void NouritureDirection()
-    {
-        float distancePlusProche = float.MaxValue;
-        Entite? plusProche = null;
 
-        int minY = Math.Max(0, (int)((Y - DistanceVision) / Grille.TailleCase));
-        int maxY = Math.Min(Grille.NbCaseHauteur - 1, (int)((Y + DistanceVision) / Grille.TailleCase));
-        int minX = Math.Max(0, (int)((X - DistanceVision) / Grille.TailleCase));
-        int maxX = Math.Min(Grille.NbCaseLongueur - 1, (int)((X + DistanceVision) / Grille.TailleCase));
+    public IEnumerable<Entite> EntitiesNearsBy(float range)
+    {
+        int minY = Math.Max(0, (int)((Y - RayonVision) / Grille.TailleCase));
+        int maxY = Math.Min(Grille.NbCaseHauteur - 1, (int)((Y + RayonVision) / Grille.TailleCase));
+        int minX = Math.Max(0, (int)((X - RayonVision) / Grille.TailleCase));
+        int maxX = Math.Min(Grille.NbCaseLongueur - 1, (int)((X + RayonVision) / Grille.TailleCase));
 
         for (int y = minY; y < maxY; y++)
         {
             for (int x = minX; x < maxX; x++)
             {
-                if (Grille.EstCaseDansVision(x, y, X, Y, DistanceVision, Direction, ChampsVision))
+                foreach (var e in Grille.Get(x, y))
                 {
-                    foreach (Entite e in Grille.GetByIndice(x, y))
+                    yield return e;
+                }
+            }
+        }
+    }
+
+    public void NouritureDirection()
+    {
+        float distancePlusProche = float.MaxValue;
+        Entite? plusProche = null;
+
+        int minY = Math.Max(0, (int)((Y - RayonVision) / Grille.TailleCase));
+        int maxY = Math.Min(Grille.NbCaseHauteur - 1, (int)((Y + RayonVision) / Grille.TailleCase));
+        int minX = Math.Max(0, (int)((X - RayonVision) / Grille.TailleCase));
+        int maxX = Math.Min(Grille.NbCaseLongueur - 1, (int)((X + RayonVision) / Grille.TailleCase));
+
+        for (int y = minY; y < maxY; y++)
+        {
+            for (int x = minX; x < maxX; x++)
+            {
+                if (Grille.EstCaseDansVision(x, y, X, Y, RayonVision, Direction, ChampsVision))
+                {
+                    foreach (Entite e in Grille.Get(x, y))
                     {
                         //Console.WriteLine(e);
                         if (Categorie.CategoriesNouritures.Contains(e.Categorie.Categorie))

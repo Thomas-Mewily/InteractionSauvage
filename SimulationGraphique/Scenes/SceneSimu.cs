@@ -15,6 +15,7 @@ namespace SimulationGraphique.Scenes;
 public class SceneSimu : Scene
 {
     private Camera Cam;
+    public bool Paused = false;
 
     public SimulationFactoryGraphique SimuFact;
     public Simulation Simu => SimuFact.Simu;
@@ -53,18 +54,22 @@ public class SceneSimu : Scene
         {
             add.Y++;
         }
+        if (Keys.P.IsPressed()) { Paused = !Paused; }
 
         Cam.Position += add * Cam.Zoom.X / 100;
 
-        int nbStep = 1;
-        if (Keys.Space.IsDown()) 
+        if(Paused == false) 
         {
-            nbStep *= 4;
+            int nbStep = 1;
+            if (Keys.Space.IsDown())
+            {
+                nbStep *= 4;
+            }
+            Simu.Update(nbStep);
         }
-        Simu.Update(nbStep);
+
 
         float delta = All.Input.MouseOld.ScrollWheelValue- All.Input.Mouse.ScrollWheelValue;
-
         Cam.Zoom *= 1 + delta / 1000;
     }
 
@@ -78,27 +83,32 @@ public class SceneSimu : Scene
 
         SpriteBatch.DrawRectangle(Vec2.Zero, Simu.Grille.Size, new Color(168,90,38));
 
+        Entite target = null;
 
         foreach (var e in Simu.ToutesLesEntites)
         {
             e.Animation?.Draw(e);
+
+            if ((Camera.Peek().WorldPosition(All.Input.Mouse.X, All.Input.Mouse.Y) - e.Position).LengthSquared < e.Rayon * e.Rayon && e.Animation != null)
+            {
+                target = e;
+            }
             //SpriteBatch.Draw(Assets.Sheep, e.Position, null, Color.White, e.Direction, ((Point2)Assets.Sheep.Bounds.Size) / 2, new Vec2(1.0f/ Assets.Sheep.Width, 1.0f / Assets.Sheep.Height)* e.Rayon*2, SpriteEffects.None, 0);
         }
 
-        // Afficher le texte par devant
-        foreach (var e in Simu.ToutesLesEntites)
+        if(target != null) 
         {
-            if ((Camera.Peek().WorldPosition(All.Input.Mouse.X, All.Input.Mouse.Y) - e.Position).Length < e.Rayon)
-            {
-                e.Animation?.DrawExtraInfo(e);
-            }
+            target.Animation.DrawChampsVision(target);
+            target.Animation.Draw(target);
+            target.Animation.DrawExtraInfo(target);
         }
-
-
 
         SpriteBatch.Fin();
         Camera.Pop();
 
-
+        if (Paused) 
+        {
+            SpriteBatch.DebugText("[P]aused");
+        }
     }
 }

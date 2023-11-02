@@ -11,7 +11,7 @@ namespace SimulationGraphique;
 
 public class SimulationFactoryGraphique : SimulationFactory
 {
-    public SimulationFactoryGraphique(Simulation? s = null) : base(s) { }
+    public SimulationFactoryGraphique() : base(null) { }
 
     public override Entite GenerateHerbe()
     {

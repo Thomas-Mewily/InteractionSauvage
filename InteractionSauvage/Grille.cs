@@ -75,7 +75,7 @@ public class Grille
     public int GetIndiceY(double y) => Math.Max(0, Math.Min((int)(y / TailleCase), NbCaseHauteur  - 1));
 
     public List<Entite> Get(double x, double y) => EntiteGrille[GetIndiceX(x), GetIndiceY(y)];
-    public List<Entite> GetByIndice(int x, int y) => EntiteGrille[x, y];
+    public List<Entite> Get(int x, int y) => EntiteGrille[x, y];
 
     public void Add(Entite e)
     {

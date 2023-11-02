@@ -6,6 +6,7 @@ using InteractionSauvage;
 using System;
 using SimulationGraphique.Scenes;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace SimulationGraphique;
 
@@ -23,6 +24,8 @@ public class LeJeu : Game
         Window.AllowUserResizing = true;
         Window.AllowAltF4 = false;
         Graphics.PreferMultiSampling = true;
+        Graphics.GraphicsProfile = GraphicsProfile.Reach;
+
 
         //Window.IsBorderless = true;
     }

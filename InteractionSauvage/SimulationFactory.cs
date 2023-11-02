@@ -66,7 +66,7 @@ public class SimulationFactory : SimulationComposante
         e.Direction = Angle.FromRadian(Rand.NextFloat(2f * MathF.PI));
         //e.Direction = Angle.FromDegree(225f);
         e.ChampsVision = Angle.FromDegree(180f);
-        e.DistanceVision = 100f;
+        e.RayonVision = 100f;
         //e.DeBase.EtatDeBase = "marcher";
         return e;
     }
@@ -81,7 +81,7 @@ public class SimulationFactory : SimulationComposante
         e.Categorie = PlantesC();
         e.Direction = 0;
         e.ChampsVision = Angle.FromDegree(0);
-        e.DistanceVision = 0f;
+        e.RayonVision = 0f;
 
         return e;
     }

@@ -19,7 +19,7 @@ public static class SpriteBatchExtension
     {
         Active = true;
         
-        spriteBatch.Begin(SpriteSortMode.Immediate, null, null, null, RasterizerState.CullNone, null, Camera.Peek().TransformMatrix);
+        spriteBatch.Begin(SpriteSortMode.Immediate, null, null, DepthStencilState.Default, RasterizerState.CullNone, null, Camera.Peek().TransformMatrix);
     }
 
     public static void Fin(this SpriteBatch spriteBatch) { Active = false; spriteBatch.End(); }
@@ -135,4 +135,55 @@ public static class SpriteBatchExtension
         texture.SetData(new[] { color });
         return texture;
     }*/
+
+
+    public static void DrawTriangle(this SpriteBatch spriteBatch, Vec2 a, Vec2 b, Vec2 c, Color color)
+    {
+        // Define vertices and their positions
+        VertexPositionColor[] vertices = new VertexPositionColor[3];
+        vertices[0] = new VertexPositionColor(new Vector3(a.X, a.Y, 0), color);
+        vertices[1] = new VertexPositionColor(new Vector3(b.X, b.Y, 0), color);
+        vertices[2] = new VertexPositionColor(new Vector3(c.X, c.Y, 0), color);
+
+
+        // Draw the triangle
+        /*
+        spriteBatch.GraphicsDevice.DrawUserPrimitives(
+            PrimitiveType.TriangleList,
+            vertices,
+            0,
+            1);*/
+        spriteBatch.Fin();
+
+        var _basicEffect = new BasicEffect(All.GraphicsDevice);
+
+        var cam = Camera.Peek();
+        _basicEffect.World = Matrix.CreateOrthographicOffCenter(cam.Min.X, cam.Max.X, cam.Max.Y, cam.Min.Y, 0, 1);
+
+        EffectTechnique effectTechnique = _basicEffect.Techniques[0];
+        EffectPassCollection effectPassCollection = effectTechnique.Passes;
+
+        foreach (EffectPass pass in effectPassCollection)
+        {
+            pass.Apply();
+
+            All.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices, 0, 1);
+        }
+
+        spriteBatch.Debut();
+    }
+
+    public static void DrawArc(this SpriteBatch spriteBatch, Vec2 pos, Vec2 radius, Angle direction, Angle fieldOfView, Color color, int precision = 32)
+    {
+        direction -= fieldOfView / 2;
+        Angle toAdd = fieldOfView / precision;
+
+        for (int i = 0; i < precision; i++) 
+        {
+            var d = direction;
+            direction += toAdd;
+            spriteBatch.DrawTriangle(pos, pos + new Vec2(radius.X * d.Cos, radius.Y * d.Sin), pos + new Vec2(radius.X * direction.Cos, radius.Y * direction.Sin), color);
+        }
+    }
+
 }

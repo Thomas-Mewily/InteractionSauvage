@@ -20,9 +20,11 @@ public struct Angle
 
     public bool EstEntre(Angle debut, Angle fin)
     {
+        
         float angleNormalise = (Radian % (2 * (float)Math.PI) + 2 * (float)Math.PI) % (2 * (float)Math.PI);
         float debutNormalise = (debut.Radian % (2 * (float)Math.PI) + 2 * (float)Math.PI) % (2 * (float)Math.PI);
         float finNormalise = (fin.Radian % (2 * (float)Math.PI) + 2 * (float)Math.PI) % (2 * (float)Math.PI);
+
 
         if (debutNormalise <= finNormalise)
         {
@@ -64,11 +66,14 @@ public struct Angle
     public static Angle operator +(Angle a, Angle b) => a.Radian + b.Radian;
     public static Angle operator -(Angle a, Angle b) => a.Radian - b.Radian;
 
+    public static Angle operator *(int   a, Angle b) => a * b.Radian;
     public static Angle operator *(float a, Angle b) => a * b.Radian;
     public static Angle operator *(Angle a, float b) => b * a.Radian;
+    public static Angle operator *(Angle a, int   b) => b * a.Radian;
 
-    public static Angle operator /(Angle a, Angle b) => a.Radian / b.Radian;
+    public static float operator /(Angle a, Angle b) => a.Radian / b.Radian;
     public static Angle operator /(Angle a, float b) => a.Radian / b;
+    public static Angle operator /(Angle a, int   b) => a.Radian / b;
 
     public static implicit operator float(Angle a) => a.Radian;
     public static implicit operator Angle(float a) => FromRadian(a);
