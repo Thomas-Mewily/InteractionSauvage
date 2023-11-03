@@ -15,7 +15,7 @@ public struct Caracteristiques
 
     public float RayonVision;
     public Angle ChampsVision;
-    public Angle MoitieChampsVision => ChampsVision / 2;
+    public Angle MoitieChampsVision { get => ChampsVision / 2; set => ChampsVision = value * 2; }
 
     public Angle Direction;
     public Vec2 Position;

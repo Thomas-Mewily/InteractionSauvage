@@ -4,6 +4,18 @@ using Useful;
 
 namespace InteractionSauvage;
 
+public struct EntiteDistance 
+{
+    public Entite E;
+    public float Distance;
+
+    public EntiteDistance(Entite e, float distance)
+    {
+        this.E = e;
+        this.Distance = distance;
+    }
+}
+
 public class Entite : SimulationComposante
 {
     public string Nom;
@@ -55,6 +67,7 @@ public class Entite : SimulationComposante
 
     public float RayonVision { get => Actuel.RayonVision; set => Actuel.RayonVision = value; }
     public Angle ChampsVision { get => Actuel.ChampsVision; set => Actuel.ChampsVision = value; }
+    public Angle MoitieChampsVision { get => Actuel.MoitieChampsVision; set => Actuel.MoitieChampsVision = value; }
 
     public Categories Categorie { get => Actuel.Categorie; set => Actuel.Categorie = value; }
     #endregion
@@ -127,19 +140,56 @@ public class Entite : SimulationComposante
                 angle.Radian += 2 * (float)Math.PI;
             }
 
-            return angle.EstEntre(debut, fin);
+            return angle.Inside(debut, fin);
         }
 
         return false;
     }
 
+    public bool PeutVoir(Entite e) => new Vec2(Position, e.Position).Angle.Inside(Direction - MoitieChampsVision, Direction + MoitieChampsVision);
+    public bool PeutManger(Entite e) => Categorie.CategoriesNouritures.Contains(e.Categorie.Categorie) && e != this;
+    public bool Collision(Entite e) => (Position - e.Position).LengthSquared <= (Rayon + e.Rayon) * (Rayon + e.Rayon);
 
-    public IEnumerable<Entite> EntitiesNearsBy(float range)
+
+    #region Chunks / Vision
+    public IEnumerable<EntiteDistance> EntitesProcheAvecDistance() => EntitesProcheAvecDistance(RayonVision);
+    public IEnumerable<EntiteDistance> EntitesProcheAvecDistance(float radius)
     {
-        int minY = Math.Max(0, (int)((Y - RayonVision) / Grille.TailleCase));
-        int maxY = Math.Min(Grille.NbCaseHauteur - 1, (int)((Y + RayonVision) / Grille.TailleCase));
-        int minX = Math.Max(0, (int)((X - RayonVision) / Grille.TailleCase));
-        int maxX = Math.Min(Grille.NbCaseLongueur - 1, (int)((X + RayonVision) / Grille.TailleCase));
+        var radius_squared = radius* radius;
+        foreach (var e in EntitesProcheCarre(radius))
+        {
+            float distance = (e.X - X) * (e.X - X) + (e.Y - Y) * (e.Y - Y);
+            if (distance < radius_squared)
+            {
+                yield return new EntiteDistance(e, MathF.Sqrt(distance));
+            }
+        }
+    }
+
+    public IEnumerable<Entite> EntitesProche() => EntitesProche(RayonVision);
+    public IEnumerable<Entite> EntitesProche(float radius)
+    {
+        var radius_squared = radius* radius;
+        foreach (var e in EntitesProcheCarre(radius))
+        {
+            float distance = (e.X - X) * (e.X - X) + (e.Y - Y) * (e.Y - Y);
+            if (distance < radius_squared)
+            {
+                yield return e;
+            }
+        }
+    }
+
+    public IEnumerable<Entite> EntitesVisibles() => EntitesVisibles(RayonVision);
+    public IEnumerable<Entite> EntitesVisibles(float radius) => EntitesProche(radius).Where(t => PeutVoir(t));
+
+    public IEnumerable<Entite> EntitesProcheCarre() => EntitesProcheCarre(RayonVision);
+    public IEnumerable<Entite> EntitesProcheCarre(float cote)
+    {
+        int minY = Math.Max(0, (int)((Y - cote) / Grille.TailleCase));
+        int maxY = Math.Min(Grille.NbCaseHauteur  - 1, (int)((Y + cote) / Grille.TailleCase));
+        int minX = Math.Max(0, (int)((X - cote) / Grille.TailleCase));
+        int maxX = Math.Min(Grille.NbCaseLongueur - 1, (int)((X + cote) / Grille.TailleCase));
 
         for (int y = minY; y < maxY; y++)
         {
@@ -147,57 +197,53 @@ public class Entite : SimulationComposante
             {
                 foreach (var e in Grille.Get(x, y))
                 {
-                    yield return e;
+                    if(e != this) 
+                    {
+                        yield return e;
+                    }
                 }
             }
         }
     }
+    #endregion
 
-    public void NouritureDirection()
+
+    public Entite? NouritureDirection()
     {
-        float distancePlusProche = float.MaxValue;
-        Entite? plusProche = null;
+        var plusProche = TrouverNouritureDirection();
 
-        int minY = Math.Max(0, (int)((Y - RayonVision) / Grille.TailleCase));
-        int maxY = Math.Min(Grille.NbCaseHauteur - 1, (int)((Y + RayonVision) / Grille.TailleCase));
-        int minX = Math.Max(0, (int)((X - RayonVision) / Grille.TailleCase));
-        int maxX = Math.Min(Grille.NbCaseLongueur - 1, (int)((X + RayonVision) / Grille.TailleCase));
-
-        for (int y = minY; y < maxY; y++)
+        if(plusProche != null) 
         {
-            for (int x = minX; x < maxX; x++)
-            {
-                if (Grille.EstCaseDansVision(x, y, X, Y, RayonVision, Direction, ChampsVision))
-                {
-                    foreach (Entite e in Grille.Get(x, y))
-                    {
-                        //Console.WriteLine(e);
-                        if (Categorie.CategoriesNouritures.Contains(e.Categorie.Categorie))
-                        {
-                            float distance = (e.X - X) * (e.X - X) + (e.Y - Y) * (e.Y - Y);
-                            if (distance < distancePlusProche)
-                            {
-                                distancePlusProche = distance;
-                                plusProche = e;
-                            }
-                        }
-                    }
-                }
-
-            }
+            Direction = new Vec2(Position, plusProche.Position).Angle;
         }
-
-        if (distancePlusProche != float.MaxValue) 
-        {
-            Direction = Angle.FromRadian(float.Atan2((plusProche!.Y - Y), (plusProche!.X - X)));
-        }
-        else
+        else 
         {
             if (Rand.NextDouble() < 0.01)
             {
                 RngDirection();
             }
         }
+        return plusProche; // déjà dessus
+    }
+
+    public Entite? TrouverNouritureDirection()
+    {
+        float distancePlusProche = float.MaxValue;
+        Entite? plusProche = null;
+
+        foreach (var info in EntitesProcheAvecDistance(RayonVision))
+        {
+            var entite = info.E;
+            var distance = info.Distance;
+
+            if (distance < distancePlusProche && PeutManger(entite) && PeutVoir(entite))
+            {
+                distancePlusProche = info.Distance;
+                plusProche = info.E;
+            }
+        }
+
+        return plusProche;
     }
 
     public void PositionChanger() => Grille.Add(this);

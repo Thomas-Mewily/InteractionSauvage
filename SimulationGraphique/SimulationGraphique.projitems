@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Animations\Animation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animations\HerbeAnim.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animations\MoutonAnim.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntiteExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Vec2Extension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Managers\Assets.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)All.cs" />

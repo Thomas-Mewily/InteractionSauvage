@@ -8,23 +8,23 @@ public struct Angle
     #region Constructor
     public float Degree
     {
-        get => _Radian * TurnDegree / TurnRadian;
+        get => Radian * TurnDegree / TurnRadian;
         set => Radian = value * TurnRadian / TurnDegree;
     }
-    private float _Radian;
-    public float Radian { get => _Radian; set => _Radian = (value % TurnRadian + TurnRadian) % TurnRadian; }
-    public float One { get => _Radian / TurnRadian; set => Radian = value * TurnRadian; }
+    public float Radian { get; set; }
+    public float One { get => Radian / TurnRadian; set => Radian = value * TurnRadian; }
+
+    public Angle Normalized => FromRadian(Radian % TurnRadian + TurnRadian) % TurnRadian;
 
     public float Cos => MathF.Cos(Radian);
     public float Sin => MathF.Sin(Radian);
 
-    public bool EstEntre(Angle debut, Angle fin)
+    public bool Inside(Angle middle) => Inside(this - middle / 2, this + middle / 2);
+    public bool Inside(Angle debut, Angle fin)
     {
-        
-        float angleNormalise = (Radian % (2 * (float)Math.PI) + 2 * (float)Math.PI) % (2 * (float)Math.PI);
-        float debutNormalise = (debut.Radian % (2 * (float)Math.PI) + 2 * (float)Math.PI) % (2 * (float)Math.PI);
-        float finNormalise = (fin.Radian % (2 * (float)Math.PI) + 2 * (float)Math.PI) % (2 * (float)Math.PI);
-
+        var angleNormalise = Normalized.Radian;
+        var debutNormalise = debut.Normalized.Radian;
+        var finNormalise   = fin.Normalized.Radian;
 
         if (debutNormalise <= finNormalise)
         {
@@ -56,7 +56,7 @@ public struct Angle
     /// <param name="fromRadianUsedBySystem"></param>
     public Angle(float fromRadianUsedBySystem)
     {
-        _Radian = fromRadianUsedBySystem;
+        Radian = fromRadianUsedBySystem;
     }
 
     #region Operator

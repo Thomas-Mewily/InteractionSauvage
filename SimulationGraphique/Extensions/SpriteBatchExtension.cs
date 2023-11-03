@@ -19,7 +19,7 @@ public static class SpriteBatchExtension
     {
         Active = true;
         
-        spriteBatch.Begin(SpriteSortMode.Immediate, null, null, DepthStencilState.Default, RasterizerState.CullNone, null, Camera.Peek().TransformMatrix);
+        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, null, DepthStencilState.Default, RasterizerState.CullNone, null, Camera.Peek().TransformMatrix);
     }
 
     public static void Fin(this SpriteBatch spriteBatch) { Active = false; spriteBatch.End(); }
@@ -156,7 +156,7 @@ public static class SpriteBatchExtension
         spriteBatch.Fin();
 
         var _basicEffect = new BasicEffect(All.GraphicsDevice);
-
+        _basicEffect.VertexColorEnabled = true;
         var cam = Camera.Peek();
         _basicEffect.World = Matrix.CreateOrthographicOffCenter(cam.Min.X, cam.Max.X, cam.Max.Y, cam.Min.Y, 0, 1);
 

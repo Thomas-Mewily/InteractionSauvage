@@ -53,7 +53,7 @@ public class Grille
                 angle.Radian += 2 * (float)Math.PI;
             }
 
-            return angle.EstEntre(debut, fin);
+            return angle.Inside(debut, fin);
         }
 
         return false;

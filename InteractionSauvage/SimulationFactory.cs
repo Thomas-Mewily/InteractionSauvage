@@ -36,7 +36,7 @@ public class SimulationFactory : SimulationComposante
     {
         var HerbeME = new MachineEtat();
 
-        HerbeME.Add("rien", new Attendre(), new Transition("trasitionne pas", new Jamais(), "rien"));
+        HerbeME.Add("rien", new Attendre(), new Transition("transitionne pas", new Jamais(), "rien"));
 
         return HerbeME;
     }
@@ -65,8 +65,9 @@ public class SimulationFactory : SimulationComposante
         e.Categorie = HerbivoresC();
         e.Direction = Angle.FromRadian(Rand.NextFloat(2f * MathF.PI));
         //e.Direction = Angle.FromDegree(225f);
-        e.ChampsVision = Angle.FromDegree(180f);
+        e.ChampsVision = Angle.FromDegree(Rand.FloatUniform(45, 180));
         e.RayonVision = 100f;
+
         //e.DeBase.EtatDeBase = "marcher";
         return e;
     }

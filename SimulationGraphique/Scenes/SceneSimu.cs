@@ -16,9 +16,11 @@ public class SceneSimu : Scene
 {
     private Camera Cam;
     public bool Paused = false;
+    public Entite? Target = null;
 
     public SimulationFactoryGraphique SimuFact;
     public Simulation Simu => SimuFact.Simu;
+    public Grille Grille => Simu.Grille;
 
     public override void Load()
     {
@@ -32,6 +34,10 @@ public class SceneSimu : Scene
 
         Cam = Camera.Center(new Rect2F(0, 0, Simu.Grille.Longueur, Simu.Grille.Hauteur));
         //Cam.Size *= 2;
+        Console.WriteLine("P to pause");
+        Console.WriteLine("Space to go fast");
+        Console.WriteLine("Arrows Keys/WASD to move");
+        Console.WriteLine("Mouse Wheel to zoom");
     }
 
     public override void Update()
@@ -63,7 +69,7 @@ public class SceneSimu : Scene
             int nbStep = 1;
             if (Keys.Space.IsDown())
             {
-                nbStep *= 4;
+                nbStep *= 16;
             }
             Simu.Update(nbStep);
         }
@@ -83,24 +89,37 @@ public class SceneSimu : Scene
 
         SpriteBatch.DrawRectangle(Vec2.Zero, Simu.Grille.Size, new Color(168,90,38));
 
-        Entite target = null;
+        for(int i = 0; i < Grille.NbCaseLongueur; i ++) 
+        {
+            for (int j = 0; j < Grille.NbCaseHauteur; j ++)
+            {
+                if(((j+i)&1) == 0) 
+                {
+                    SpriteBatch.DrawRectangle(new Rect2F(i * Grille.TailleCase, j * Grille.TailleCase, Grille.TailleCase, Grille.TailleCase), new Color(128, 70, 28));
+                }
+            }
+        }
 
         foreach (var e in Simu.ToutesLesEntites)
         {
             e.Animation?.Draw(e);
 
-            if ((Camera.Peek().WorldPosition(All.Input.Mouse.X, All.Input.Mouse.Y) - e.Position).LengthSquared < e.Rayon * e.Rayon && e.Animation != null)
+            if (All.Input.Mouse.LeftButton == ButtonState.Pressed && e.IsSelected())
             {
-                target = e;
+                Target = e;
             }
-            //SpriteBatch.Draw(Assets.Sheep, e.Position, null, Color.White, e.Direction, ((Point2)Assets.Sheep.Bounds.Size) / 2, new Vec2(1.0f/ Assets.Sheep.Width, 1.0f / Assets.Sheep.Height)* e.Rayon*2, SpriteEffects.None, 0);
         }
 
-        if(target != null) 
+        if(Target != null) 
         {
-            target.Animation.DrawChampsVision(target);
-            target.Animation.Draw(target);
-            target.Animation.DrawExtraInfo(target);
+            Target.Animation.DrawChampsVision(Target);
+            Target.Animation.Draw(Target);
+            Target.Animation.DrawExtraInfo(Target);
+
+            foreach(var v in Target.EntitesVisibles()) 
+            {
+                SpriteBatch.DrawEllipse(v.Position, v.Rayon, new Color(0,255,0, 128));
+            }
         }
 
         SpriteBatch.Fin();
