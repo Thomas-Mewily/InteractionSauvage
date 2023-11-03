@@ -38,29 +38,46 @@ public class SceneSimu : Scene
         Console.WriteLine("Space to go fast");
         Console.WriteLine("Arrows Keys/WASD to move");
         Console.WriteLine("Mouse Wheel to zoom");
+        Console.WriteLine("A : Add CP");
+        Console.WriteLine("Z : Delete CP");
+        Console.WriteLine("R : RollBack CP");
     }
 
     public override void Update()
     {
         Vec2 add = Vec2.Zero;
 
-        if(Keys.Right.IsDown() || Keys.D.IsDown())
+        if(Keys.Right.IsDown())// || Keys.D.IsDown())
         {
             add.X++;
         }
-        if (Keys.Left.IsDown() || Keys.A.IsDown())
+        if (Keys.Left.IsDown())// || Keys.A.IsDown())
         {
             add.X--;
         }
-        if (Keys.Up.IsDown() || Keys.W.IsDown())
+        if (Keys.Up.IsDown())// || Keys.W.IsDown())
         {
             add.Y--;
         }
-        if (Keys.Down.IsDown() || Keys.S.IsDown())
+        if (Keys.Down.IsDown())// || Keys.S.IsDown())
         {
             add.Y++;
         }
         if (Keys.P.IsPressed()) { Paused = !Paused; }
+
+        if (Keys.A.IsPressed()) 
+        {
+            Simu.CheckPointAdd();
+        }
+        if (Keys.Z.IsPressed() && Simu.NbCheckPoint > 0)
+        {
+            Simu.CheckPointRemove();
+        }
+        if (Keys.E.IsPressed() && Simu.NbCheckPoint > 0)
+        {
+            Simu.CheckPointRollBack();
+        }
+
 
         Cam.Position += add * Cam.Zoom.X / 100;
 
@@ -129,5 +146,10 @@ public class SceneSimu : Scene
         {
             SpriteBatch.DebugText("[P]aused");
         }
+        SpriteBatch.DebugText("CP : " + Simu.NbCheckPoint);
+        SpriteBatch.DebugText("A : Add CP");
+        SpriteBatch.DebugText("Z : Delete CP");
+        SpriteBatch.DebugText("E : RollBack CP");
+
     }
 }

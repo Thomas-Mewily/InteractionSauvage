@@ -100,6 +100,7 @@ public class Simulation : CheckPointable
     public override void CheckPointRollBack()
     {
         Actuel = CheckPoints.Peek();
+        Actuel.Entites = Actuel.Entites.ToList();
 
         foreach (var e in ToutesLesEntites)
         {

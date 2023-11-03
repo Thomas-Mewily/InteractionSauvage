@@ -54,7 +54,7 @@ public class SimulationFactory : SimulationComposante
 
         HerbivoresCat = new Categories(Categories.CategorieEnum.Herbivore);
         HerbivoresCat.CategoriesNouritures.Add(Categories.CategorieEnum.Plante);
-        HerbivoresCat.CategoriesNouritures.Add(Categories.CategorieEnum.Herbivore);
+        //HerbivoresCat.CategoriesNouritures.Add(Categories.CategorieEnum.Herbivore);
     }
 
     public Entite NewEntite(string nom, MachineEtat? machineEtat) => new(Simu, nom + "#" + Simu.EntitesDeBase.Count, machineEtat);

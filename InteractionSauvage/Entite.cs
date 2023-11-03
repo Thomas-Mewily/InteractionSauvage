@@ -332,24 +332,30 @@ public class Entite : SimulationComposante
     {
         EtatNom = EtatDeBase;
         base.CheckPointReset();
+
+        MachineEtat.CheckPointReset();
     }
 
     public override void CheckPointAdd()
     {
+        base.CheckPointAdd();
+
         CheckPoints.Add(Actuel);
         MachineEtat.CheckPointAdd();
-
-        base.CheckPointAdd();
     }
 
     public override void CheckPointRemove()
     {
         base.CheckPointRemove();
+        CheckPoints.Pop();
+        MachineEtat.CheckPointRemove();
     }
 
     public override void CheckPointRollBack()
     {
         base.CheckPointRollBack();
+        Actuel = CheckPoints.Peek();
+        MachineEtat.CheckPointRollBack();
     }
     #endregion
 }

@@ -35,4 +35,42 @@ public class MachineEtat : EntiteComposante
     }
 
     public override string ToString() => "Machine à Etat : {" + string.Join(", ", Etats.ToList().Select(t => t.Key)) + "}";
+
+    #region CheckPoint
+    public override void CheckPointAdd()
+    {
+        foreach(var v in Etats) 
+        {
+            v.Value.CheckPointAdd();
+        }
+        base.CheckPointAdd();
+    }
+
+    public override void CheckPointRemove()
+    {
+        foreach (var v in Etats)
+        {
+            v.Value.CheckPointRemove();
+        }
+        base.CheckPointRemove();
+    }
+
+    public override void CheckPointRollBack()
+    {
+        foreach (var v in Etats)
+        {
+            v.Value.CheckPointRollBack();
+        }
+        base.CheckPointRollBack();
+    }
+
+    public override void CheckPointReset()
+    {
+        foreach (var v in Etats)
+        {
+            v.Value.CheckPointReset();
+        }
+        base.CheckPointReset();
+    }
+    #endregion
 }
