@@ -18,6 +18,6 @@ public class MoutonAnim : Animation
 
     public override void Meurt(Entite e)
     {
-        All.Assets.SheepSound.Play(0.2f, e.Rand.FloatUniform(-1, 1), 0);
+        All.Assets.SheepSound.Play(1f, e.Rand.FloatUniform(-1, 1), 0);
     }
 }
