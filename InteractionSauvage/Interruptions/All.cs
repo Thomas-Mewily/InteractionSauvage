@@ -67,7 +67,7 @@ public class ApresAleatoire : Interruption
 
 public class NourritureAtteignable : Interruption
 {
-    public override bool Interrupt => E.Target != null && E.Target.Vivant ? E.DistanceTo(E.Target) < E.Taille*2 : false;
+    public override bool Interrupt => E.Target != null && E.Target.Vivant ? E.DistanceToNoHitbox(E.Target) < E.Taille*2 : false;
 }
 
 public class Fatigue : Interruption

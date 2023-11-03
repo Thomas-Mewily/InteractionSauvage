@@ -135,6 +135,11 @@ public class SceneSimu : Scene
                 SpriteBatch.DrawEllipse(v.Position, v.Rayon, new Color(0, 255, 0, 128));
             }
 
+            if(Target.Target != null) 
+            {
+                SpriteBatch.DrawEllipse(Target.Target.Position, Target.Target.Rayon, new Color(255, 0, 0, 255));
+            }
+
             Target.Animation.DrawExtraInfo(Target);
 
         }

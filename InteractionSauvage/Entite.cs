@@ -138,7 +138,7 @@ public class Entite : SimulationComposante
     public bool PeutVoir(Entite e) 
     {
         // trop loin
-        //if(new Vec2(Position, e.Position).LengthSquared - e.Rayon* e.Rayon > RayonVision* RayonVision) { return false; }
+        //if(DistanceVisionTo(e) < RayonVision) { return false; }
 
         var dir = new Vec2(Position, e.Position);
             
@@ -152,7 +152,8 @@ public class Entite : SimulationComposante
     }
     public bool PeutManger(Entite e) => Categorie.CategoriesNouritures.Contains(e.Categorie.Categorie) && e != this;
     public bool Collision(Entite e) => (Position - e.Position).LengthSquared <= (Rayon + e.Rayon) * (Rayon + e.Rayon);
-
+    public float DistanceVisionTo(Entite e) => float.Max(0, (Position - e.Position).Length-e.Rayon);
+    public float DistanceToNoHitbox(Entite e) => (Position - e.Position).Length;
 
     #region Chunks / Vision
     public const float BonusRadiusBigEntityMax = 2;
@@ -160,17 +161,9 @@ public class Entite : SimulationComposante
     public IEnumerable<EntiteDistance> EntitesProcheAvecDistance() => EntitesProcheAvecDistance(RayonVision);
     public IEnumerable<EntiteDistance> EntitesProcheAvecDistance(float radius)
     {
-        //var radius_squared = radius * radius;
         foreach (var e in EntitesProcheCarre(radius + BonusRadiusBigEntityMax))
         {
-            /*
-            float distance = Math.Max(0, (e.X - X) * (e.X - X) + (e.Y - Y) * (e.Y - Y) - e.Rayon * e.Rayon);
-            if (distance < radius_squared)
-            {
-                yield return new EntiteDistance(e, MathF.Sqrt(distance));
-            }*/
-
-            float d = (Position - e.Position).Length - e.Rayon;
+            float d = DistanceVisionTo(e);
             if (d < radius)
             {
                 yield return new EntiteDistance(e, d);
@@ -260,17 +253,21 @@ public class Entite : SimulationComposante
 
     public void PositionChanger() => Grille.Add(this);
 
+    /*
     public bool Collision(double x, double y)
     {
         foreach (Entite e in Grille.Get(x, y))
         {
             double distance = Math.Pow(x - e.X, 2) + Math.Pow(y - e.Y, 2);
 
-            if (e != this && e.Categorie != Categorie && distance <= Math.Pow(Rayon + e.Rayon, 2)) return true; 
+            if (e != this && e.Categorie != Categorie && distance <= Math.Pow(Rayon + e.Rayon, 2)) 
+            {
+                return true;
+            }
         }
 
         return false;
-    }
+    }*/
 
     public void Avancer(float coef = 1)
     {
@@ -279,7 +276,7 @@ public class Entite : SimulationComposante
 
         if(deltaX* deltaX + deltaY* deltaY < 0.0001f) { return; }
 
-        if (X + deltaX > 0 && X + deltaX < Grille.Longueur && Y + deltaY > 0 && Y + deltaY < Grille.Hauteur && !Collision(X+deltaX, Y+deltaY))
+        if (X + deltaX > 0 && X + deltaX < Grille.Longueur && Y + deltaY > 0 && Y + deltaY < Grille.Hauteur)// && !Collision(X+deltaX, Y+deltaY))
         {
             X += deltaX;
             Y += deltaY;
@@ -301,10 +298,6 @@ public class Entite : SimulationComposante
     {
         return -0.5f*(e.Taille/Taille)+1f;
     }
-
-
-    public float DistanceTo(Entite e) => float.Sqrt((e.X - X) * (e.X - X) + (e.Y - Y) * (e.Y - Y));
-
 
     public void Affiche()
     {

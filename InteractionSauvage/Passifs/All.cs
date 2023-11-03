@@ -58,13 +58,13 @@ public class MarcherVersNouriture : Passif
             E.Target = null;
         }
 
-        if (E.Target == null || E.DistanceTo(E.Target) > E.RayonVision)
+        if (E.Target == null || E.DistanceVisionTo(E.Target) > E.RayonVision)
         {
             E.NouritureDirection();
         }
         else
         {
-            E.Direction = Angle.FromRadian(float.Atan2((E.Target!.Y - E.Y), (E.Target!.X - E.X))); ;
+            E.Direction = (E.Target.Position- E.Position).Angle; //Angle.FromRadian(float.Atan2((E.Target!.Y - E.Y), (E.Target!.X - E.X))); ;
         }
 
         E.Avancer(Coef);
@@ -81,6 +81,7 @@ public class Mange : Passif
             if (proba < E.ProbaManger(E.Target))
             {
                 E.Nourriture += E.Target.Taille;
+                E.Target.Animation?.Meurt(E);
                 E.Target.Meurt();
                 E.Target = null;
             }
