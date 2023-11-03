@@ -21,7 +21,7 @@ public abstract class Animation : AnimationBase
 
     public override void DrawChampsVision(Entite e) 
     {
-        //All.SpriteBatch.DrawEllipse(e.Position, e.RayonVision, new Color(255, 0, 0, 16));
+        All.SpriteBatch.DrawEllipse(e.Position, e.RayonVision+ Entite.BonusRadiusBigEntityMax, new Color(128, 128, 128, 3));
         All.SpriteBatch.DrawArc(e.Position, e.RayonVision, e.Direction, e.ChampsVision, new Color(12, 82, 165, 128));
         All.SpriteBatch.DrawArc(e.Position, e.RayonVision, e.Direction+Angle.AngleFromOne(0.5f), Angle.AngleFromOne(1)-e.ChampsVision, new Color(255, 64, 0, 128));
 

@@ -135,64 +135,61 @@ public class Entite : SimulationComposante
         Actuel.Direction = (Rand.NextFloat(2f * MathF.PI));
     }
 
-    public bool EstDansVision(int x, int y, float distanceVision, Angle direction, Angle champsVision)
+    public bool PeutVoir(Entite e) 
     {
-        Angle debut = Angle.FromRadian(direction.Radian - champsVision.Radian / 2);
-        Angle fin = Angle.FromRadian(direction.Radian + champsVision.Radian / 2);
+        // trop loin
+        //if(new Vec2(Position, e.Position).LengthSquared - e.Rayon* e.Rayon > RayonVision* RayonVision) { return false; }
 
+        var dir = new Vec2(Position, e.Position);
+            
+        if(dir.Angle.Inside(Direction - MoitieChampsVision, Direction + MoitieChampsVision)) { return true; } // clairement devant lui
 
-        float distanceHorizontale = X - x;
-        float distanceVerticale = Y - y;
-
-        float distanceSquared = (float)distanceHorizontale * distanceHorizontale + distanceVerticale * distanceVerticale;
-
-        if (distanceSquared <= distanceVision * distanceVision)
-        {
-            Angle angle = Angle.FromRadian((float)Math.Atan2(distanceVerticale, distanceHorizontale));
-            if (angle < 0)
-            {
-                angle.Radian += 2 * (float)Math.PI;
-            }
-
-            return angle.Inside(debut, fin);
-        }
+        // sur les côté
+        Angle bonus = MathF.Sinh(e.Rayon / dir.Length);
+        if (dir.Angle.Inside(Direction - MoitieChampsVision - bonus, Direction + MoitieChampsVision + bonus)) { return true; }
 
         return false;
     }
-
-    public bool PeutVoir(Entite e) => new Vec2(Position, e.Position).Angle.Inside(Direction - MoitieChampsVision, Direction + MoitieChampsVision);
     public bool PeutManger(Entite e) => Categorie.CategoriesNouritures.Contains(e.Categorie.Categorie) && e != this;
     public bool Collision(Entite e) => (Position - e.Position).LengthSquared <= (Rayon + e.Rayon) * (Rayon + e.Rayon);
 
 
     #region Chunks / Vision
+    public const float BonusRadiusBigEntityMax = 2;
+
     public IEnumerable<EntiteDistance> EntitesProcheAvecDistance() => EntitesProcheAvecDistance(RayonVision);
     public IEnumerable<EntiteDistance> EntitesProcheAvecDistance(float radius)
     {
-        var radius_squared = radius* radius;
-        foreach (var e in EntitesProcheCarre(radius))
+        var radius_squared = radius * radius;
+        foreach (var e in EntitesProcheCarre(radius + BonusRadiusBigEntityMax))
         {
-            float distance = (e.X - X) * (e.X - X) + (e.Y - Y) * (e.Y - Y);
+            /*
+            float distance = Math.Max(0, (e.X - X) * (e.X - X) + (e.Y - Y) * (e.Y - Y) - e.Rayon * e.Rayon);
             if (distance < radius_squared)
             {
                 yield return new EntiteDistance(e, MathF.Sqrt(distance));
+            }*/
+
+            float d = (Position - e.Position).Length - e.Rayon;
+            if (d < radius)
+            {
+                yield return new EntiteDistance(e, d);
             }
         }
     }
 
     public IEnumerable<Entite> EntitesProche() => EntitesProche(RayonVision);
-    public IEnumerable<Entite> EntitesProche(float radius)
-    {
-        var radius_squared = radius* radius;
-        foreach (var e in EntitesProcheCarre(radius))
+    public IEnumerable<Entite> EntitesProche(float radius) => EntitesProcheAvecDistance(radius).Select(t => t.E);
+        /*
+        var radius_squared = radius * radius;
+        foreach (var e in EntitesProcheCarre(radius + BonusRadiusBigEntityMax))
         {
-            float distance = (e.X - X) * (e.X - X) + (e.Y - Y) * (e.Y - Y);
+            float distance = Math.Max(0, (e.X - X) * (e.X - X) + (e.Y - Y) * (e.Y - Y) - e.Rayon * e.Rayon);
             if (distance < radius_squared)
             {
                 yield return e;
             }
-        }
-    }
+        }*/
 
     public IEnumerable<Entite> EntitesVisibles() => EntitesVisibles(RayonVision);
     public IEnumerable<Entite> EntitesVisibles(float radius) => EntitesProche(radius).Where(t => PeutVoir(t));
