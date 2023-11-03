@@ -39,8 +39,9 @@ public class Entite : SimulationComposante
 
     public string EtatNom { get => Etat.Nom; set => Etat = MachineEtat[value]; }
 
+    public bool Vivant { get => Actuel.Vivant; set => Actuel.Vivant = value; }
     public float Score { get => Actuel.Score; set => Actuel.Score = Score; }
-    public int TempsDeRepos { get => Actuel.TempsDeRepos; set => Actuel.TempsDeRepos = TempsDeRepos; }
+    public int TempsDeRepos { get => Actuel.TempsDeRepos; set => Actuel.TempsDeRepos = value; }
 
     public Vec2 Position { get => Actuel.Position; set => Actuel.Position = value; } 
     public float X { get => Actuel.Position.X; set => Actuel.Position.X = value; }
@@ -69,6 +70,7 @@ public class Entite : SimulationComposante
     public Angle ChampsVision { get => Actuel.ChampsVision; set => Actuel.ChampsVision = value; }
     public Angle MoitieChampsVision { get => Actuel.MoitieChampsVision; set => Actuel.MoitieChampsVision = value; }
 
+    public Entite? Target { get => Actuel.Target; set => Actuel.Target = value; }
     public Categories Categorie { get => Actuel.Categorie; set => Actuel.Categorie = value; }
     #endregion
 
@@ -94,10 +96,21 @@ public class Entite : SimulationComposante
     {
         Nom = nom ?? "";
         MachineEtat = e ?? new MachineEtat();
+        Vivant = true;
 
         Load(simu); // because of the need of Simu for rand
 
         //simu.Grille.Add(this);
+    }
+
+    public void Meurt()
+    {
+        if (Vivant)
+        {
+            Grille.Remove(this);
+            Simu.ToutesLesEntites.Remove(this);
+            Vivant = false;
+        }
     }
 
     public override void Load() 
@@ -215,10 +228,12 @@ public class Entite : SimulationComposante
         if(plusProche != null) 
         {
             Direction = new Vec2(Position, plusProche.Position).Angle;
+            Target = plusProche;
+            Direction = Angle.FromRadian(float.Atan2((plusProche!.Y - Y), (plusProche!.X - X)));
         }
         else 
         {
-            if (Rand.NextDouble() < 0.01)
+            if (Rand.NextDouble() <= 0.1)
             {
                 RngDirection();
             }
@@ -254,7 +269,7 @@ public class Entite : SimulationComposante
         {
             double distance = Math.Pow(x - e.X, 2) + Math.Pow(y - e.Y, 2);
 
-            if (e != this && distance <= Math.Pow(Rayon + e.Rayon, 2)) return true; 
+            if (e != this && e.Categorie != Categorie && distance <= Math.Pow(Rayon + e.Rayon, 2)) return true; 
         }
 
         return false;
@@ -280,20 +295,33 @@ public class Entite : SimulationComposante
             Avancer(coef / 2);
             Avancer(coef / 2);
         }
+
+        Nourriture -= 1 * coef;
+        Energie    -= 1 * coef;
     }
+
+    public float ProbaManger(Entite e)
+    {
+        return -0.5f*(e.Taille/Taille)+1f;
+    }
+
+
+    public float DistanceTo(Entite e) => float.Sqrt((e.X - X) * (e.X - X) + (e.Y - Y) * (e.Y - Y));
 
 
     public void Affiche()
     {
         Console.WriteLine("================= " + Nom + " =========");
-        Console.WriteLine("Categorie   = "  + Actuel.Categorie);
-        Console.WriteLine("Etat        = "  + Etat);
-        Console.WriteLine("TempsDeRepos= "  + TempsDeRepos);
-        Console.WriteLine("Nouriture   = "  + Nourriture);
-        Console.WriteLine("Energie     = "  + Energie);
-        Console.WriteLine("Age         = "  + Age);
-        Console.WriteLine("VitesseMax  = "  + VitesseMax);
-        Console.WriteLine("Direction   = "  + Direction);
+        Console.WriteLine("Categorie   = " + Actuel.Categorie);
+        Console.WriteLine("Etat        = " + Etat);
+        Console.WriteLine("TempsDeRepos= " + TempsDeRepos);
+        Console.WriteLine("Nouriture   = " + Nourriture);
+        Console.WriteLine("Energie     = " + Energie);
+        Console.WriteLine("Age         = " + Age);
+        Console.WriteLine("Taille      = " + Taille);
+        Console.WriteLine("Vivant      = " + Vivant);
+        Console.WriteLine("VitesseMax  = " + VitesseMax);
+        Console.WriteLine("Direction   = " + Direction);
         Console.WriteLine("X,  Y       = (" + X  + ", " + Y  + ")");
         Console.WriteLine("VX, VY      = (" + VX + ", " + VY + ")");
     }

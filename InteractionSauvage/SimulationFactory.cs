@@ -22,10 +22,14 @@ public class SimulationFactory : SimulationComposante
     {
         var MoutonME = new MachineEtat();
         // le 1er état ajouté est l'état suggeré par défaut/l'état d'entrée
-        MoutonME.Add("marcher",  new MarcherVersNouriture(0.5f), new Transition("cours ma gazelle", new Apres(Rand.IntUniform(10, 40)), "courrir"));
-        MoutonME.Add("courrir",  new MarcherVersNouriture(1f),   new Transition("je suis epuise",   new Apres(Rand.IntUniform(30, 80)), "attendre"));
-        MoutonME.Add("attendre", new Attendre(),   new Transition("c'est reparti pour un tour", new Apres(Rand.IntUniform(40, 90)), "marcher"));
+        MoutonME.Add("marcher",  new MarcherAleatoire(0.5f), new Transition("cours ma gazelle", new Apres(Rand.IntUniform(10, 20)), "courrir"), new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("j'ai faim", new Faim(), "marcher vers nouriture"));
+        MoutonME.Add("courrir",  new MarcherAleatoire(1f),   new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("j'ai faim", new Faim(), "courrir vers nouriture"));
+        MoutonME.Add("dormir", new Dormir(), new Transition("c'est reparti pour un tour", new Repose(Rand.IntUniform(30, 50)), "marcher vers nouriture"));
 
+        MoutonME.Add("marcher vers nouriture", new MarcherVersNouriture(0.5f), new Transition("cours ma gazelle", new Apres(Rand.IntUniform(10, 20)), "courrir vers nouriture"), new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("miam", new NourritureAtteignable(), "manger"), new Transition("plus faim", new Repu(5), "marcher"));
+        MoutonME.Add("courrir vers nouriture", new MarcherVersNouriture(1f), new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("miam", new NourritureAtteignable(), "manger"));
+
+        MoutonME.Add("manger", new Mange(), new Transition("marchons", new Apres(1), "marcher vers nouriture"));
         //MoutonME.Add("courrir", new Marcher(1), new Transition("je suis epuise", new Apres(2), new EtatSuivant(4, "attendre"), new EtatSuivant(8, "marcher")));
         //MoutonME.Add("courrir", new Marcher(1), new Transition("je suis epuise", new Apres(2), new List<EtatSuivant> { new EtatSuivant(4, "attendre"), new EtatSuivant(8, "marcher") }));
 
@@ -59,9 +63,11 @@ public class SimulationFactory : SimulationComposante
         Entite e = NewEntite("Mouton", MoutonME()).WithRandomPosition(Simu);
 
         e.VitesseMax = 2;
+        e.Taille = 10;
         e.Age = 10;
         e.Rayon = 10;
-        e.Energie = 1;
+        e.Energie = 1000;
+        e.Nourriture = 0;
         e.Categorie = HerbivoresC();
         e.Direction = Angle.FromRadian(Rand.NextFloat(2f * MathF.PI));
         //e.Direction = Angle.FromDegree(225f);
@@ -90,6 +96,10 @@ public class SimulationFactory : SimulationComposante
     public void AddEntite() 
     {
         Simu.Add(GenerateMouton());
+        Simu.Add(GenerateHerbe());
+        Simu.Add(GenerateHerbe());
+        Simu.Add(GenerateHerbe());
+        Simu.Add(GenerateHerbe());
         Simu.Add(GenerateHerbe());
         //Simu.EntitesDeBase.Add(GenerateHerbe());
     }

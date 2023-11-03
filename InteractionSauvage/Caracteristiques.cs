@@ -7,11 +7,12 @@ namespace InteractionSauvage;
 
 public struct Caracteristiques
 {
+    public bool Vivant = true;
+
     /// <summary> [0, 1]. Si 0 => meurt </summary>
     public float Nourriture;
     /// <summary> [0, 1]. Si 0 => Dodo forcé </summary>
     public float Energie;
-
 
     public float RayonVision;
     public Angle ChampsVision;
@@ -30,6 +31,8 @@ public struct Caracteristiques
     public int TempsDeRepos = 0;
 
     public string? EtatDeBase = null;
+
+    public Entite? Target = null;
 
     public Categories Categorie;
 
