@@ -107,6 +107,7 @@ public class Entite : SimulationComposante
     {
         if (Vivant)
         {
+            Animation?.Meurt(this);
             Grille.Remove(this);
             Simu.ToutesLesEntites.Remove(this);
             Vivant = false;

@@ -63,7 +63,7 @@ public class SimulationFactory : SimulationComposante
     {
         Entite e = NewEntite("Mouton", MoutonME()).WithRandomPosition(Simu);
 
-        e.VitesseMax = 0.2f;
+        e.VitesseMax = 0.1f;
         e.Taille = 1;
         e.Age = 10;
         e.Rayon = 1;
@@ -94,10 +94,10 @@ public class SimulationFactory : SimulationComposante
         return e;
     }
 
-    public void AddEntite() 
+    public void AddEntite()
     {
         Simu.Add(GenerateMouton());
-        for(int i = 0; i < 20; i++) 
+        for(int i = 0; i < 50; i++) 
         {
             Simu.Add(GenerateHerbe());
         }

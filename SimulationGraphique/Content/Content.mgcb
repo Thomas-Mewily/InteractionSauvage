@@ -32,6 +32,12 @@
 /processorParam:TextureFormat=Compressed
 /build:File.spritefont;Arial.spritefont
 
+#begin grass_mc.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:grass_mc.mp3
+
 #begin grass.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -43,6 +49,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:grass.png
+
+#begin Minecraft Sheep Sound Effect.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Minecraft Sheep Sound Effect.mp3;sheep_mc.mp3
 
 #begin sheep.png
 /importer:TextureImporter
