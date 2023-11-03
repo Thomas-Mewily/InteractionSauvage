@@ -39,16 +39,6 @@ public class ApresAleatoire : Interruption
     public override bool Interrupt => Simu.Time - AssocieA.TempsDebut > Temps;
 }
 
-public class ApresAleatoire : Interruption
-{
-    public Temps Temps;
-    public ApresAleatoire(Temps min, Temps max)
-    {
-        Temps = Rand.IntUniform(min.T, max.T);
-    }
-    public override bool Interrupt => Simu.Time - AssocieA.TempsDebut > Temps;
-}
-
 public class NourritureAtteignable : Interruption
 {
     public override bool Interrupt => E.Target != null && E.Target.Vivant ? E.DistanceTo(E.Target) < E.Taille*2 : false;

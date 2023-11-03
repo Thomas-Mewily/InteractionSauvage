@@ -227,13 +227,12 @@ public class Entite : SimulationComposante
 
         if(plusProche != null) 
         {
-            Direction = new Vec2(Position, plusProche.Position).Angle;
             Target = plusProche;
-            Direction = Angle.FromRadian(float.Atan2((plusProche!.Y - Y), (plusProche!.X - X)));
+            Direction = new Vec2(Position, plusProche.Position).Angle;
         }
         else 
         {
-            if (Rand.NextDouble() <= 0.1)
+            if (Rand.NextDouble() <= 0.02)
             {
                 RngDirection();
             }

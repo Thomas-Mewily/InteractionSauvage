@@ -16,7 +16,7 @@ public class SceneSimu : Scene
 {
     private Camera Cam;
     public bool Paused = false;
-    public Entite? Target = null;
+    public Entite Target = null;
 
     public SimulationFactoryGraphique SimuFact;
     public Simulation Simu => SimuFact.Simu;
