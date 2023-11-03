@@ -160,7 +160,7 @@ public class Entite : SimulationComposante
     public IEnumerable<EntiteDistance> EntitesProcheAvecDistance() => EntitesProcheAvecDistance(RayonVision);
     public IEnumerable<EntiteDistance> EntitesProcheAvecDistance(float radius)
     {
-        var radius_squared = radius * radius;
+        //var radius_squared = radius * radius;
         foreach (var e in EntitesProcheCarre(radius + BonusRadiusBigEntityMax))
         {
             /*
