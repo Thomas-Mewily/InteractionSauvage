@@ -7,6 +7,7 @@ namespace InteractionSauvage;
 public abstract class CheckPointable
 {
     public int NbCheckPoint = 0;
+
     public virtual void CheckPointAdd() { NbCheckPoint++; }
     public virtual void CheckPointRemove() { NbCheckPoint--; }
     public virtual void CheckPointRollBack() { }

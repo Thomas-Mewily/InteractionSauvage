@@ -42,13 +42,13 @@ public static class SpriteBatchExtension
 
     public enum TextSize 
     {
-        Normal = 18,
+        Normal = 36,
     }
 
     public static void DrawText(this SpriteBatch spriteBatch, Font font, string text, Vec2 pos, Vec2 coefCenter, Color color, TextSize size = TextSize.Normal) 
     {
         var m = (Vec2)font.MeasureString(text);
-        float scale = (float)size / m.Y;
+        float scale = (float)size / m.Y * Camera.Peek().Rect.SizeY / All.Screen.WindowSize.Y;
 
         pos -= m* scale* coefCenter;
         spriteBatch.DrawString(font, text, pos, color, 0, Vec2.Zero, scale, SpriteEffects.None, 0);

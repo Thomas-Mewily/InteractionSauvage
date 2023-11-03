@@ -81,9 +81,6 @@ public class SceneSimu : Scene
 
     public override void Draw()
     {
-
-
-
         Camera.Push(Cam);
         SpriteBatch.Debut();
 
@@ -114,12 +111,15 @@ public class SceneSimu : Scene
         {
             Target.Animation.DrawChampsVision(Target);
             Target.Animation.Draw(Target);
+
+
+            foreach (var v in Target.EntitesVisibles())
+            {
+                SpriteBatch.DrawEllipse(v.Position, v.Rayon, new Color(0, 255, 0, 128));
+            }
+
             Target.Animation.DrawExtraInfo(Target);
 
-            foreach(var v in Target.EntitesVisibles()) 
-            {
-                SpriteBatch.DrawEllipse(v.Position, v.Rayon, new Color(0,255,0, 128));
-            }
         }
 
         SpriteBatch.Fin();

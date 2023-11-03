@@ -200,13 +200,13 @@ public class Entite : SimulationComposante
     public IEnumerable<Entite> EntitesProcheCarre(float cote)
     {
         int minY = Math.Max(0, (int)((Y - cote) / Grille.TailleCase));
-        int maxY = Math.Min(Grille.NbCaseHauteur  - 1, (int)((Y + cote) / Grille.TailleCase));
+        int maxY = Math.Min(Grille.NbCaseHauteur - 1, (int)((Y + cote) / Grille.TailleCase));
         int minX = Math.Max(0, (int)((X - cote) / Grille.TailleCase));
         int maxX = Math.Min(Grille.NbCaseLongueur - 1, (int)((X + cote) / Grille.TailleCase));
 
-        for (int y = minY; y < maxY; y++)
+        for (int y = minY; y <= maxY; y++)
         {
-            for (int x = minX; x < maxX; x++)
+            for (int x = minX; x <= maxX; x++)
             {
                 foreach (var e in Grille.Get(x, y))
                 {
@@ -279,7 +279,7 @@ public class Entite : SimulationComposante
         float deltaX = coef * VitesseMax * Direction.Cos;
         float deltaY = coef * VitesseMax * Direction.Sin;
 
-        if(deltaX* deltaX + deltaY* deltaY < 0.1) { return; }
+        if(deltaX* deltaX + deltaY* deltaY < 0.0001f) { return; }
 
         if (X + deltaX > 0 && X + deltaX < Grille.Longueur && Y + deltaY > 0 && Y + deltaY < Grille.Hauteur && !Collision(X+deltaX, Y+deltaY))
         {

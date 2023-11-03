@@ -26,12 +26,14 @@ public class Etat : EntiteComposante
     public void Debut() 
     {
         Passif.Debut();
+        Transitions.ForEach(t => t.Debut());
         TempsDebut = Simu.Time;
     }
 
     public void Fin()
     {
         Passif.Fin();
+        Transitions.ForEach(t => t.Fin());
     }
 
     public override void Load()
@@ -56,23 +58,41 @@ public class Etat : EntiteComposante
         }
     }
 
+    #region CheckPoint
     public override void CheckPointAdd()
     {
         CheckPointsTempsDebut.Push(TempsDebut);
         base.CheckPointAdd();
+
+        Passif.CheckPointAdd();
+        Transitions.ForEach(t => t.CheckPointAdd());
     }
 
     public override void CheckPointRemove()
     {
+        Passif.CheckPointRemove();
+        Transitions.ForEach(t => t.CheckPointRemove());
+
         CheckPointsTempsDebut.Pop();
         base.CheckPointRemove();
     }
 
     public override void CheckPointRollBack()
     {
+        Passif.CheckPointRollBack();
+        Transitions.ForEach(t => t.CheckPointRollBack());
+
         TempsDebut = CheckPointsTempsDebut.Peek();
         base.CheckPointRollBack();
     }
+
+    public override void CheckPointReset()
+    {
+        Passif.CheckPointReset();
+        Transitions.ForEach(t => t.CheckPointReset());
+        base.CheckPointReset();
+    }
+    #endregion
 
     override public string ToString() => Nom + " : " + Passif + "; transition : {" + string.Join(", ", Transitions) + "}";
 }

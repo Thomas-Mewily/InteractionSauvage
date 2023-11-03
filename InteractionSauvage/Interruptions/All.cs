@@ -26,17 +26,43 @@ public class Apres : Interruption
 
 public class ApresAleatoire : Interruption
 {
-    public Temps Temps;
+    public Temps TempsMax;
+    public Temps TempsMin;
+
+    public Temps TempsRng;
+    public List<Temps> TempsRngCp = new List<Temps>();
+
     public ApresAleatoire(Temps min, Temps max)
     {
-        Temps = Rand.IntUniform(min.T, max.T);
+        TempsMin = min;
+        TempsMax = max;
+        TempsRng = TempsMax;
     }
-    /*
-    public override void Load(Entite e)
+
+    public override void Debut()
     {
-        base.Load(e);
-    }*/
-    public override bool Interrupt => Simu.Time - AssocieA.TempsDebut > Temps;
+        TempsRng = Rand.IntUniform(TempsMin.T, TempsMax.T);
+    }
+
+    public override void CheckPointAdd()
+    {
+        TempsRngCp.Add(TempsRng);
+        base.CheckPointAdd();
+    }
+
+    public override void CheckPointRollBack()
+    {
+        TempsRng = TempsRngCp.Peek();
+        base.CheckPointRollBack();
+    }
+
+    public override void CheckPointRemove()
+    {
+        TempsRngCp.Pop();
+        base.CheckPointRemove();
+    }
+
+    public override bool Interrupt => Simu.Time - AssocieA.TempsDebut > TempsRng;
 }
 
 public class NourritureAtteignable : Interruption

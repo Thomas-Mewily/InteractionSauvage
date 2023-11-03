@@ -10,4 +10,7 @@ public abstract class Interruption : EntiteComposante
     
     public Etat? MaybeAssocieA;
     public Etat AssocieA => MaybeAssocieA!;
+
+    public virtual void Debut() { }
+    public virtual void Fin() { }
 }

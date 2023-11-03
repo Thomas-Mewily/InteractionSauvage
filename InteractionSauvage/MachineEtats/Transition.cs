@@ -61,4 +61,34 @@ public class Transition : EntiteComposante
     }
 
     public override string ToString() => Nom;
+
+    public void Debut() => Interruptions.Debut();
+    public void Fin() => Interruptions.Fin();
+
+    #region CheckPoint
+    public override void CheckPointAdd()
+    {
+        Interruptions.CheckPointAdd();
+        base.CheckPointAdd();
+    }
+
+    public override void CheckPointRemove()
+    {
+        Interruptions.CheckPointRemove();
+        base.CheckPointRemove();
+    }
+
+    public override void CheckPointRollBack()
+    {
+        Interruptions.CheckPointRollBack();
+        base.CheckPointRollBack();
+    }
+
+    public override void CheckPointReset()
+    {
+        Interruptions.CheckPointReset();
+        base.CheckPointReset();
+    }
+    #endregion
+
 }

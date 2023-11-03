@@ -54,6 +54,7 @@ public class SimulationFactory : SimulationComposante
 
         HerbivoresCat = new Categories(Categories.CategorieEnum.Herbivore);
         HerbivoresCat.CategoriesNouritures.Add(Categories.CategorieEnum.Plante);
+        HerbivoresCat.CategoriesNouritures.Add(Categories.CategorieEnum.Herbivore);
     }
 
     public Entite NewEntite(string nom, MachineEtat? machineEtat) => new(Simu, nom + "#" + Simu.EntitesDeBase.Count, machineEtat);
@@ -62,17 +63,17 @@ public class SimulationFactory : SimulationComposante
     {
         Entite e = NewEntite("Mouton", MoutonME()).WithRandomPosition(Simu);
 
-        e.VitesseMax = 2;
-        e.Taille = 10;
+        e.VitesseMax = 0.2f;
+        e.Taille = 1;
         e.Age = 10;
-        e.Rayon = 10;
+        e.Rayon = 1;
         e.Energie = 1000;
         e.Nourriture = 0;
         e.Categorie = HerbivoresC();
         e.Direction = Angle.FromRadian(Rand.NextFloat(2f * MathF.PI));
         //e.Direction = Angle.FromDegree(225f);
         e.ChampsVision = Angle.FromDegree(Rand.FloatUniform(45, 180));
-        e.RayonVision = 100f;
+        e.RayonVision = 10f;
 
         //e.DeBase.EtatDeBase = "marcher";
         return e;
@@ -83,7 +84,7 @@ public class SimulationFactory : SimulationComposante
         Entite e = NewEntite("Herbe", HerbeME()).WithRandomPosition(Simu);
         e.VitesseMax = 0;
         e.Age = 1;
-        e.Taille = 5;
+        e.Taille = 0.5f;
         e.Energie = 1;
         e.Categorie = PlantesC();
         e.Direction = 0;
@@ -96,11 +97,10 @@ public class SimulationFactory : SimulationComposante
     public void AddEntite() 
     {
         Simu.Add(GenerateMouton());
-        Simu.Add(GenerateHerbe());
-        Simu.Add(GenerateHerbe());
-        Simu.Add(GenerateHerbe());
-        Simu.Add(GenerateHerbe());
-        Simu.Add(GenerateHerbe());
+        for(int i = 0; i < 20; i++) 
+        {
+            Simu.Add(GenerateHerbe());
+        }
         //Simu.EntitesDeBase.Add(GenerateHerbe());
     }
 }
