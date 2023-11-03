@@ -10,7 +10,7 @@ public abstract class Animation : AnimationBase
 {
     public override void DrawExtraInfo(Entite e)
     {
-        All.SpriteBatch.DrawText(e.Nom + " : " + e.Etat.Nom, e.Position - new Vec2(0, e.Rayon + 32), Color.Black);
+        All.SpriteBatch.DrawText(e.Nom + " : " + e.Etat.Nom + (e.Target != null ? (", " + e.Target) : ", null"), e.Position - new Vec2(0, e.Rayon + 32), Color.Black);
     }
 
     public void Draw(Entite e, Tex2 texture, Rectangle? r, Color c, SpriteEffects effects = SpriteEffects.None, float zoom = 1.05f) 

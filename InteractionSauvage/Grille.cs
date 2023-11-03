@@ -85,5 +85,5 @@ public class Grille
         EntiteGrille[e.GrilleIndiceX, e.GrilleIndiceY].Add(e);
     }
 
-    private void Remove(Entite e) => EntiteGrille[e.GrilleIndiceX, e.GrilleIndiceY].Remove(e);
+    public void Remove(Entite e) => EntiteGrille[e.GrilleIndiceX, e.GrilleIndiceY].Remove(e);
 }

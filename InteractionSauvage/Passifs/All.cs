@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+﻿using Geometry;
+using System.Numerics;
+using Useful;
 using static InteractionSauvage.Categories;
 
 namespace InteractionSauvage.Passifs;
@@ -51,8 +53,37 @@ public class MarcherVersNouriture : Passif
 
     public override void Execute()
     {
-        E.NouritureDirection();
+        if(E.Target != null && !E.Target.Vivant)
+        {
+            E.Target = null;
+        }
+
+        if (E.Target == null || E.DistanceTo(E.Target) > E.RayonVision)
+        {
+            E.NouritureDirection();
+        }
+        else
+        {
+            E.Direction = Angle.FromRadian(float.Atan2((E.Target!.Y - E.Y), (E.Target!.X - E.X))); ;
+        }
 
         E.Avancer(Coef);
+    }
+}
+
+public class Mange : Passif
+{
+    public override void Execute()
+    {
+        if (E.Target != null && E.Target.Vivant)
+        {
+            float proba = Rand.NextFloat();
+            if (proba < E.ProbaManger(E.Target))
+            {
+                E.Nourriture += E.Target.Taille;
+                E.Target.Meurt();
+                E.Target = null;
+            }
+        }
     }
 }
