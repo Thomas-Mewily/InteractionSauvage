@@ -11,6 +11,8 @@ public abstract class Interruption : EntiteComposante
     public Etat? MaybeAssocieA;
     public Etat AssocieA => MaybeAssocieA!;
 
+    public abstract Interruption Clone();
+
     public virtual void Debut() { }
     public virtual void Fin() { }
 }

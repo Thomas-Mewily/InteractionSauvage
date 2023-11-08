@@ -8,6 +8,11 @@ namespace InteractionSauvage.Passifs;
 public class Attendre : Passif
 {
     public override void Execute() { }
+
+    public override Passif Clone()
+    {
+        return new Attendre();
+    }
 }
 
 public class Dormir : Passif
@@ -15,6 +20,11 @@ public class Dormir : Passif
     public override void Execute()
     {
         E.Energie++;
+    }
+
+    public override Passif Clone()
+    {
+        return new Dormir();
     }
 }
 
@@ -24,6 +34,11 @@ public class Marcher : Passif
     public override void Execute()
     {
         E.Avancer(Coef);
+    }
+
+    public override Passif Clone()
+    {
+        return new Marcher(Coef);
     }
 }
 
@@ -40,6 +55,11 @@ public class MarcherAleatoire : Passif
         if (Rand.NextDouble() < 0.01) E.RngDirection();
 
         E.Avancer(Coef);
+    }
+
+    public override Passif Clone()
+    {
+        return new MarcherAleatoire(Coef);
     }
 }
 
@@ -69,6 +89,11 @@ public class MarcherVersNouriture : Passif
 
         E.Avancer(Coef);
     }
+
+    public override Passif Clone()
+    {
+        return new MarcherVersNouriture(Coef);
+    }
 }
 
 public class Mange : Passif
@@ -86,5 +111,23 @@ public class Mange : Passif
                 E.Target = null;
             }
         }
+    }
+
+    public override Passif Clone()
+    {
+        return new Mange();
+    }
+}
+
+public class Replique : Passif
+{
+    public override void Execute()
+    {
+        E.Replication();
+    }
+
+    public override Passif Clone()
+    {
+        return new Replique();
     }
 }

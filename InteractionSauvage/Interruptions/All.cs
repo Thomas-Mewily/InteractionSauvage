@@ -7,11 +7,21 @@ namespace InteractionSauvage.Interruptions;
 public class Jamais : Interruption 
 {
     public override bool Interrupt => false;
+
+    public override Interruption Clone()
+    {
+        return new Jamais();
+    }
 }
 
 public class Instantanee : Interruption
 {
     public override bool Interrupt => true;
+
+    public override Interruption Clone()
+    {
+        return new Instantanee();
+    }
 }
 
 public class Apres : Interruption
@@ -22,6 +32,11 @@ public class Apres : Interruption
         Temps = temps;
     }
     public override bool Interrupt => Simu.Time - AssocieA.TempsDebut > Temps;
+
+    public override Interruption Clone()
+    {
+        return new Apres(Temps);
+    }
 }
 
 public class ApresAleatoire : Interruption
@@ -63,11 +78,21 @@ public class ApresAleatoire : Interruption
     }
 
     public override bool Interrupt => Simu.Time - AssocieA.TempsDebut > TempsRng;
+
+    public override Interruption Clone()
+    {
+        return new ApresAleatoire(TempsMin, TempsMax);
+    }
 }
 
 public class NourritureAtteignable : Interruption
 {
     public override bool Interrupt => E.Target != null && E.Target.Vivant ? E.DistanceToNoHitbox(E.Target) < E.Taille*2 : false;
+
+    public override Interruption Clone()
+    {
+        return new NourritureAtteignable();
+    }
 }
 
 public class Fatigue : Interruption
@@ -78,6 +103,11 @@ public class Fatigue : Interruption
         NiveauEnergie = niveauEnergie;
     }
     public override bool Interrupt => E.Energie < NiveauEnergie;
+
+    public override Interruption Clone()
+    {
+        return new Fatigue(NiveauEnergie);
+    }
 }
 
 public class Repose : Interruption
@@ -88,6 +118,11 @@ public class Repose : Interruption
         NiveauEnergie = niveauEnergie;
     }
     public override bool Interrupt => E.Energie >= NiveauEnergie;
+
+    public override Interruption Clone()
+    {
+        return new Repose(NiveauEnergie);
+    }
 }
 
 public class Faim : Interruption
@@ -98,6 +133,11 @@ public class Faim : Interruption
         NiveauNouriture = niveauNouriture;
     }
     public override bool Interrupt => E.Nourriture < NiveauNouriture;
+
+    public override Interruption Clone()
+    {
+        return new Faim(NiveauNouriture);
+    }
 }
 
 public class Repu : Interruption
@@ -108,5 +148,10 @@ public class Repu : Interruption
         NiveauNouriture = niveauNouriture;
     }
     public override bool Interrupt => E.Nourriture >= NiveauNouriture;
+
+    public override Interruption Clone()
+    {
+        return new Repu(NiveauNouriture);
+    }
 }
 

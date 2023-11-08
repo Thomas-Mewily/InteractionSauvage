@@ -1,5 +1,6 @@
 ﻿using Geometry;
 using InteractionSauvage.MachineEtats;
+using SimulationConsole;
 using Useful;
 
 namespace InteractionSauvage;
@@ -112,6 +113,29 @@ public class Entite : SimulationComposante
             Simu.ToutesLesEntites.Remove(this);
             Vivant = false;
         }
+    }
+
+    public void Replication()
+    {
+        float newX = X + Rand.FloatUniform(Taille, 10);
+        float newY = Y + Rand.FloatUniform(Taille, 10);
+
+        newX = (newX + Grille.Longueur)%Grille.Longueur;
+        newY = (newY + Grille.Hauteur) %Grille.Hauteur ;
+
+        Entite newEntite = new Entite(Simu, "~" + Nom, MachineEtat.Clone());
+
+        newEntite.DeBase = DeBase;
+        newEntite.WithPosition(newX, newY);
+        newEntite.Target = null;
+        newEntite.Taille += Rand.FloatUniform(-1, 1);
+        if(newEntite.Taille < 0) newEntite.Taille = -newEntite.Taille;
+        newEntite.Categorie = Categorie;
+        newEntite.EtatNom = newEntite.MachineEtat.EtatSuggererParDefaut;
+        newEntite.Animation = Animation;
+
+        newEntite.Load();
+        Simu.ToutesLesEntites.Add(newEntite);
     }
 
     public override void Load() 

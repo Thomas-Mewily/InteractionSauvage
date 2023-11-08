@@ -58,6 +58,18 @@ public class Etat : EntiteComposante
         }
     }
 
+    public Etat Clone()
+    {
+        Passif newPassif = Passif.Clone();
+        List<Transition> newTransitions = new List<Transition>();
+        foreach (Transition transition in Transitions)
+        {
+            newTransitions.Add(transition.Clone());
+        }
+
+        return new Etat(Nom, newPassif, newTransitions);
+    }
+
     #region CheckPoint
     public override void CheckPointAdd()
     {
