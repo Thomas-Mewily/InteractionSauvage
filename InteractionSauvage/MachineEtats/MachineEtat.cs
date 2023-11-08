@@ -1,5 +1,6 @@
 ﻿using InteractionSauvage.MachineEtats;
 using InteractionSauvage.Passifs;
+using System.Security.Cryptography.X509Certificates;
 using static InteractionSauvage.MachineEtats.Etat;
 
 namespace InteractionSauvage.MachineEtats;
@@ -9,6 +10,20 @@ public class MachineEtat : EntiteComposante
     private Dictionary<string, Etat> Etats;
     public Etat this[string i] => Etats[i];
     public string EtatSuggererParDefaut = "?";
+
+    public MachineEtat Clone()
+    {
+        Dictionary<string, Etat> newEtats = new Dictionary<string, Etat>();
+        foreach (string key in Etats.Keys)
+        {
+            newEtats.Add(key, Etats[key].Clone());
+        }
+        
+        MachineEtat newMachine =  new MachineEtat(newEtats);
+        newMachine.EtatSuggererParDefaut = EtatSuggererParDefaut;
+
+        return newMachine;
+    }
 
     public Etat Add(string nom, Passif passif, params Transition[] transitions)
     {

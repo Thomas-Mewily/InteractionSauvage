@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using InteractionSauvage.Interruptions;
+using System.Numerics;
 using static InteractionSauvage.Categories;
 
 namespace InteractionSauvage.Passifs;
@@ -14,6 +15,7 @@ public abstract class Passif : EntiteComposante
         Nom = GetType().Name;
     }
 
+    public abstract Passif Clone();
     public virtual void Debut() { }
     public virtual void Fin() { }
     public abstract void Execute();

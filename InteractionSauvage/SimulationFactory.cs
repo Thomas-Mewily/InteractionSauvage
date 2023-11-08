@@ -42,7 +42,8 @@ public class SimulationFactory : SimulationComposante
     {
         var HerbeME = new MachineEtat();
 
-        HerbeME.Add("rien", new Attendre(), new Transition("transitionne pas", new Jamais(), "rien"));
+        HerbeME.Add("Attend", new Attendre(), new Transition("Replique", new Apres(Rand.IntUniform(150, 1000)), "Replique"));
+        HerbeME.Add("Replique", new Replique(), new Transition("Fini", new Instantanee(), "Attend"));
 
         return HerbeME;
     }

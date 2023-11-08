@@ -62,6 +62,11 @@ public class Transition : EntiteComposante
 
     public override string ToString() => Nom;
 
+    public Transition Clone()
+    {
+        return new Transition(Nom, Interruptions.Clone(), EtatSuivants.ToList());
+    }
+
     public void Debut() => Interruptions.Debut();
     public void Fin() => Interruptions.Fin();
 
