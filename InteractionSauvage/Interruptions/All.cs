@@ -197,9 +197,19 @@ public abstract class InterrupComposition : Interruption
 public class InterrupOU : InterrupComposition 
 {
     public override bool Interrupt => Composites.Any(t => t.Interrupt);
+
+    public override Interruption Clone()
+    {
+        return new InterrupOU();
+    }
 }
 
 public class InterrupET : InterrupComposition
 {
     public override bool Interrupt => Composites.All(t => t.Interrupt);
+
+    public override Interruption Clone()
+    {
+        return new InterrupET();
+    }
 }
