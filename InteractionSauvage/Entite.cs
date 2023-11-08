@@ -303,7 +303,7 @@ public class Entite : SimulationComposante
         {
             X += deltaX;
             Y += deltaY;
-            Energie -= coef * VitesseMax;
+            Energie -= coef * VitesseMax * 0.01f; ;
             //Nourriture -= coef;
 
             PositionChanger();
@@ -333,7 +333,7 @@ public class Entite : SimulationComposante
         }
 
         float radius_add = float.Sqrt(Rayon * Rayon + cible_rayon_absorber * cible_rayon_absorber) - Rayon;
-        Rayon += radius_add / 10;
+        Rayon += radius_add/5;
         float energie_gagne = radius_add * radius_add * 700;
         Energie += energie_gagne;
 

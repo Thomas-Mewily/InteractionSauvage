@@ -98,7 +98,7 @@ public class NourritureAtteignable : Interruption
 public class Fatigue : Interruption
 {
     public float NiveauEnergie;
-    public Fatigue(float niveauEnergie = 0)
+    public Fatigue(float niveauEnergie = 0.05f)
     {
         NiveauEnergie = niveauEnergie;
     }

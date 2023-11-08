@@ -103,7 +103,7 @@ public class Mange : Passif
         // bidouille pour augmenter la taille de la zone ou le mouton peut manger
         if (E.Target != null && E.Target.Vivant && E.Collision(E.Target))
         {
-            E.Absorber(E.Target, 0.2f);
+            E.Absorber(E.Target, 0.4f);
             //float proba = Rand.NextFloat();
             // sorry
             //if (proba < E.ProbaManger(E.Target))
