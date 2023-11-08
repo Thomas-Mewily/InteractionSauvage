@@ -13,7 +13,7 @@ public abstract class Animation : AnimationBase
     private static int IdxInfo = 0;
     private void DrawTextInfo(Entite e, string Text) 
     {
-        All.SpriteBatch.DrawText(Text, e.Position - new Vec2(0, e.Rayon+ 5 - (IdxInfo++)* Camera.Peek().Rect.SizeY/20), Color.Black);
+        All.SpriteBatch.DrawText(Text, e.Position - new Vec2(0, e.Rayon+ 15 - (IdxInfo++)* Camera.Peek().Rect.SizeY/20), Color.Black);
     }
 
     public override void DrawExtraInfo(Entite e)

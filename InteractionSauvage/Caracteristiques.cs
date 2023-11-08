@@ -14,10 +14,13 @@ public struct Caracteristiques
     /// <summary> [0, 1]. Si 0 => Dodo forcé </summary>
     public float Energie;
 
+    public float CoefAbandonEnergiePerduPendantLesDeplacements = 1;
+
     public float RayonVision;
     public Angle ChampsVision;
     public Angle MoitieChampsVision { get => ChampsVision / 2; set => ChampsVision = value * 2; }
 
+    public Angle RotationParSeconde = Angle.FromDegree(180);
     public Angle Direction;
     public Angle DirectionTarget;
     public Vec2 Position;

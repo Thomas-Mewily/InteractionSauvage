@@ -50,7 +50,12 @@ public class Entite : SimulationComposante
     public Angle Direction { get => Actuel.Direction; set => Actuel.Direction = value; }
     public Angle DirectionTarget { get => Actuel.DirectionTarget; set => Actuel.DirectionTarget = value; }
     
-    public float Energie { get => Actuel.Energie; set => Actuel.Energie = Math.Min(1, Math.Max(0, value)); }
+    public float Energie
+    {
+        get => Actuel.Energie; 
+        //set => Actuel.Energie = value;
+        set => Actuel.Energie = Math.Min(1, Math.Max(0, value));
+    }
     //public float Nourriture { get => Actuel.Nourriture; set => Actuel.Nourriture = value; }
     
     public int Age { get => Actuel.Age; set => Actuel.Age = value; }
@@ -59,9 +64,11 @@ public class Entite : SimulationComposante
     public float Taille { get => Actuel.Rayon; set => Actuel.Rayon = value; }
     public float Rayon { get => Actuel.Rayon; set => Actuel.Rayon = value; }
 
+    public float CoefAbandonEnergiePerduPendantLesDeplacements { get => Actuel.CoefAbandonEnergiePerduPendantLesDeplacements; set => Actuel.CoefAbandonEnergiePerduPendantLesDeplacements = value; }
     public float RayonVision { get => Actuel.RayonVision; set => Actuel.RayonVision = value; }
     public Angle ChampsVision { get => Actuel.ChampsVision; set => Actuel.ChampsVision = value; }
     public Angle MoitieChampsVision { get => Actuel.MoitieChampsVision; set => Actuel.MoitieChampsVision = value; }
+    public Angle RotationParSeconde { get => Actuel.RotationParSeconde; set => Actuel.RotationParSeconde = value; }
 
     public Entite? Target { get => Actuel.Target; set => Actuel.Target = value; }
     public Categories Categorie { get => Actuel.Categorie; set => Actuel.Categorie = value; }
@@ -111,7 +118,7 @@ public class Entite : SimulationComposante
 
     public void Replication()
     {
-        if(Rand.Next(0, Simu.ToutesLesEntites.Count) > 250 || Grille.Get(GrilleIndiceX, GrilleIndiceY).Count >= 32) 
+        if(Rand.Next(0, Simu.ToutesLesEntites.Count) > 500 || Grille.Get(GrilleIndiceX, GrilleIndiceY).Count >= 32) 
         {
             return;
         }
@@ -149,7 +156,7 @@ public class Entite : SimulationComposante
     {
         OldPosition = Position;
 
-        if(Target != null && Target.Vivant == false) 
+        if(Target != null && (Target.Vivant == false || PeutVoir(Target) == false || Rand.Next()%500==0))
         {
             Target = null;
         }
@@ -157,7 +164,7 @@ public class Entite : SimulationComposante
         if(Direction != DirectionTarget && Dors == false) 
         {
             var dif = (Direction - DirectionTarget).NormalizedCenter;
-            Angle turnPerTick = (Angle.FromDegree(180) / Temps.OneSecond).NormalizedCenter;
+            Angle turnPerTick = (RotationParSeconde / Temps.OneSecond).NormalizedCenter;
 
             if(dif > turnPerTick) { dif = turnPerTick;  }
             else if(dif < -turnPerTick) { dif = -turnPerTick; }
@@ -231,7 +238,7 @@ public class Entite : SimulationComposante
     public IEnumerable<Entite> EntitesVisibles(float radius) => EntitesProche(radius).Where(t => PeutVoir(t));
 
     public IEnumerable<Entite> EntitesProcheCarre() => EntitesProcheCarre(RayonVision);
-    public IEnumerable<Entite> EntitesProcheCarre(float cote) => Grille.EntitesDansRectangle(X, Y, cote, cote).Where(t => t != this);
+    public IEnumerable<Entite> EntitesProcheCarre(float demi_cote) => Grille.EntitesDansRectangle(X, Y, demi_cote * 2, demi_cote * 2).Where(t => t != this);
     #endregion
 
 
@@ -303,7 +310,7 @@ public class Entite : SimulationComposante
         {
             X += deltaX;
             Y += deltaY;
-            Energie -= coef * VitesseMax * 0.05f; ;
+            Energie -= coef * VitesseMax * 0.05f * CoefAbandonEnergiePerduPendantLesDeplacements;
             //Nourriture -= coef;
 
             PositionChanger();

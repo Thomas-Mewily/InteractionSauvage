@@ -29,6 +29,7 @@ public class SceneSimu : Scene
         {
             SimuFact.AddEntite();
         }
+        SimuFact.AddSniperSheep();
 
         Simu.Reset();
 

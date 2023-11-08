@@ -81,6 +81,7 @@ public class SimulationFactory : SimulationComposante
         //e.Nourriture = 0;
         e.Categorie = HerbivoresC();
         e.Direction = Angle.FromRadian(Rand.NextFloat(2f * MathF.PI));
+        e.RotationParSeconde = Angle.FromDegree(Rand.FloatUniform(45, 360 * 2));
         //e.Direction = Angle.FromDegree(225f);
 
         float repartition = Rand.FloatUniform(0, 1);
@@ -114,5 +115,18 @@ public class SimulationFactory : SimulationComposante
             Simu.Add(GenerateHerbe());
         }
         //Simu.EntitesDeBase.Add(GenerateHerbe());
+    }
+
+    public void AddSniperSheep() 
+    {
+        var m = GenerateMouton();
+        m.VitesseMax *= 17;
+        m.RayonVision = 64;
+        m.Rayon = 0.01f;
+        m.ChampsVision = Angle.FromDegree(90);
+        m.CoefAbandonEnergiePerduPendantLesDeplacements = 0.000001f;
+        m.Energie = 0;
+        m.RotationParSeconde = Angle.FromDegree(360 * 4);
+        Simu.Add(m);
     }
 }

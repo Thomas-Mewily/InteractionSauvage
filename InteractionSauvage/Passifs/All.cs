@@ -87,7 +87,17 @@ public class MarcherVersNouriture : Passif
             E.DirectionTarget = (E.Target.Position- E.Position).Angle; //Angle.FromRadian(float.Atan2((E.Target!.Y - E.Y), (E.Target!.X - E.X))); ;
         }
 
-        E.Avancer(Coef);
+
+        float c = Coef;
+        if (E.Target != null) 
+        {
+            var d = new Vec2(E.Target.Position, E.Position).Length;
+            if (E.VitesseMax * c > d) 
+            {
+                c = d / E.VitesseMax;
+            }
+        }
+        E.Avancer(c);
     }
 
     public override Passif Clone()
