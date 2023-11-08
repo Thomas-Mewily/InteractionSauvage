@@ -303,7 +303,7 @@ public class Entite : SimulationComposante
         {
             X += deltaX;
             Y += deltaY;
-            Energie -= coef * VitesseMax * 0.01f; ;
+            Energie -= coef * VitesseMax * 0.05f; ;
             //Nourriture -= coef;
 
             PositionChanger();

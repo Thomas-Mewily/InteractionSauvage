@@ -24,7 +24,7 @@ public abstract class Animation : AnimationBase
         DrawTextInfo(e, e.Nom);
         DrawTextInfo(e, e.Etat.Nom);
         DrawTextInfo(e, "vise " + (e.Target != null ? e.Target.ToString() : ""));
-        DrawTextInfo(e, ((int)(e.Energie*1000)/ 1000f*100).ToString().PadLeft(5) + " % energie");
+        DrawTextInfo(e, ((int)(e.Energie*10000)/ 100).ToString().PadLeft(5) + " % energie");
     }
 
     public void Draw(Entite e, Tex2 texture, Rectangle? r, Color c, SpriteEffects effects = SpriteEffects.None, float zoom = 1.05f) => Draw(e, texture, r, c, e.Direction, effects, zoom);
