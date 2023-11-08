@@ -136,39 +136,43 @@ public static class SpriteBatchExtension
         return texture;
     }*/
 
+    private static VertexPositionColor[] TriangleVertex = new VertexPositionColor[3];
+    private static BasicEffect TriangleEffect;
+
+    public static void Load() 
+    {
+    }
 
     public static void DrawTriangle(this SpriteBatch spriteBatch, Vec2 a, Vec2 b, Vec2 c, Color color)
     {
-        // Define vertices and their positions
-        VertexPositionColor[] vertices = new VertexPositionColor[3];
-        vertices[0] = new VertexPositionColor(new Vector3(a.X, a.Y, 0), color);
-        vertices[1] = new VertexPositionColor(new Vector3(b.X, b.Y, 0), color);
-        vertices[2] = new VertexPositionColor(new Vector3(c.X, c.Y, 0), color);
+        TriangleVertex[0].Position = new Vector3(a.X, a.Y, 0);
+        TriangleVertex[0].Color = color;
 
+        TriangleVertex[1].Position = new Vector3(b.X, b.Y, 0);
+        TriangleVertex[1].Color = color;
 
-        // Draw the triangle
-        /*
-        spriteBatch.GraphicsDevice.DrawUserPrimitives(
-            PrimitiveType.TriangleList,
-            vertices,
-            0,
-            1);*/
+        TriangleVertex[2].Position = new Vector3(c.X, c.Y, 0);
+        TriangleVertex[2].Color = color;
+
         spriteBatch.Fin();
 
-        var _basicEffect = new BasicEffect(All.GraphicsDevice);
-        _basicEffect.VertexColorEnabled = true;
-        var cam = Camera.Peek();
-        _basicEffect.World = Matrix.CreateOrthographicOffCenter(cam.Min.X, cam.Max.X, cam.Max.Y, cam.Min.Y, 0, 1);
+        TriangleEffect = new BasicEffect(All.GraphicsDevice);
+        TriangleEffect.VertexColorEnabled = true;
 
-        EffectTechnique effectTechnique = _basicEffect.Techniques[0];
+        var cam = Camera.Peek();
+        TriangleEffect.World = Matrix.CreateOrthographicOffCenter(cam.Min.X, cam.Max.X, cam.Max.Y, cam.Min.Y, 0, 1);
+
+        EffectTechnique effectTechnique = TriangleEffect.Techniques[0];
         EffectPassCollection effectPassCollection = effectTechnique.Passes;
 
         foreach (EffectPass pass in effectPassCollection)
         {
             pass.Apply();
 
-            All.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices, 0, 1);
+            All.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, TriangleVertex, 0, 1);
         }
+
+        TriangleEffect.Dispose();
 
         spriteBatch.Debut();
     }

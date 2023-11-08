@@ -14,7 +14,15 @@ public struct Angle
     public float Radian { get; set; }
     public float One { get => Radian / TurnRadian; set => Radian = value * TurnRadian; }
 
+    /// <summary>
+    /// [0, 2PI[
+    /// </summary>
     public Angle Normalized => FromRadian(Radian % TurnRadian + TurnRadian) % TurnRadian;
+
+    /// <summary>
+    /// ]PI; PI]
+    /// </summary>
+    public Angle NormalizedCenter { get { var tmp = Normalized; return tmp < FlatRadian ? tmp : tmp - TurnRadian; } }
 
     public float Cos => MathF.Cos(Radian);
     public float Sin => MathF.Sin(Radian);

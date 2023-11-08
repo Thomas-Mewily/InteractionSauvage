@@ -67,7 +67,9 @@ public class Etat : EntiteComposante
             newTransitions.Add(transition.Clone());
         }
 
-        return new Etat(Nom, newPassif, newTransitions);
+        var e =  new Etat(Nom, newPassif, newTransitions);
+        e.CheckPointsTempsDebut = CheckPointsTempsDebut.ToList();
+        return e;
     }
 
     #region CheckPoint
@@ -101,6 +103,7 @@ public class Etat : EntiteComposante
     public override void CheckPointReset()
     {
         Passif.CheckPointReset();
+        TempsDebut = CheckPointsTempsDebut.Peek();
         Transitions.ForEach(t => t.CheckPointReset());
         base.CheckPointReset();
     }

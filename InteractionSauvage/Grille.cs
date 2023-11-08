@@ -71,6 +71,28 @@ public class Grille
         }
     }
 
+    public IEnumerable<Entite> EntitesDansRectangle(Rect2F r) => EntitesDansRectangle(r.XMin + r.SizeX / 2, r.YMin + r.SizeY / 2, r.SizeX, r.SizeY);
+    public IEnumerable<Entite> EntitesDansRectangle(float centreX, float centreY, float longueurX, float hauteurY)
+    {
+        longueurX /= 2;
+        hauteurY  /= 2;
+        int minY = Math.Max(0, (int)((centreY - hauteurY) / TailleCase));
+        int maxY = Math.Min(NbCaseHauteur - 1, (int)((centreY + hauteurY) / TailleCase));
+        int minX = Math.Max(0, (int)((centreX - longueurX) / TailleCase));
+        int maxX = Math.Min(NbCaseLongueur - 1, (int)((centreX + longueurX) / TailleCase));
+
+        for (int y = minY; y <= maxY; y++)
+        {
+            for (int x = minX; x <= maxX; x++)
+            {
+                foreach (var e in Get(x, y))
+                {
+                    yield return e;
+                }
+            }
+        }
+    }
+
     public int GetIndiceX(double x) => Math.Max(0, Math.Min((int)(x / TailleCase), NbCaseLongueur - 1));
     public int GetIndiceY(double y) => Math.Max(0, Math.Min((int)(y / TailleCase), NbCaseHauteur  - 1));
 

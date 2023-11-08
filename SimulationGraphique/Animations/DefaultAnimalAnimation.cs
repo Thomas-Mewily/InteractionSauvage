@@ -9,7 +9,7 @@ using Useful;
 
 namespace SimulationGraphique;
 
-public struct AnimalSprite 
+public class AnimalSprite 
 {
     public Tex2 Leg;
     public Tex2 Head;
@@ -30,6 +30,7 @@ public class DefaultAnimalAnimation : Animation
     AnimalSprite Dead;
     AnimalSprite Normal;
     AnimalSprite Sleep;
+    Color Colored;
 
     public DefaultAnimalAnimation(string nom) 
     {
@@ -39,18 +40,23 @@ public class DefaultAnimalAnimation : Animation
         Sleep  = new AnimalSprite(nom, "sleep");
     }
 
+    public override void Load(Entite e)
+    {
+        Colored = new Color(255-e.Rand.Next(0, 255)/2, 255 - e.Rand.Next(0, 255) / 2, 255 - e.Rand.Next(0, 255) / 2);
+    }
+
     public override void Draw(Entite e)
     {
-        AnimalSprite sprite = Normal;
+        AnimalSprite sprite = e.Dors ? Sleep : Normal;
 
         Angle a = e.Direction;
         Angle legsAngleAdd = (e.OldPosition - e.Position).HaveLength ? Angle.FromDegree(e.Simu.Time.T*6) : Angle.Zero;
         Angle legsAngle = Angle.FromDegree(25);
 
-        Draw(e, sprite.Leg,  null, Color.White, a+ legsAngleAdd.Sin * legsAngle);
-        Draw(e, sprite.Leg,  null, Color.White, a+ legsAngleAdd.Cos * legsAngle, SpriteEffects.FlipVertically);
-        Draw(e, sprite.Body, null, Color.White, a);
-        Draw(e, sprite.Head, null, Color.White, e.Target != null ? new Vec2(e.Position, e.Target.Position).Angle : a);
+        Draw(e, sprite.Leg,  null, Colored, a+ legsAngleAdd.Sin * legsAngle);
+        Draw(e, sprite.Leg,  null, Colored, a+ (legsAngleAdd+Angle.FromDegree(90)).Sin * legsAngle, SpriteEffects.FlipVertically);
+        Draw(e, sprite.Body, null, Colored, a);
+        Draw(e, sprite.Head, null, Colored, e.Target != null ? new Vec2(e.Position, e.Target.Position).Angle : e.DirectionTarget);
 
 
         //All.SpriteBatch.Draw(All.Assets.Sheep, e.Position, null, Color.White, e.Direction, ((Point2)All.Assets.Sheep.Bounds.Size) / 2, new Vec2(1.0f / All.Assets.Sheep.Width, 1.0f / All.Assets.Sheep.Height) * e.Rayon * 2, SpriteEffects.None, 0);

@@ -19,7 +19,7 @@ public class Dormir : Passif
 {
     public override void Execute()
     {
-        E.Energie++;
+        E.Energie += Entite.EnergiePerduParTour + 1000 * Entite.EnergiePerduParTour;
     }
 
     public override Passif Clone()
@@ -84,7 +84,7 @@ public class MarcherVersNouriture : Passif
         }
         else
         {
-            E.Direction = (E.Target.Position- E.Position).Angle; //Angle.FromRadian(float.Atan2((E.Target!.Y - E.Y), (E.Target!.X - E.X))); ;
+            E.DirectionTarget = (E.Target.Position- E.Position).Angle; //Angle.FromRadian(float.Atan2((E.Target!.Y - E.Y), (E.Target!.X - E.X))); ;
         }
 
         E.Avancer(Coef);
@@ -100,15 +100,15 @@ public class Mange : Passif
 {
     public override void Execute()
     {
-        if (E.Target != null && E.Target.Vivant)
+        // bidouille pour augmenter la taille de la zone ou le mouton peut manger
+        if (E.Target != null && E.Target.Vivant && E.Collision(E.Target))
         {
-            float proba = Rand.NextFloat();
-            if (proba < E.ProbaManger(E.Target))
+            E.Absorber(E.Target, 0.2f);
+            //float proba = Rand.NextFloat();
+            // sorry
+            //if (proba < E.ProbaManger(E.Target))
             {
-                E.Nourriture += E.Target.Taille;
-                E.Target.Animation?.Meurt(E);
-                E.Target.Meurt();
-                E.Target = null;
+                //E.Target = null;
             }
         }
     }

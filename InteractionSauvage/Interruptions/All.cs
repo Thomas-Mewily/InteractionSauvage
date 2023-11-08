@@ -87,7 +87,7 @@ public class ApresAleatoire : Interruption
 
 public class NourritureAtteignable : Interruption
 {
-    public override bool Interrupt => E.Target != null && E.Target.Vivant ? E.DistanceToNoHitbox(E.Target) < E.Taille*2 : false;
+    public override bool Interrupt => E.Target != null && E.Target.Vivant ? E.Collision(E.Target) : false;
 
     public override Interruption Clone()
     {
@@ -97,8 +97,8 @@ public class NourritureAtteignable : Interruption
 
 public class Fatigue : Interruption
 {
-    public int NiveauEnergie;
-    public Fatigue(int niveauEnergie = 0)
+    public float NiveauEnergie;
+    public Fatigue(float niveauEnergie = 0)
     {
         NiveauEnergie = niveauEnergie;
     }
@@ -112,8 +112,8 @@ public class Fatigue : Interruption
 
 public class Repose : Interruption
 {
-    public int NiveauEnergie;
-    public Repose(int niveauEnergie)
+    public float NiveauEnergie;
+    public Repose(float niveauEnergie)
     {
         NiveauEnergie = niveauEnergie;
     }
@@ -125,6 +125,7 @@ public class Repose : Interruption
     }
 }
 
+/*
 public class Faim : Interruption
 {
     public int NiveauNouriture;
@@ -138,8 +139,9 @@ public class Faim : Interruption
     {
         return new Faim(NiveauNouriture);
     }
-}
+}*/
 
+/*
 public class Repu : Interruption
 {
     public int NiveauNouriture;
@@ -153,7 +155,7 @@ public class Repu : Interruption
     {
         return new Repu(NiveauNouriture);
     }
-}
+}*/
 
 public abstract class InterrupComposition : Interruption 
 {

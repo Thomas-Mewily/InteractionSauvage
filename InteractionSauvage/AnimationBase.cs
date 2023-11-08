@@ -7,6 +7,8 @@ public abstract class AnimationBase
 
     public virtual void Meurt(Entite e) { }
 
+    public virtual void Load(Entite e) { }
+
     public virtual void DrawExtraInfo(Entite e) { }
     public virtual void DrawChampsVision(Entite e) { }
 }

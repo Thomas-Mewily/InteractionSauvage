@@ -25,7 +25,7 @@ public class SceneSimu : Scene
     public override void Load()
     {
         SimuFact = new SimulationFactoryGraphique();
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 20; i++)
         {
             SimuFact.AddEntite();
         }
@@ -114,7 +114,7 @@ public class SceneSimu : Scene
             }
         }
 
-        foreach (var e in Simu.ToutesLesEntites)
+        foreach (var e in Simu.Grille.EntitesDansRectangle(Camera.Peek().Rect))
         {
             e.Animation?.Draw(e);
 
@@ -146,7 +146,7 @@ public class SceneSimu : Scene
 
         SpriteBatch.Fin();
         Camera.Pop();
-
+        SpriteBatch.DebugText(Simu.ToutesLesEntites.Count + " entitées");
         if (Paused) 
         {
             SpriteBatch.DebugText("[P]aused");

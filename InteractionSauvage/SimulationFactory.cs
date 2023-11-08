@@ -18,23 +18,28 @@ public class SimulationFactory : SimulationComposante
     private static Categories PlantesCat { get; set; }
     private static Categories HerbivoresCat { get; set; }
 
-    public Temps Second(float secondMin, float secondMax) => Temps.MilliSecond(Rand.FloatUniform(secondMin, secondMax));
+    public Temps Second(float secondMax) => Second(0, secondMax);
+    public Temps Second(float secondMin, float secondMax) => Temps.Second(Rand.FloatUniform(secondMin, secondMax));
+
 
     public MachineEtat MoutonMEMathis() 
     {
         var MoutonME = new MachineEtat();
         // le 1er état ajouté est l'état suggeré par défaut/l'état d'entrée
-        MoutonME.Add("marcher",  new MarcherAleatoire(0.5f), new Transition("cours ma gazelle", new Apres(Second(0, 5)), "courrir"), new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("j'ai faim", new Faim(), "marcher vers nouriture"));
-        MoutonME.Add("courrir",  new MarcherAleatoire(1f),   new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("j'ai faim", new Faim(), "courrir vers nouriture"));
-        MoutonME.Add("dormir", new Dormir(), new Transition("c'est reparti pour un tour", new Repose(Rand.IntUniform(5 * Temps.OneSecond, 10 * Temps.OneSecond)), "marcher vers nouriture"));
+
+        //MoutonME.Add("marcher",  new MarcherAleatoire(0.5f), new Transition("cours ma gazelle", new Apres(Second(0, 0.1f)), "courrir"), new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("j'ai faim", new Faim(), "marcher vers nouriture"));
+        //MoutonME.Add("courrir",  new MarcherAleatoire(1f),   new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("j'ai faim", new Faim(), "courrir vers nouriture"));
+        MoutonME.Add("dormir", new Dormir(), new Transition("c'est reparti pour un tour", new Repose(Rand.FloatUniform(0.5f,0.9f)), "marcher vers nouriture"));
         
-        MoutonME.Add("marcher vers nouriture", new MarcherVersNouriture(0.5f), new Transition("cours ma gazelle", new Apres(Rand.IntUniform(2 * Temps.OneSecond, 3 * Temps.OneSecond)), "courrir vers nouriture"), new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("miam", new NourritureAtteignable(), "manger"), new Transition("plus faim", new Repu(5), "marcher"));
+        //MoutonME.Add("marcher vers nouriture", new MarcherVersNouriture(0.5f), new Transition("cours ma gazelle", new Apres(Second(0.1f, 0.2f)), "courrir vers nouriture"), new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("miam", new NourritureAtteignable(), "manger"), new Transition("plus faim", new Repu(5), "marcher"));
+        MoutonME.Add("marcher vers nouriture", new MarcherVersNouriture(0.5f), new Transition("cours ma gazelle", new Apres(Second(0.1f, 0.2f)), "courrir vers nouriture"), new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("miam", new NourritureAtteignable(), "manger"));
         MoutonME.Add("courrir vers nouriture", new MarcherVersNouriture(1f), new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("miam", new NourritureAtteignable(), "manger"));
 
-        MoutonME.Add("manger", new Mange(), new Transition("marchons", new Apres(1 * Temps.OneSecond), "marcher vers nouriture"));
+        //new Apres(Temps.Second(0.5f))
+        MoutonME.Add("manger", new Mange(), new Transition("marchons", new Instantanee(), "marcher vers nouriture"));
         //MoutonME.Add("courrir", new Marcher(1), new Transition("je suis epuise", new Apres(2), new EtatSuivant(4, "attendre"), new EtatSuivant(8, "marcher")));
         //MoutonME.Add("courrir", new Marcher(1), new Transition("je suis epuise", new Apres(2), new List<EtatSuivant> { new EtatSuivant(4, "attendre"), new EtatSuivant(8, "marcher") }));
-
+        
         return MoutonME;
     }
 
@@ -42,7 +47,8 @@ public class SimulationFactory : SimulationComposante
     {
         var HerbeME = new MachineEtat();
 
-        HerbeME.Add("Attend", new Attendre(), new Transition("Replique", new Apres(Rand.IntUniform(150, 1000)), "Replique"));
+        //HerbeME.Add("rien", new Attendre(), new Transition("", new Jamais(), "rien"));
+        HerbeME.Add("Attend", new Attendre(), new Transition("Replique", new Apres(Second(5,7)), "Replique"));
         HerbeME.Add("Replique", new Replique(), new Transition("Fini", new Instantanee(), "Attend"));
 
         return HerbeME;
@@ -71,13 +77,15 @@ public class SimulationFactory : SimulationComposante
         e.Taille = 1;
         e.Age = 10;
         e.Rayon = 1;
-        e.Energie = 1000;
-        e.Nourriture = 0;
+        e.Energie = Rand.FloatUniform(0, 1);
+        //e.Nourriture = 0;
         e.Categorie = HerbivoresC();
         e.Direction = Angle.FromRadian(Rand.NextFloat(2f * MathF.PI));
         //e.Direction = Angle.FromDegree(225f);
-        e.ChampsVision = Angle.FromDegree(Rand.FloatUniform(45, 180));
-        e.RayonVision = 10f;
+
+        float repartition = Rand.FloatUniform(0, 1);
+        e.ChampsVision = Angle.FromDegree(5 + repartition * 200);
+        e.RayonVision = 2 + (1 - repartition)* (1 - repartition) * 12;
 
         //e.DeBase.EtatDeBase = "marcher";
         return e;

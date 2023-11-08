@@ -36,7 +36,7 @@ public class All
         SpriteBatch = jeu.SpriteBatch;
         Graphics = jeu.Graphics;
         GraphicsDevice = jeu.GraphicsDevice;
-
+        SpriteBatchExtension.Load();
 
         Assets = new Assets();
         Performance = new Performance();
@@ -81,6 +81,8 @@ public class All
         Screen.Draw();
         Performance.Draw(gameTime);
         Input.Draw();
+
+
 
         if (Camera.Count != 1) { throw new Exception("La camera a pas été Pop()"); }
         Camera.Pop();

@@ -10,7 +10,7 @@ public struct Caracteristiques
     public bool Vivant = true;
 
     /// <summary> [0, 1]. Si 0 => meurt </summary>
-    public float Nourriture;
+    //public float Nourriture;
     /// <summary> [0, 1]. Si 0 => Dodo forcé </summary>
     public float Energie;
 

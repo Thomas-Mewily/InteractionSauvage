@@ -55,19 +55,7 @@ with.
     <CharacterRegions>
       <CharacterRegion>
         <Start>&#32;</Start> <!-- Espace -->
-        <End>&#126;</End>   <!-- ~ (Tilde) -->
-      </CharacterRegion>
-      <CharacterRegion>
-        <Start>&#48;</Start> <!-- 0 (Chiffre 0) -->
-        <End>&#57;</End>     <!-- 9 (Chiffre 9) -->
-      </CharacterRegion>
-      <CharacterRegion>
-        <Start>&#65;</Start> <!-- A (Majuscule A) -->
-        <End>&#90;</End>     <!-- Z (Majuscule Z) -->
-      </CharacterRegion>
-      <CharacterRegion>
-        <Start>&#97;</Start> <!-- a (Minuscule a) -->
-        <End>&#122;</End>    <!-- z (Minuscule z) -->
+        <End>&#2048;</End>   <!-- ~ (Tilde) -->
       </CharacterRegion>
     </CharacterRegions>
 

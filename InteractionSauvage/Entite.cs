@@ -1,5 +1,6 @@
 ﻿using Geometry;
 using InteractionSauvage.MachineEtats;
+using InteractionSauvage.Passifs;
 using SimulationConsole;
 using Useful;
 
@@ -32,7 +33,6 @@ public class Entite : SimulationComposante
 
     public bool Vivant { get => Actuel.Vivant; set => Actuel.Vivant = value; }
     public float Score { get => Actuel.Score; set => Actuel.Score = Score; }
-    public int TempsDeRepos { get => Actuel.TempsDeRepos; set => Actuel.TempsDeRepos = value; }
 
     public Vec2 OldPosition { get => Actuel.OldPosition; set => Actuel.OldPosition = value; } 
     public Vec2 Position { get => Actuel.Position; set => Actuel.Position = value; }
@@ -50,8 +50,8 @@ public class Entite : SimulationComposante
     public Angle Direction { get => Actuel.Direction; set => Actuel.Direction = value; }
     public Angle DirectionTarget { get => Actuel.DirectionTarget; set => Actuel.DirectionTarget = value; }
     
-    public float Energie { get => Actuel.Energie; set => Actuel.Energie = value; }
-    public float Nourriture { get => Actuel.Nourriture; set => Actuel.Nourriture = value; }
+    public float Energie { get => Actuel.Energie; set => Actuel.Energie = Math.Min(1, Math.Max(0, value)); }
+    //public float Nourriture { get => Actuel.Nourriture; set => Actuel.Nourriture = value; }
     
     public int Age { get => Actuel.Age; set => Actuel.Age = value; }
 
@@ -65,6 +65,8 @@ public class Entite : SimulationComposante
 
     public Entite? Target { get => Actuel.Target; set => Actuel.Target = value; }
     public Categories Categorie { get => Actuel.Categorie; set => Actuel.Categorie = value; }
+
+    public bool Dors => Etat.Passif is Dormir;
     #endregion
 
     public Caracteristiques Actuel;
@@ -109,19 +111,24 @@ public class Entite : SimulationComposante
 
     public void Replication()
     {
-        float newX = X + Rand.FloatUniform(Taille, 10);
-        float newY = Y + Rand.FloatUniform(Taille, 10);
+        if(Rand.Next(0, Simu.ToutesLesEntites.Count) > 250 || Grille.Get(GrilleIndiceX, GrilleIndiceY).Count >= 32) 
+        {
+            return;
+        }
+        float newX = X + Taille * Rand.FloatUniform(-1, 1) * 4;
+        float newY = Y + Taille * Rand.FloatUniform(-1, 1) * 4;
 
-        newX = (newX + Grille.Longueur)%Grille.Longueur;
-        newY = (newY + Grille.Hauteur) %Grille.Hauteur ;
+        newX = (newX + Grille.Longueur) % Grille.Longueur;
+        newY = (newY + Grille.Hauteur) % Grille.Hauteur;
 
         Entite newEntite = new Entite(Simu, "~" + Nom, MachineEtat.Clone());
+        newEntite.Actuel = Actuel;
 
         newEntite.DeBase = DeBase;
         newEntite.WithPosition(newX, newY);
         newEntite.Target = null;
-        newEntite.Taille += Rand.FloatUniform(-1, 1);
-        if(newEntite.Taille < 0) newEntite.Taille = -newEntite.Taille;
+        newEntite.Taille *= Rand.FloatUniform(0.8f, 1.2f);
+        //if(newEntite.Taille < 0) newEntite.Taille = -newEntite.Taille;
         newEntite.Categorie = Categorie;
         newEntite.EtatNom = newEntite.MachineEtat.EtatSuggererParDefaut;
         newEntite.Animation = Animation;
@@ -133,20 +140,34 @@ public class Entite : SimulationComposante
     public override void Load() 
     {
         MachineEtat.Load(this);
+        Animation?.Load(this);
     }
+
+    public const float EnergiePerduParTour = 0.00001f;
 
     public void Update()
     {
         OldPosition = Position;
-        
-        if(Direction != DirectionTarget) 
+
+        if(Target != null && Target.Vivant == false) 
         {
+            Target = null;
+        }
         
+        if(Direction != DirectionTarget && Dors == false) 
+        {
+            var dif = (Direction - DirectionTarget).NormalizedCenter;
+            Angle turnPerTick = (Angle.FromDegree(180) / Temps.OneSecond).NormalizedCenter;
+
+            if(dif > turnPerTick) { dif = turnPerTick;  }
+            else if(dif < -turnPerTick) { dif = -turnPerTick; }
+
+            Direction -= dif;
         }
         Animation?.Update(this);
 
         Actuel.Age++;
-        TempsDeRepos = TempsDeRepos > 0 ? TempsDeRepos - 1 : 0;
+        Energie = Energie > 0 ? Energie - EnergiePerduParTour : 0;
 
         Etat.Update();
     }
@@ -154,7 +175,7 @@ public class Entite : SimulationComposante
 
     public void RngDirection()
     {
-        Actuel.Direction = (Rand.NextFloat(2f * MathF.PI));
+        DirectionTarget = (Rand.NextFloat(2f * MathF.PI));
     }
 
     public bool PeutVoir(Entite e) 
@@ -210,27 +231,7 @@ public class Entite : SimulationComposante
     public IEnumerable<Entite> EntitesVisibles(float radius) => EntitesProche(radius).Where(t => PeutVoir(t));
 
     public IEnumerable<Entite> EntitesProcheCarre() => EntitesProcheCarre(RayonVision);
-    public IEnumerable<Entite> EntitesProcheCarre(float cote)
-    {
-        int minY = Math.Max(0, (int)((Y - cote) / Grille.TailleCase));
-        int maxY = Math.Min(Grille.NbCaseHauteur - 1, (int)((Y + cote) / Grille.TailleCase));
-        int minX = Math.Max(0, (int)((X - cote) / Grille.TailleCase));
-        int maxX = Math.Min(Grille.NbCaseLongueur - 1, (int)((X + cote) / Grille.TailleCase));
-
-        for (int y = minY; y <= maxY; y++)
-        {
-            for (int x = minX; x <= maxX; x++)
-            {
-                foreach (var e in Grille.Get(x, y))
-                {
-                    if(e != this) 
-                    {
-                        yield return e;
-                    }
-                }
-            }
-        }
-    }
+    public IEnumerable<Entite> EntitesProcheCarre(float cote) => Grille.EntitesDansRectangle(X, Y, cote, cote).Where(t => t != this);
     #endregion
 
 
@@ -241,7 +242,7 @@ public class Entite : SimulationComposante
         if(plusProche != null) 
         {
             Target = plusProche;
-            Direction = new Vec2(Position, plusProche.Position).Angle;
+            DirectionTarget = new Vec2(Position, plusProche.Position).Angle;
         }
         else 
         {
@@ -302,7 +303,8 @@ public class Entite : SimulationComposante
         {
             X += deltaX;
             Y += deltaY;
-            Energie -= coef;
+            Energie -= coef * VitesseMax;
+            //Nourriture -= coef;
 
             PositionChanger();
         }
@@ -312,8 +314,6 @@ public class Entite : SimulationComposante
             Avancer(coef / 2);
         }
 
-        Nourriture -= 1 * coef;
-        Energie    -= 1 * coef;
     }
 
     public float ProbaManger(Entite e)
@@ -321,13 +321,35 @@ public class Entite : SimulationComposante
         return -0.5f*(e.Taille/Taille)+1f;
     }
 
+    public void Absorber(Entite e, float pourcentage=1f) 
+    {
+        float cible_rayon_absorber = e.Rayon * pourcentage;
+        e.Rayon -= cible_rayon_absorber;
+
+        if (e.Rayon < 0.1f) 
+        {
+            cible_rayon_absorber += e.Rayon;
+            e.Rayon = 0;
+        }
+
+        float radius_add = float.Sqrt(Rayon * Rayon + cible_rayon_absorber * cible_rayon_absorber) - Rayon;
+        Rayon += radius_add / 10;
+        float energie_gagne = radius_add * radius_add * 700;
+        Energie += energie_gagne;
+
+        if (e.Rayon == 0f)
+        { 
+            e.Meurt();
+        }
+    }
+
     public void Affiche()
     {
         Console.WriteLine("================= " + Nom + " =========");
         Console.WriteLine("Categorie   = " + Actuel.Categorie);
         Console.WriteLine("Etat        = " + Etat);
-        Console.WriteLine("TempsDeRepos= " + TempsDeRepos);
-        Console.WriteLine("Nouriture   = " + Nourriture);
+        Console.WriteLine("TempsDeRepos= " + Energie);
+        //Console.WriteLine("Nouriture   = " + Nourriture);
         Console.WriteLine("Energie     = " + Energie);
         Console.WriteLine("Age         = " + Age);
         Console.WriteLine("Taille      = " + Taille);
