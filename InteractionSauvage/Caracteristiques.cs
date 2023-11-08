@@ -19,7 +19,9 @@ public struct Caracteristiques
     public Angle MoitieChampsVision { get => ChampsVision / 2; set => ChampsVision = value * 2; }
 
     public Angle Direction;
+    public Angle DirectionTarget;
     public Vec2 Position;
+    public Vec2 OldPosition;
     public Vec2 Vitesse;
 
     public int Age;
@@ -33,7 +35,17 @@ public struct Caracteristiques
     public string? EtatDeBase = null;
 
     public Entite? Target = null;
-
+    public Etat? MaybeEtat = null;
+    public Etat Etat
+    {
+        get => MaybeEtat!;
+        set
+        {
+            MaybeEtat?.Fin();
+            MaybeEtat = value!;
+            MaybeEtat.Debut();
+        }
+    }
     public Categories Categorie;
 
     public Caracteristiques() { Categorie = new Categories(CategorieEnum.Plante);  }

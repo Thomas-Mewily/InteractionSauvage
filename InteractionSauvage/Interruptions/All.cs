@@ -155,3 +155,51 @@ public class Repu : Interruption
     }
 }
 
+public abstract class InterrupComposition : Interruption 
+{
+    public List<Interruption> Composites;
+    public InterrupComposition(params Interruption[] ou) : this(ou.ToList()) { }
+    public InterrupComposition(List<Interruption> ou)
+    {
+        Composites = ou;
+    }
+    public override void CheckPointAdd()
+    {
+        Composites.ForEach(t => t.CheckPointAdd());
+        base.CheckPointAdd();
+    }
+    public override void CheckPointRemove()
+    {
+        Composites.ForEach(t => t.CheckPointRemove());
+        base.CheckPointRemove();
+    }
+    public override void CheckPointRollBack()
+    {
+        Composites.ForEach(t => t.CheckPointRollBack());
+        base.CheckPointRollBack();
+    }
+    public override void Load()
+    {
+        Composites.ForEach(t => t.Load());
+    }
+    public override void Debut()
+    {
+        Composites.ForEach(t => t.Debut());
+        base.Debut();
+    }
+    public override void Fin()
+    {
+        Composites.ForEach(t => t.Fin());
+        base.Fin();
+    }
+}
+
+public class InterrupOU : InterrupComposition 
+{
+    public override bool Interrupt => Composites.Any(t => t.Interrupt);
+}
+
+public class InterrupET : InterrupComposition
+{
+    public override bool Interrupt => Composites.All(t => t.Interrupt);
+}

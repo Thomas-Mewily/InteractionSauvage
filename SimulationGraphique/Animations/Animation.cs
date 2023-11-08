@@ -13,10 +13,11 @@ public abstract class Animation : AnimationBase
         All.SpriteBatch.DrawText(e.Nom + " : " + e.Etat.Nom + (e.Target != null ? (", " + e.Target) : ", null"), e.Position - new Vec2(0, e.Rayon+4), Color.Black);
     }
 
-    public void Draw(Entite e, Tex2 texture, Rectangle? r, Color c, SpriteEffects effects = SpriteEffects.None, float zoom = 1.05f) 
+    public void Draw(Entite e, Tex2 texture, Rectangle? r, Color c, SpriteEffects effects = SpriteEffects.None, float zoom = 1.05f) => Draw(e, texture, r, c, e.Direction, effects, zoom);
+    public void Draw(Entite e, Tex2 texture, Rectangle? r, Color c, Angle angle, SpriteEffects effects = SpriteEffects.None, float zoom = 1.05f) 
     {
         Rectangle rec = (r == null ? texture.Bounds : r.Value);
-        All.SpriteBatch.Draw(texture, e.Position, r, c, e.Direction, new Vector2(rec.Width/2, rec.Height/2), new Vec2(1.0f / rec.Width, 1.0f / rec.Height) * e.Rayon * 2 * zoom, effects, 0);
+        All.SpriteBatch.Draw(texture, e.Position, r, c, angle, new Vector2(rec.Width/2, rec.Height/2), new Vec2(1.0f / rec.Width, 1.0f / rec.Height) * e.Rayon * 2 * zoom, effects, 0);
     }
 
     public override void DrawChampsVision(Entite e) 

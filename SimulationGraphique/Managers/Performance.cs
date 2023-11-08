@@ -58,8 +58,8 @@ public class Performance
             FpsFrameRate = 0;
         }
 
-#if DEBUG
+//#if DEBUG
         All.SpriteBatch.DebugText("fps: " + (int)Fps + " ups: " + (int)Ups);
-#endif
+//#endif
     }
 }

@@ -9,6 +9,7 @@
     <Import_RootNamespace>SimulationGraphique</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Animations\DefaultAnimalAnimation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animations\Animation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animations\HerbeAnim.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Animations\MoutonAnim.cs" />
