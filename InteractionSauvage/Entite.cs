@@ -26,24 +26,15 @@ public class Entite : SimulationComposante
     public AnimationBase? Animation = null;
 
     #region Champs Affecté par la simulation
-    public Etat? MaybeEtat = null;
-    public Etat Etat
-    {
-        get => MaybeEtat!;
-        set { 
-            MaybeEtat?.Fin();
-            MaybeEtat = value!;
-            MaybeEtat.Debut();
-        } 
-    }
-
+    public Etat Etat { get => Actuel.Etat; set => Actuel.Etat = value; }
     public string EtatNom { get => Etat.Nom; set => Etat = MachineEtat[value]; }
 
     public bool Vivant { get => Actuel.Vivant; set => Actuel.Vivant = value; }
     public float Score { get => Actuel.Score; set => Actuel.Score = Score; }
     public int TempsDeRepos { get => Actuel.TempsDeRepos; set => Actuel.TempsDeRepos = value; }
 
-    public Vec2 Position { get => Actuel.Position; set => Actuel.Position = value; } 
+    public Vec2 OldPosition { get => Actuel.OldPosition; set => Actuel.OldPosition = value; } 
+    public Vec2 Position { get => Actuel.Position; set => Actuel.Position = value; }
     public float X { get => Actuel.Position.X; set => Actuel.Position.X = value; }
     public float Y { get => Actuel.Position.Y; set => Actuel.Position.Y = value; }
 
@@ -56,6 +47,7 @@ public class Entite : SimulationComposante
 
     public float VitesseMax { get => Actuel.VitesseMax; set => Actuel.VitesseMax = value; }
     public Angle Direction { get => Actuel.Direction; set => Actuel.Direction = value; }
+    public Angle DirectionTarget { get => Actuel.DirectionTarget; set => Actuel.DirectionTarget = value; }
     
     public float Energie { get => Actuel.Energie; set => Actuel.Energie = value; }
     public float Nourriture { get => Actuel.Nourriture; set => Actuel.Nourriture = value; }
@@ -74,7 +66,7 @@ public class Entite : SimulationComposante
     public Categories Categorie { get => Actuel.Categorie; set => Actuel.Categorie = value; }
     #endregion
 
-    private Caracteristiques Actuel;
+    public Caracteristiques Actuel;
     public Caracteristiques DeBase 
     { 
         get => CheckPoints.Count == 0 ? Actuel : CheckPoints.Peek(); 
@@ -121,6 +113,12 @@ public class Entite : SimulationComposante
 
     public void Update()
     {
+        OldPosition = Position;
+        
+        if(Direction != DirectionTarget) 
+        {
+        
+        }
         Animation?.Update(this);
 
         Actuel.Age++;

@@ -28,7 +28,11 @@ public class MachineEtat : EntiteComposante
 
     public override void Load()
     {
-        foreach(var v in Etats) 
+        if(E.Actuel.MaybeEtat == null) 
+        {
+            E.Actuel.MaybeEtat = E.MachineEtat[EtatSuggererParDefaut];
+        }
+        foreach (var v in Etats) 
         {
             v.Value.Load(E);
         }

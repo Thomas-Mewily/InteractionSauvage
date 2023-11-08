@@ -18,18 +18,20 @@ public class SimulationFactory : SimulationComposante
     private static Categories PlantesCat { get; set; }
     private static Categories HerbivoresCat { get; set; }
 
-    public MachineEtat MoutonME() 
+    public Temps Second(float secondMin, float secondMax) => Temps.MilliSecond(Rand.FloatUniform(secondMin, secondMax));
+
+    public MachineEtat MoutonMEMathis() 
     {
         var MoutonME = new MachineEtat();
         // le 1er état ajouté est l'état suggeré par défaut/l'état d'entrée
-        MoutonME.Add("marcher",  new MarcherAleatoire(0.5f), new Transition("cours ma gazelle", new Apres(Rand.IntUniform(10, 20)), "courrir"), new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("j'ai faim", new Faim(), "marcher vers nouriture"));
+        MoutonME.Add("marcher",  new MarcherAleatoire(0.5f), new Transition("cours ma gazelle", new Apres(Second(0, 5)), "courrir"), new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("j'ai faim", new Faim(), "marcher vers nouriture"));
         MoutonME.Add("courrir",  new MarcherAleatoire(1f),   new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("j'ai faim", new Faim(), "courrir vers nouriture"));
-        MoutonME.Add("dormir", new Dormir(), new Transition("c'est reparti pour un tour", new Repose(Rand.IntUniform(30, 50)), "marcher vers nouriture"));
+        MoutonME.Add("dormir", new Dormir(), new Transition("c'est reparti pour un tour", new Repose(Rand.IntUniform(5 * Temps.OneSecond, 10 * Temps.OneSecond)), "marcher vers nouriture"));
 
-        MoutonME.Add("marcher vers nouriture", new MarcherVersNouriture(0.5f), new Transition("cours ma gazelle", new Apres(Rand.IntUniform(10, 20)), "courrir vers nouriture"), new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("miam", new NourritureAtteignable(), "manger"), new Transition("plus faim", new Repu(5), "marcher"));
+        MoutonME.Add("marcher vers nouriture", new MarcherVersNouriture(0.5f), new Transition("cours ma gazelle", new Apres(Rand.IntUniform(2 * Temps.OneSecond, 3 * Temps.OneSecond)), "courrir vers nouriture"), new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("miam", new NourritureAtteignable(), "manger"), new Transition("plus faim", new Repu(5), "marcher"));
         MoutonME.Add("courrir vers nouriture", new MarcherVersNouriture(1f), new Transition("je suis epuise", new Fatigue(), "dormir"), new Transition("miam", new NourritureAtteignable(), "manger"));
 
-        MoutonME.Add("manger", new Mange(), new Transition("marchons", new Apres(1), "marcher vers nouriture"));
+        MoutonME.Add("manger", new Mange(), new Transition("marchons", new Apres(1 * Temps.OneSecond), "marcher vers nouriture"));
         //MoutonME.Add("courrir", new Marcher(1), new Transition("je suis epuise", new Apres(2), new EtatSuivant(4, "attendre"), new EtatSuivant(8, "marcher")));
         //MoutonME.Add("courrir", new Marcher(1), new Transition("je suis epuise", new Apres(2), new List<EtatSuivant> { new EtatSuivant(4, "attendre"), new EtatSuivant(8, "marcher") }));
 
@@ -54,6 +56,7 @@ public class SimulationFactory : SimulationComposante
 
         HerbivoresCat = new Categories(Categories.CategorieEnum.Herbivore);
         HerbivoresCat.CategoriesNouritures.Add(Categories.CategorieEnum.Plante);
+
         //HerbivoresCat.CategoriesNouritures.Add(Categories.CategorieEnum.Herbivore);
     }
 
@@ -61,7 +64,7 @@ public class SimulationFactory : SimulationComposante
 
     public virtual Entite GenerateMouton() 
     {
-        Entite e = NewEntite("Mouton", MoutonME()).WithRandomPosition(Simu);
+        Entite e = NewEntite("Mouton", MoutonMEMathis()).WithRandomPosition(Simu);
 
         e.VitesseMax = 0.1f;
         e.Taille = 1;

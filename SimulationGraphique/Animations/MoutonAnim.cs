@@ -8,8 +8,10 @@ using Useful;
 
 namespace SimulationGraphique.Animations;
 
-public class MoutonAnim : Animation
+public class MoutonAnim : DefaultAnimalAnimation
 {
+    public MoutonAnim() : base("sheep") { }
+    /*
     public override void Draw(Entite e)
     {
         Draw(e, All.Assets.Sheep, null, Color.White);
@@ -19,5 +21,5 @@ public class MoutonAnim : Animation
     public override void Meurt(Entite e)
     {
         All.Assets.SheepSound.Play(1f, e.Rand.FloatUniform(-1, 1), 0);
-    }
+    }*/
 }
