@@ -118,7 +118,7 @@ public class Entite : SimulationComposante
 
     public void Replication()
     {
-        if(Rand.Next(0, Simu.ToutesLesEntites.Count) > 500 || Grille.Get(GrilleIndiceX, GrilleIndiceY).Count >= 32) 
+        if(Rand.Next(0, Grille.Get(GrilleIndiceX, GrilleIndiceY).Count * Grille.Get(GrilleIndiceX, GrilleIndiceY).Count) > 10) 
         {
             return;
         }
@@ -154,6 +154,8 @@ public class Entite : SimulationComposante
 
     public void Update()
     {
+        if (!Vivant) return;
+
         OldPosition = Position;
 
         if(Target != null && (Target.Vivant == false || PeutVoir(Target) == false || Rand.Next()%500==0))
@@ -246,7 +248,7 @@ public class Entite : SimulationComposante
     {
         var plusProche = TrouverNouritureDirection();
 
-        if(plusProche != null) 
+        if(plusProche != null && plusProche.Vivant) 
         {
             Target = plusProche;
             DirectionTarget = new Vec2(Position, plusProche.Position).Angle;

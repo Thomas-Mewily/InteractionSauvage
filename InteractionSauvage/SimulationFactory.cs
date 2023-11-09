@@ -48,7 +48,7 @@ public class SimulationFactory : SimulationComposante
         var HerbeME = new MachineEtat();
 
         //HerbeME.Add("rien", new Attendre(), new Transition("", new Jamais(), "rien"));
-        HerbeME.Add("Attend", new Attendre(), new Transition("Replique", new Apres(Second(5,7)), "Replique"));
+        HerbeME.Add("Attend", new Attendre(), new Transition("Replique", new Apres(Second(1,7)), "Replique"));
         HerbeME.Add("Replique", new Replique(), new Transition("Fini", new Instantanee(), "Attend"));
 
         return HerbeME;
