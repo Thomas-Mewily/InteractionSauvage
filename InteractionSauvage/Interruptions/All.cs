@@ -1,4 +1,5 @@
-﻿using InteractionSauvage.MachineEtats;
+﻿using Geometry;
+using InteractionSauvage.MachineEtats;
 using Useful;
 using static InteractionSauvage.MachineEtats.Etat;
 
@@ -95,6 +96,24 @@ public class NourritureAtteignable : Interruption
     }
 }
 
+public class VoitNourritureJusteDevant : Interruption 
+{
+    public float CoefRayonVision;
+    public override bool Interrupt 
+    { 
+        get {
+            var tmp = E.ChampsVision;
+            E.ChampsVision = Angle.FromDegree(1);
+            bool b = E.EntitesVisibles().Any(e => E.PeutManger(e) && E.DistanceVisionTo(e) > E.RayonVision * CoefRayonVision);
+            E.ChampsVision = tmp;
+            return b;
+        }
+    
+    }
+    public override Interruption Clone() => new VoitNourritureJusteDevant(CoefRayonVision);
+    public VoitNourritureJusteDevant(float coefRayonVisionApres = 0) { CoefRayonVision = coefRayonVisionApres; }
+}
+
 public class Fatigue : Interruption
 {
     public float NiveauEnergie;
@@ -156,6 +175,8 @@ public class Repu : Interruption
         return new Repu(NiveauNouriture);
     }
 }*/
+
+
 
 public abstract class InterrupComposition : Interruption 
 {

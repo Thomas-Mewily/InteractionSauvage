@@ -12,7 +12,7 @@ public class HerbeAnim : Animation
 {
     public override void Draw(Entite e)
     {
-        Draw(e, All.Assets.Grass, null, Color.White);
+        Draw(e, All.Assets.Grass, null, Vec2.Zero, Color.White);
     }
 
     public override void Meurt(Entite e)

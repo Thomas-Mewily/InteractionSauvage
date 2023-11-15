@@ -24,7 +24,7 @@ public class MachineEtat : EntiteComposante
 
         return newMachine;
     }
-
+    public Etat Add(string nom, Passif passif, List<Transition> commonTransition, params Transition[] transitions) => Add(nom, passif, commonTransition.Select(t=>t.Clone()).Union(transitions).ToArray());
     public Etat Add(string nom, Passif passif, params Transition[] transitions)
     {
         if(Etats.Count == 0) 
