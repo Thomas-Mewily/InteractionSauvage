@@ -64,7 +64,7 @@ public class SimulationFactory : SimulationComposante
                 new Transition("trouver mouton proche", new VoitNourritureJusteDevant(), "courir vers nourriture"));
 
         WolfME.Add("sprinter",
-            new Sprinter(0.08f), commonTransition,
+            new Sprinter(0.15f), commonTransition,
             //new Sprinter(0.01f), commonTransition,
                 new Transition("trouver mouton loin", new Instantanee(), "courir vers nourriture"));
 
@@ -157,7 +157,7 @@ public class SimulationFactory : SimulationComposante
     {
         Entite e = NewEntite("Loup", WolfME()).WithRandomPosition(Simu);
 
-        e.MarcheCoef = 0.2f;
+        e.MarcheCoef = 0.08f;
         e.Taille = 1.5f;
         e.Age = 10;
         e.Energie = Rand.FloatUniform(0, 1);

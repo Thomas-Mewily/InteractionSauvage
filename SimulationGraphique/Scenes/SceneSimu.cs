@@ -32,6 +32,12 @@ public class SceneSimu : Scene
         SimuFact.AddSniperSheep();
         Simu.Add(SimuFact.GenerateWolf());
 
+        for(int i = 0; i < 300; i++) 
+        {
+            //Simu.Add(SimuFact.GenerateMouton());
+        }
+
+
         Simu.Reset();
 
         Cam = Camera.Center(new Rect2F(0, 0, Simu.Grille.Longueur, Simu.Grille.Hauteur));
