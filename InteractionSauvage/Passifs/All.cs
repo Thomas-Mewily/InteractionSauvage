@@ -19,7 +19,7 @@ public class Dormir : Passif
 {
     public override void Execute()
     {
-        E.Energie += Entite.EnergiePerduParTour + 1000 * Entite.EnergiePerduParTour;
+        E.Energie += Entite.EnergiePerduParTour + 300 * Entite.EnergiePerduParTour;
     }
 
     public override Passif Clone()

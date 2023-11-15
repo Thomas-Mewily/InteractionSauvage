@@ -30,6 +30,7 @@ public class SceneSimu : Scene
             SimuFact.AddEntite();
         }
         SimuFact.AddSniperSheep();
+        Simu.Add(SimuFact.GenerateWolf());
 
         Simu.Reset();
 

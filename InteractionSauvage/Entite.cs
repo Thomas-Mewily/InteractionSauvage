@@ -76,7 +76,7 @@ public class Entite : SimulationComposante
     public bool Dors => Etat.Passif is Dormir;
     #endregion
 
-    public Caracteristiques Actuel;
+    public Caracteristiques Actuel = new Caracteristiques();
     public Caracteristiques DeBase 
     { 
         get => CheckPoints.Count == 0 ? Actuel : CheckPoints.Peek(); 
@@ -312,7 +312,7 @@ public class Entite : SimulationComposante
         {
             X += deltaX;
             Y += deltaY;
-            Energie -= coef * VitesseMax * 0.05f * CoefAbandonEnergiePerduPendantLesDeplacements;
+            Energie -= coef * VitesseMax * 0.02f * CoefAbandonEnergiePerduPendantLesDeplacements;
             //Nourriture -= coef;
 
             PositionChanger();
@@ -390,9 +390,12 @@ public class Entite : SimulationComposante
 
     public override void CheckPointRemove()
     {
-        base.CheckPointRemove();
-        CheckPoints.Pop();
-        MachineEtat.CheckPointRemove();
+        if(NbCheckPoint > 0) 
+        {
+            base.CheckPointRemove();
+            CheckPoints.Pop();
+            MachineEtat.CheckPointRemove();
+        }
     }
 
     public override void CheckPointRollBack()
