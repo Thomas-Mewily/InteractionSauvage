@@ -106,6 +106,7 @@ public class VoitNourritureJusteDevant : Interruption
             E.ChampsVision = Angle.FromDegree(1);
             bool b = E.EntitesVisibles().Any(e => E.PeutManger(e) && E.DistanceVisionTo(e) > E.RayonVision * CoefRayonVision);
             E.ChampsVision = tmp;
+            E.Energie -= 0.0001f;
             return b;
         }
     

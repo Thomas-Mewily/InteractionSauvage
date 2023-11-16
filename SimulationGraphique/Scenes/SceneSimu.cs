@@ -9,8 +9,21 @@ using static SimulationGraphique.SpriteBatchExtension;
 using Geometry;
 using Render;
 using SimulationGraphique.Managers;
+using SimulationGraphique.Animations;
 
 namespace SimulationGraphique.Scenes;
+
+public struct RedParticles 
+{
+    public Vec2 Pos;
+    public float Radius;
+
+    public RedParticles(Vec2 pos, float radius)
+    {
+        Pos = pos;
+        Radius = radius;
+    }
+}
 
 public class SceneSimu : Scene
 {
@@ -21,6 +34,8 @@ public class SceneSimu : Scene
     public SimulationFactoryGraphique SimuFact;
     public Simulation Simu => SimuFact.Simu;
     public Grille Grille => Simu.Grille;
+
+    public List<RedParticles> Particles = new();
 
     public override void Load()
     {
@@ -107,6 +122,19 @@ public class SceneSimu : Scene
     public override void Draw()
     {
         Camera.Push(Cam);
+
+        if (Target != null) 
+        {
+            if((Cam.Y - Target.Y) > Cam.Rect.SizeY / 2) 
+            {
+                Cam.Y = (Cam.Y * 199 + Target.Y) / 200;
+            }
+            if ((Cam.X - Target.X) > Cam.Rect.SizeX / 2)
+            {
+                Cam.X = (Cam.X * 199 + Target.X) / 200;
+            }
+        }
+
         SpriteBatch.Debut();
 
         SpriteBatch.DrawRectangle(Vec2.Zero, Simu.Grille.Size, new Color(168,90,38));
@@ -126,13 +154,31 @@ public class SceneSimu : Scene
         {
             e.Animation?.Draw(e);
 
-            if (All.Input.Mouse.LeftButton == ButtonState.Pressed && e.IsSelected())
+            if (All.Input.MouseLeftPressed  && e.IsSelected())
             {
                 Target = e;
             }
+            
+            if(e.Animation is WolfAnim && (e.Position-e.OldPosition).HaveLength) 
+            {
+                int iMax = 3;
+                for(int i = 0; i < 3; i++) 
+                {
+                    float coef = i / (float)iMax; // Note que le (float) est à droite et pas à gauche Mathis ;)
+                    var pos = e.Position * coef + e.OldPosition * (1 - coef);
+                    Particles.Add(new RedParticles(pos + Vec2.FromAngle(e.HeadDirection + Angle.FromDegree(12), e.Rayon * 0.55f), e.Rayon * 0.1f));
+                    Particles.Add(new RedParticles(pos + Vec2.FromAngle(e.HeadDirection - Angle.FromDegree(12), e.Rayon * 0.55f), e.Rayon * 0.1f));
+                }
+            }
         }
 
-        if(Target != null) 
+        if (All.Input.MouseRightPressed) 
+        {
+            Target = null;
+        }
+
+
+        if (Target != null) 
         {
             Target.Animation.DrawChampsVision(Target);
             Target.Animation.Draw(Target);
@@ -153,6 +199,21 @@ public class SceneSimu : Scene
         }
 
         SpriteBatch.Fin();
+
+        SpriteBatch.Debut(BlendState.Additive);
+        for (int i = Particles.Count - 1; i >= 0; i--)
+        {
+            RedParticles red = Particles[i];
+            if (!Paused)
+            {
+                red.Radius -= 0.001f;
+            }
+            if (red.Radius < 0) { Particles.RemoveAt(i); continue; }
+            SpriteBatch.DrawEllipse(red.Pos, red.Radius, new Color(255,0,0, 128));
+            Particles[i] = red;
+        }
+        SpriteBatch.Fin();
+
         Camera.Pop();
         SpriteBatch.DebugText(Simu.ToutesLesEntites.Count + " entitées");
         if (Paused) 

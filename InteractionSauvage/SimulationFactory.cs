@@ -164,7 +164,7 @@ public class SimulationFactory : SimulationComposante
         //e.Nourriture = 0;
         e.Categorie = CarnivoreCat;
         e.Direction = Angle.FromRadian(Rand.NextFloat(2f * MathF.PI));
-        e.RotationParSeconde = Angle.FromDegree(50);
+        e.RotationParSeconde = Angle.FromDegree(40);
         //e.Direction = Angle.FromDegree(225f);
 
         e.ChampsVision = Angle.FromDegree(90+45);

@@ -79,6 +79,8 @@ public class Entite : SimulationComposante
     public bool Dors => Etat.Passif is Dormir;
     #endregion
 
+    public Angle HeadDirection => Target != null ? new Vec2(Position, Target.Position).Angle : DirectionTarget;
+
     public Caracteristiques Actuel = new Caracteristiques();
     public Caracteristiques DeBase 
     { 
@@ -322,7 +324,7 @@ public class Entite : SimulationComposante
         {
             X += deltaX;
             Y += deltaY;
-            //Energie -= () * MarcheCoef * 0.02f * CoefAbandonEnergiePerduPendantLesDeplacements;
+            Energie -= new Vec2(deltaX , deltaY).Length * 0.02f * CoefAbandonEnergiePerduPendantLesDeplacements;
             //Nourriture -= coef;
 
             PositionChanger();
@@ -379,7 +381,7 @@ public class Entite : SimulationComposante
 
         float radius_add = float.Sqrt(Rayon * Rayon + cible_rayon_absorber * cible_rayon_absorber) - Rayon;
         Rayon += radius_add/5;
-        float energie_gagne = radius_add * radius_add * 700;
+        float energie_gagne = radius_add / Rayon * 10;
         Energie += energie_gagne;
 
         if (e.Rayon == 0f)

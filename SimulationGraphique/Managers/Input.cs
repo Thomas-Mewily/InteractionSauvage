@@ -28,6 +28,12 @@ public class Input : ClasseBase
     public bool IsDown(Keys k) => Keyboard.IsKeyDown(k);
     public bool IsUp(Keys k) => Keyboard.IsKeyUp(k);
 
+    public bool MouseLeftPressed => Mouse.LeftButton == ButtonState.Pressed && MouseOld.LeftButton == ButtonState.Released;
+    public bool MouseLeftReleased=> Mouse.LeftButton == ButtonState.Released && MouseOld.LeftButton == ButtonState.Pressed;
+
+    public bool MouseRightPressed => Mouse.RightButton == ButtonState.Pressed && MouseOld.RightButton == ButtonState.Released;
+    public bool MouseRightReleased => Mouse.RightButton == ButtonState.Released && MouseOld.RightButton == ButtonState.Pressed;
+
     public override void Update()
     {
         MouseOld = Mouse;

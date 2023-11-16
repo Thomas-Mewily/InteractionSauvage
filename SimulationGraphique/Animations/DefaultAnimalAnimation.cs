@@ -63,7 +63,7 @@ public class DefaultAnimalAnimation : Animation
         Draw(e, sprite.Leg, null, Vec2.FromAngle(a, (e.Rayon * 0.4f) * legLeft ), Colored, a + legLeft  * legsAngle);
         Draw(e, sprite.Leg, null, Vec2.FromAngle(a, (e.Rayon * 0.4f) * legRight), Colored, a + legRight * legsAngle, SpriteEffects.FlipVertically);
         Draw(e, sprite.Body, null, Vec2.Zero, Colored, a);
-        Draw(e, sprite.Head, null, Vec2.Zero, Colored, e.Target != null ? new Vec2(e.Position, e.Target.Position).Angle : e.DirectionTarget);
+        Draw(e, sprite.Head, null, Vec2.Zero, Colored, e.HeadDirection);
 
         Draw(e, sprite.Queue, null, Vec2.Zero, Colored, a + Angle.FromDegree(e.Simu.Time.T * 9).Cos * Angle.FromDegree(45));
 
