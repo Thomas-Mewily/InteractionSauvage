@@ -206,7 +206,7 @@ public class SceneSimu : Scene
             RedParticles red = Particles[i];
             if (!Paused)
             {
-                red.Radius -= 0.001f;
+                red.Radius -= 0.002f;
             }
             if (red.Radius < 0) { Particles.RemoveAt(i); continue; }
             SpriteBatch.DrawEllipse(red.Pos, red.Radius, new Color(255,0,0, 128));
