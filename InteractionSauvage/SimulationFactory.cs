@@ -100,7 +100,7 @@ public class SimulationFactory : SimulationComposante
 
         //HerbeME.Add("rien", new Attendre(), new Transition("", new Jamais(), "rien"));
         //HerbeME.Add("Attend", new Attendre(), new Transition("Replique", new Apres(Second(1,7)), "Replique"));
-        HerbeME.Add("Attend", new Attendre(), new Transition("Replique", new Apres(Second(1, 7)), "Replique"));
+        HerbeME.Add("Attend", new Attendre(), new Transition("Replique", new Apres(Second(3, 10)), "Replique"));
         HerbeME.Add("Replique", new Replique(), new Transition("Fini", new Instantanee(), "Attend"));
 
         return HerbeME;
@@ -131,8 +131,8 @@ public class SimulationFactory : SimulationComposante
         e.MarcheCoef = 0.1f;
         e.Taille = 1;
         e.Age = 10;
-        e.Rayon = 1;
-        e.RayonMax = 1;
+        e.Rayon = 1f;
+        e.RayonMax = 1.5f;
         e.Energie = Rand.FloatUniform(0, 1);
         //e.Nourriture = 0;
         e.Categorie = HerbivoresC();
@@ -155,6 +155,7 @@ public class SimulationFactory : SimulationComposante
         e.MarcheCoef = 0;
         e.Age = 1;
         e.Taille = 0.5f;
+        e.TailleMax = 1f;
         e.Energie = 1;
         e.Categorie = PlantesC();
         e.Direction = 0;

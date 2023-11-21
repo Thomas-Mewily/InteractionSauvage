@@ -45,7 +45,11 @@ public class SceneSimu : Scene
             SimuFact.AddEntite();
         }
         SimuFact.AddSniperSheep();
-        Simu.Add(SimuFact.GenerateWolf());
+
+        for (int i = 0; i < 3; i++)
+        {
+            Simu.Add(SimuFact.GenerateWolf());
+        }
 
         for(int i = 0; i < 300; i++) 
         {

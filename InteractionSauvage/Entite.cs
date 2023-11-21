@@ -145,7 +145,7 @@ public class Entite : SimulationComposante
         newEntite.WithPosition(newX, newY);
         newEntite.Target = null;
         newEntite.Taille *= Rand.FloatUniform(0.8f, 1.2f);
-        //if(newEntite.Taille < 0) newEntite.Taille = -newEntite.Taille;
+        if(newEntite.Taille > TailleMax) { newEntite.Taille = TailleMax; }
         newEntite.Categorie = Categorie;
         newEntite.EtatNom = newEntite.MachineEtat.EtatSuggererParDefaut;
         newEntite.Animation = Animation;
