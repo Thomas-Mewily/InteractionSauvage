@@ -54,6 +54,7 @@ public class Etat : EntiteComposante
             if (t.Interrupt()) 
             {
                 E.Etat = t.DoTransition();
+                break;
             }
         }
     }

@@ -8,7 +8,7 @@ public static class Extension
 {
     public static void Push<T>(this IList<T> l, T val) => l.Add(val);
     public static bool IsEmpty<T>(this IList<T> l) => l.Count == 0;
-    public static T Peek<T>(this IList<T> l) => l[l.Count - 1];
+    public static T Peek<T>(this IList<T> l) =>  l[l.Count - 1];
     public static T Pop<T>(this IList<T> l) 
     {
         T t = l.Peek();

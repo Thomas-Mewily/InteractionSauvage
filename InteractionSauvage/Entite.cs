@@ -28,11 +28,14 @@ public class Entite : SimulationComposante
     public AnimationBase? Animation = null;
 
     #region Champs Affecté par la simulation
+    public int Generation{ get => Actuel.Generation; set => Actuel.Generation = value; }
+
+
     public Etat Etat { get => Actuel.Etat; set => Actuel.Etat = value; }
     public string EtatNom { get => Etat.Nom; set => Etat = MachineEtat[value]; }
 
     public bool Vivant { get => Actuel.Vivant; set => Actuel.Vivant = value; }
-    public float Score { get => Actuel.Score; set => Actuel.Score = Score; }
+    public float Score { get => Actuel.Score; set => Actuel.Score = value; }
 
     public Vec2 OldPosition { get => Actuel.OldPosition; set => Actuel.OldPosition = value; } 
     public Vec2 Position { get => Actuel.Position; set => Actuel.Position = value; }
@@ -46,7 +49,7 @@ public class Entite : SimulationComposante
     public float VX { get => Actuel.Vitesse.X; set => Actuel.Vitesse.X = value; }
     public float VY { get => Actuel.Vitesse.Y; set => Actuel.Vitesse.Y = value; }
 
-    public float VitesseMax { get => Actuel.VitesseMax; set => Actuel.VitesseMax = value; }
+    public float MarcheCoef { get => Actuel.MarcheCoef; set => Actuel.MarcheCoef = value; }
     public Angle Direction { get => Actuel.Direction; set => Actuel.Direction = value; }
     public Angle DirectionTarget { get => Actuel.DirectionTarget; set => Actuel.DirectionTarget = value; }
     
@@ -74,12 +77,15 @@ public class Entite : SimulationComposante
     public Angle RotationParSeconde { get => Actuel.RotationParSeconde; set => Actuel.RotationParSeconde = value; }
 
     public Entite? Target { get => Actuel.Target; set => Actuel.Target = value; }
+    public Entite? Predateur { get => Actuel.Predateur; set => Actuel.Predateur = value; }
     public Categories Categorie { get => Actuel.Categorie; set => Actuel.Categorie = value; }
 
     public bool Dors => Etat.Passif is Dormir;
     #endregion
 
-    public Caracteristiques Actuel;
+    public Angle HeadDirection => Target != null ? new Vec2(Position, Target.Position).Angle : DirectionTarget;
+
+    public Caracteristiques Actuel = new Caracteristiques();
     public Caracteristiques DeBase 
     { 
         get => CheckPoints.Count == 0 ? Actuel : CheckPoints.Peek(); 
@@ -131,8 +137,9 @@ public class Entite : SimulationComposante
         newX = (newX + Grille.Longueur) % Grille.Longueur;
         newY = (newY + Grille.Hauteur) % Grille.Hauteur;
 
-        Entite newEntite = new Entite(Simu, "~" + Nom, MachineEtat.Clone());
+        Entite newEntite = new Entite(Simu, Nom, MachineEtat.Clone());
         newEntite.Actuel = Actuel;
+        newEntite.Generation++;
 
         newEntite.DeBase = DeBase;
         newEntite.WithPosition(newX, newY);
@@ -160,6 +167,15 @@ public class Entite : SimulationComposante
         if (!Vivant) return;
 
         OldPosition = Position;
+
+        if (Vitesse.HaveLength) 
+        {
+            if(AddPos(Vitesse.X, Vitesse.Y) == false || Vitesse.LengthSquared < 0.001f) 
+            {
+                Vitesse = Vec2.Zero;
+            }
+            Vitesse *= 0.992f;
+        }
 
         if(Target != null && (Target.Vivant == false || PeutVoir(Target) == false || Rand.Next()%500==0))
         {
@@ -266,6 +282,26 @@ public class Entite : SimulationComposante
         return plusProche; // déjà dessus
     }
 
+    public Entite? PredateurDirection()
+    {
+        var plusProche = TrouverPredateur();
+
+        if (plusProche != null && plusProche.Vivant)
+        {
+            Predateur = plusProche;
+            DirectionTarget = new Vec2(Position, plusProche.Position).Angle;
+            DirectionTarget += (float) Math.PI;
+        }
+        else
+        {
+            if (Rand.NextDouble() <= 0.02)
+            {
+                RngDirection();
+            }
+        }
+        return plusProche; // déjà dessus
+    }
+
     public Entite? TrouverNouritureDirection()
     {
         float distancePlusProche = float.MaxValue;
@@ -277,6 +313,26 @@ public class Entite : SimulationComposante
             var distance = info.Distance;
 
             if (distance < distancePlusProche && PeutManger(entite) && PeutVoir(entite))
+            {
+                distancePlusProche = info.Distance;
+                plusProche = info.E;
+            }
+        }
+
+        return plusProche;
+    }
+
+    public Entite? TrouverPredateur()
+    {
+        float distancePlusProche = float.MaxValue;
+        Entite? plusProche = null;
+
+        foreach (var info in EntitesProcheAvecDistance(RayonVision))
+        {
+            var entite = info.E;
+            var distance = info.Distance;
+
+            if (distance < distancePlusProche && entite.PeutManger(this) /*&& PeutVoir(entite)*/)
             {
                 distancePlusProche = info.Distance;
                 plusProche = info.E;
@@ -304,18 +360,41 @@ public class Entite : SimulationComposante
         return false;
     }*/
 
-    public void Avancer(float coef = 1)
+    public bool AddPos(float deltaX, float deltaY) 
     {
-        float deltaX = coef * VitesseMax * Direction.Cos;
-        float deltaY = coef * VitesseMax * Direction.Sin;
+        if (deltaX * deltaX + deltaY * deltaY < 0.0001f) { return true; }
+        //Todo : energie
+        if (X + deltaX > 0 && X + deltaX < Grille.Longueur && Y + deltaY > 0 && Y + deltaY < Grille.Hauteur)// && !Collision(X+deltaX, Y+deltaY))
+        {
+            X += deltaX;
+            Y += deltaY;
+            Energie -= new Vec2(deltaX , deltaY).Length * 0.02f * CoefAbandonEnergiePerduPendantLesDeplacements;
+            //Nourriture -= coef;
 
-        if(deltaX* deltaX + deltaY* deltaY < 0.0001f) { return; }
+            PositionChanger();
+            return true;
+        }
+        else
+        {
+            AddPos(deltaX / 2, deltaY / 2);
+            AddPos(deltaX / 2, deltaY / 2);
+            return false;
+        }
+    }
+
+    public bool Avancer(float coef = 1)
+    {
+        float deltaX = coef * MarcheCoef * Direction.Cos;
+        float deltaY = coef * MarcheCoef * Direction.Sin;
+        return AddPos(deltaX, deltaY);
+        /*
+        if (deltaX* deltaX + deltaY* deltaY < 0.0001f) { return; }
 
         if (X + deltaX > 0 && X + deltaX < Grille.Longueur && Y + deltaY > 0 && Y + deltaY < Grille.Hauteur)// && !Collision(X+deltaX, Y+deltaY))
         {
             X += deltaX;
             Y += deltaY;
-            Energie -= coef * VitesseMax * 0.05f * CoefAbandonEnergiePerduPendantLesDeplacements;
+            Energie -= coef * MarcheCoef * 0.02f * CoefAbandonEnergiePerduPendantLesDeplacements;
             //Nourriture -= coef;
 
             PositionChanger();
@@ -324,7 +403,7 @@ public class Entite : SimulationComposante
         {
             Avancer(coef / 2);
             Avancer(coef / 2);
-        }
+        }*/
 
     }
 
@@ -368,7 +447,7 @@ public class Entite : SimulationComposante
         Console.WriteLine("Age         = " + Age);
         Console.WriteLine("Taille      = " + Taille);
         Console.WriteLine("Vivant      = " + Vivant);
-        Console.WriteLine("VitesseMax  = " + VitesseMax);
+        Console.WriteLine("VitesseMax  = " + MarcheCoef);
         Console.WriteLine("Direction   = " + Direction);
         Console.WriteLine("X,  Y       = (" + X  + ", " + Y  + ")");
         Console.WriteLine("VX, VY      = (" + VX + ", " + VY + ")");
@@ -395,9 +474,12 @@ public class Entite : SimulationComposante
 
     public override void CheckPointRemove()
     {
-        base.CheckPointRemove();
-        CheckPoints.Pop();
-        MachineEtat.CheckPointRemove();
+        if(NbCheckPoint > 0) 
+        {
+            base.CheckPointRemove();
+            CheckPoints.Pop();
+            MachineEtat.CheckPointRemove();
+        }
     }
 
     public override void CheckPointRollBack()

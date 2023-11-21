@@ -19,7 +19,7 @@ public class Dormir : Passif
 {
     public override void Execute()
     {
-        E.Energie += Entite.EnergiePerduParTour + 1000 * Entite.EnergiePerduParTour;
+        E.Energie += Entite.EnergiePerduParTour + 300 * Entite.EnergiePerduParTour;
     }
 
     public override Passif Clone()
@@ -40,6 +40,16 @@ public class Marcher : Passif
     {
         return new Marcher(Coef);
     }
+}
+
+public class Sprinter : Passif
+{
+    public Sprinter(float coef = 1) : base(coef) { }
+    public override void Execute()
+    {
+        E.Vitesse += Vec2.FromAngle(E.Direction, E.Rayon * Coef);
+    }
+    public override Passif Clone() => new Sprinter(Coef);
 }
 
 public class MarcherAleatoire : Passif
@@ -92,9 +102,9 @@ public class MarcherVersNouriture : Passif
         if (E.Target != null) 
         {
             var d = new Vec2(E.Target.Position, E.Position).Length;
-            if (E.VitesseMax * c > d) 
+            if (E.MarcheCoef * c > d) 
             {
-                c = d / E.VitesseMax;
+                c = d / E.MarcheCoef;
             }
         }
         E.Avancer(c);
@@ -103,6 +113,39 @@ public class MarcherVersNouriture : Passif
     public override Passif Clone()
     {
         return new MarcherVersNouriture(Coef);
+    }
+}
+
+public class Fuir : Passif
+{
+    public Fuir(float coef = 1) : base(coef) { }
+    public override void Debut()
+    {
+        E.PredateurDirection();
+    }
+
+    public override void Execute()
+    {
+        if (E.Predateur != null && !E.Predateur.Vivant)
+        {
+            E.Predateur = null;
+        }
+
+        if (E.Predateur == null || E.DistanceVisionTo(E.Predateur) > E.RayonVision)
+        {
+            E.PredateurDirection();
+        }
+        else
+        {
+            E.DirectionTarget = (E.Predateur.Position - E.Position).Angle + (float) Math.PI;
+        }
+
+        E.Avancer(Coef);
+    }
+
+    public override Passif Clone()
+    {
+        return new Fuir(Coef);
     }
 }
 
@@ -140,4 +183,23 @@ public class Replique : Passif
     {
         return new Replique();
     }
+}
+
+public class Tourner : Passif
+{
+    public Angle RotationPerSecond;
+
+    public Tourner(Angle rotationPerSecond)
+    {
+        RotationPerSecond = rotationPerSecond;
+    }
+
+    public override void Execute()
+    {
+        var add = RotationPerSecond / Temps.OneSecond;
+        E.DirectionTarget += add;
+        E.Direction = E.DirectionTarget;
+    }
+
+    public override Passif Clone() => new Tourner(RotationPerSecond);
 }

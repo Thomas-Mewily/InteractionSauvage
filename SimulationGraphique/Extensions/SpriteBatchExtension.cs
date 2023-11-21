@@ -15,12 +15,14 @@ public static class SpriteBatchExtension
     private static bool Active = false;
     public static bool IsActive(this SpriteBatch spriteBatch) => Active;
 
-    public static void Debut(this SpriteBatch spriteBatch) 
+    public static void Debut(this SpriteBatch spriteBatch, BlendState blend)
     {
         Active = true;
-        
-        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, null, DepthStencilState.Default, RasterizerState.CullNone, null, Camera.Peek().TransformMatrix);
+
+        spriteBatch.Begin(SpriteSortMode.Immediate, blend, null, DepthStencilState.Default, RasterizerState.CullNone, null, Camera.Peek().TransformMatrix);
     }
+
+    public static void Debut(this SpriteBatch spriteBatch) => spriteBatch.Debut(BlendState.NonPremultiplied);
 
     public static void Fin(this SpriteBatch spriteBatch) { Active = false; spriteBatch.End(); }
 

@@ -26,4 +26,11 @@ public class SimulationFactoryGraphique : SimulationFactory
         mouton.Animation = new MoutonAnim();
         return mouton;
     }
+
+    public override Entite GenerateWolf()
+    {
+        var loup = base.GenerateWolf();
+        loup.Animation = new WolfAnim();
+        return loup;
+    }
 }

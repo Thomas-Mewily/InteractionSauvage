@@ -14,7 +14,6 @@ public class Assets : ClasseBase
 
     public SpriteFont Arial { get; private set; }
 
-    public Texture2D  Sheep { get; private set; }
     public Texture2D  Grass { get; private set; }
 
     public SoundEffect GrassSound { get; private set; }
@@ -45,13 +44,12 @@ public class Assets : ClasseBase
         Pixel.SetData(new[] { Color.White });
 
         Circle = LoadTexture("circle");
-        Sheep  = LoadTexture("sheep");
         Grass  = LoadTexture("grass");
 
         Arial  = Content.Load<SpriteFont>("Arial");
 
         GrassSound = LoadSoundEffect("grass_mc");
-        SheepSound = LoadSoundEffect("sheep_mc");
+        //SheepSound = LoadSoundEffect("sheep_mc");
     }
 
     public override void Unload() 
