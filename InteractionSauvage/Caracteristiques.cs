@@ -38,6 +38,7 @@ public struct Caracteristiques
 
     public string? EtatDeBase = null;
 
+    public Entite? Predateur = null;
     public Entite? Target = null;
     public Etat? MaybeEtat = null;
     public Etat Etat

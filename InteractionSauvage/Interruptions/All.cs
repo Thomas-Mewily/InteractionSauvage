@@ -96,6 +96,16 @@ public class NourritureAtteignable : Interruption
     }
 }
 
+public class PredateurVisible : Interruption
+{
+    public override bool Interrupt => E.TrouverPredateur() != null;
+
+    public override Interruption Clone()
+    {
+        return new PredateurVisible();
+    }
+}
+
 public class VoitNourritureJusteDevant : Interruption 
 {
     public float CoefRayonVision;

@@ -116,6 +116,39 @@ public class MarcherVersNouriture : Passif
     }
 }
 
+public class Fuir : Passif
+{
+    public Fuir(float coef = 1) : base(coef) { }
+    public override void Debut()
+    {
+        E.PredateurDirection();
+    }
+
+    public override void Execute()
+    {
+        if (E.Predateur != null && !E.Predateur.Vivant)
+        {
+            E.Predateur = null;
+        }
+
+        if (E.Predateur == null || E.DistanceVisionTo(E.Predateur) > E.RayonVision)
+        {
+            E.PredateurDirection();
+        }
+        else
+        {
+            E.DirectionTarget = (E.Predateur.Position - E.Position).Angle + (float) Math.PI;
+        }
+
+        E.Avancer(Coef);
+    }
+
+    public override Passif Clone()
+    {
+        return new Fuir(Coef);
+    }
+}
+
 public class Mange : Passif
 {
     public override void Execute()

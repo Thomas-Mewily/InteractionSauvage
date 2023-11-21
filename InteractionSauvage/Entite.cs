@@ -74,6 +74,7 @@ public class Entite : SimulationComposante
     public Angle RotationParSeconde { get => Actuel.RotationParSeconde; set => Actuel.RotationParSeconde = value; }
 
     public Entite? Target { get => Actuel.Target; set => Actuel.Target = value; }
+    public Entite? Predateur { get => Actuel.Predateur; set => Actuel.Predateur = value; }
     public Categories Categorie { get => Actuel.Categorie; set => Actuel.Categorie = value; }
 
     public bool Dors => Etat.Passif is Dormir;
@@ -278,6 +279,26 @@ public class Entite : SimulationComposante
         return plusProche; // déjà dessus
     }
 
+    public Entite? PredateurDirection()
+    {
+        var plusProche = TrouverPredateur();
+
+        if (plusProche != null && plusProche.Vivant)
+        {
+            Predateur = plusProche;
+            DirectionTarget = new Vec2(Position, plusProche.Position).Angle;
+            DirectionTarget += (float) Math.PI;
+        }
+        else
+        {
+            if (Rand.NextDouble() <= 0.02)
+            {
+                RngDirection();
+            }
+        }
+        return plusProche; // déjà dessus
+    }
+
     public Entite? TrouverNouritureDirection()
     {
         float distancePlusProche = float.MaxValue;
@@ -289,6 +310,26 @@ public class Entite : SimulationComposante
             var distance = info.Distance;
 
             if (distance < distancePlusProche && PeutManger(entite) && PeutVoir(entite))
+            {
+                distancePlusProche = info.Distance;
+                plusProche = info.E;
+            }
+        }
+
+        return plusProche;
+    }
+
+    public Entite? TrouverPredateur()
+    {
+        float distancePlusProche = float.MaxValue;
+        Entite? plusProche = null;
+
+        foreach (var info in EntitesProcheAvecDistance(RayonVision))
+        {
+            var entite = info.E;
+            var distance = info.Distance;
+
+            if (distance < distancePlusProche && entite.PeutManger(this) /*&& PeutVoir(entite)*/)
             {
                 distancePlusProche = info.Distance;
                 plusProche = info.E;
