@@ -77,6 +77,7 @@ public class SimulationFactory : SimulationComposante
         e.Taille = 1;
         e.Age = 10;
         e.Rayon = 1;
+        e.RayonMax = 1;
         e.Energie = Rand.FloatUniform(0, 1);
         //e.Nourriture = 0;
         e.Categorie = HerbivoresC();
@@ -87,6 +88,7 @@ public class SimulationFactory : SimulationComposante
         float repartition = Rand.FloatUniform(0, 1);
         e.ChampsVision = Angle.FromDegree(5 + repartition * 200);
         e.RayonVision = 2 + (1 - repartition)* (1 - repartition) * 12;
+        
 
         //e.DeBase.EtatDeBase = "marcher";
         return e;

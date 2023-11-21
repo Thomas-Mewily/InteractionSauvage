@@ -30,6 +30,8 @@ public struct Caracteristiques
     public int Age;
 
     public float Rayon;
+    public float RayonMax = 10;
+
     public float VitesseMax = 0;
 
     public float Score = 0;

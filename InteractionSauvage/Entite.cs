@@ -64,6 +64,9 @@ public class Entite : SimulationComposante
     public float Taille { get => Actuel.Rayon; set => Actuel.Rayon = value; }
     public float Rayon { get => Actuel.Rayon; set => Actuel.Rayon = value; }
 
+    public float TailleMax { get => Actuel.RayonMax; set => Actuel.RayonMax = value; }
+    public float RayonMax { get => Actuel.RayonMax; set => Actuel.RayonMax = value; }
+
     public float CoefAbandonEnergiePerduPendantLesDeplacements { get => Actuel.CoefAbandonEnergiePerduPendantLesDeplacements; set => Actuel.CoefAbandonEnergiePerduPendantLesDeplacements = value; }
     public float RayonVision { get => Actuel.RayonVision; set => Actuel.RayonVision = value; }
     public Angle ChampsVision { get => Actuel.ChampsVision; set => Actuel.ChampsVision = value; }
@@ -342,7 +345,9 @@ public class Entite : SimulationComposante
         }
 
         float radius_add = float.Sqrt(Rayon * Rayon + cible_rayon_absorber * cible_rayon_absorber) - Rayon;
-        Rayon += radius_add/5;
+        Rayon += radius_add / 5;
+        if (Rayon > RayonMax) Rayon = RayonMax;
+
         float energie_gagne = radius_add * radius_add * 700;
         Energie += energie_gagne;
 
