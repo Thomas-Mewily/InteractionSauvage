@@ -44,6 +44,12 @@ public class DefaultAnimalAnimation : Animation
         Sleep  = new AnimalSprite(nom, "sleep");
     }
 
+    public override AnimationBase Clone()
+    {
+        DefaultAnimalAnimation anim = new DefaultAnimalAnimation(Nom);
+        anim.Colored = Colored;
+        return anim;
+    }
     public override void Load(Entite e)
     {
         Colored = new Color(255-e.Rand.Next(0, 255)/2, 255 - e.Rand.Next(0, 255) / 2, 255 - e.Rand.Next(0, 255) / 2);

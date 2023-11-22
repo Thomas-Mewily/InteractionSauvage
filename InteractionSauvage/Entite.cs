@@ -63,6 +63,8 @@ public class Entite : SimulationComposante
     
     public int Age { get => Actuel.Age; set => Actuel.Age = value; }
 
+    public float NutritionCoef { get => Actuel.NutritionCoef; set => Actuel.NutritionCoef = value; }
+
     // Taille & Rayon : même chose
     public float Taille { get => Actuel.Rayon; set => Actuel.Rayon = value; }
     public float Rayon { get => Actuel.Rayon; set => Actuel.Rayon = value; }
@@ -127,15 +129,26 @@ public class Entite : SimulationComposante
 
     public void Replication()
     {
-        if(Rand.Next(0, Grille.Get(GrilleIndiceX, GrilleIndiceY).Count * Grille.Get(GrilleIndiceX, GrilleIndiceY).Count) > 10) 
+        if(Rand.Next(0, Grille.Get(GrilleIndiceX, GrilleIndiceY).Count * Grille.Get(GrilleIndiceX, GrilleIndiceY).Count) > 10 || Simu.ToutesLesEntites.Count > 4000) 
         {
             return;
         }
+
+        Energie *= 0.1f;
+
         float newX = X + Taille * Rand.FloatUniform(-1, 1) * 4;
         float newY = Y + Taille * Rand.FloatUniform(-1, 1) * 4;
 
-        newX = (newX + Grille.Longueur) % Grille.Longueur;
-        newY = (newY + Grille.Hauteur) % Grille.Hauteur;
+        if (newX > Grille.Longueur) newX = Grille.Longueur - Rand.FloatUniform(1, 2);
+        if (newY > Grille.Hauteur) newY = Grille.Hauteur - Rand.FloatUniform(1, 2);
+
+        if (newX < 0) newX = Rand.FloatUniform(0, 1);
+        if (newY < 0) newY = Rand.FloatUniform(0, 1);
+
+        if(Grille.Get(Grille.GetIndiceX(newX), Grille.GetIndiceY(newY)).Count > 50)
+        {
+            return;
+        }
 
         Entite newEntite = new Entite(Simu, Nom, MachineEtat.Clone());
         newEntite.Actuel = Actuel;
@@ -148,9 +161,10 @@ public class Entite : SimulationComposante
         if(newEntite.Taille > TailleMax) { newEntite.Taille = TailleMax; }
         newEntite.Categorie = Categorie;
         newEntite.EtatNom = newEntite.MachineEtat.EtatSuggererParDefaut;
-        newEntite.Animation = Animation;
+        newEntite.Animation = Animation? .Clone();
 
         newEntite.Load();
+
         Simu.ToutesLesEntites.Add(newEntite);
     }
 
@@ -417,7 +431,7 @@ public class Entite : SimulationComposante
         float cible_rayon_absorber = e.Rayon * pourcentage;
         e.Rayon -= cible_rayon_absorber;
 
-        if (e.Rayon < 0.1f) 
+        if (e.Rayon < e.RayonMax*0.4f) 
         {
             cible_rayon_absorber += e.Rayon;
             e.Rayon = 0;
@@ -427,7 +441,7 @@ public class Entite : SimulationComposante
         Rayon += radius_add / 5;
         if (Rayon > RayonMax) Rayon = RayonMax;
 
-        float energie_gagne = radius_add * radius_add * 700;
+        float energie_gagne = radius_add * e.NutritionCoef;
         Energie += energie_gagne;
 
         if (e.Rayon == 0f)

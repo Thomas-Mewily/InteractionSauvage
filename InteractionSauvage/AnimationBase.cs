@@ -11,4 +11,6 @@ public abstract class AnimationBase
 
     public virtual void DrawExtraInfo(Entite e) { }
     public virtual void DrawChampsVision(Entite e) { }
+
+    public abstract AnimationBase Clone();
 }

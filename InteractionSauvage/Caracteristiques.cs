@@ -9,6 +9,7 @@ public struct Caracteristiques
 {
     public bool Vivant = true;
     public int Generation = 0;
+    public float NutritionCoef = 1;
 
     /// <summary> [0, 1]. Si 0 => meurt </summary>
     //public float Nourriture;

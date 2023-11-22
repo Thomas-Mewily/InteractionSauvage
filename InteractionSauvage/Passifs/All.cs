@@ -17,9 +17,10 @@ public class Attendre : Passif
 
 public class Dormir : Passif
 {
+    public Dormir(float coef = 30) : base(coef) { }
     public override void Execute()
     {
-        E.Energie += Entite.EnergiePerduParTour + 300 * Entite.EnergiePerduParTour;
+        E.Energie += Entite.EnergiePerduParTour + Coef * Entite.EnergiePerduParTour;
     }
 
     public override Passif Clone()

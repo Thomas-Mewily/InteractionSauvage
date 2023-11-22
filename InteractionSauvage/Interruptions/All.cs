@@ -247,3 +247,13 @@ public class InterrupET : InterrupComposition
         return new InterrupET();
     }
 }
+
+public class EnergieMax : InterrupComposition
+{
+    public override bool Interrupt => E.Energie > 0.99;
+
+    public override Interruption Clone()
+    {
+        return new EnergieMax();
+    }
+}
