@@ -61,7 +61,14 @@ public class SimulationFactory : SimulationComposante
         WolfME.Add("chercher",
             new Tourner(Angle.FromDegree(70)), commonTransition,
                 new Transition("trouver mouton loin", new VoitNourritureJusteDevant(0.5f), "sprinter"),
-                new Transition("trouver mouton proche", new VoitNourritureJusteDevant(), "courir vers nourriture"));
+                new Transition("trouver mouton proche", new VoitNourritureJusteDevant(), "courir vers nourriture"),
+                new Transition("aller voir ailleur", new Apres(Temps.Second(10)), "marcher")
+                );
+
+        WolfME.Add("marcher",
+            new MarcherVersNouriture(0.5f), commonTransition,
+        //new Sprinter(0.01f), commonTransition,
+        new Transition("trouver mouton loin", new ApresAleatoire(Temps.Second(2), Temps.Second(8)), "chercher"));
 
         WolfME.Add("sprinter",
             new Sprinter(0.15f), commonTransition,
@@ -161,6 +168,7 @@ public class SimulationFactory : SimulationComposante
         e.Taille = 1.5f;
         e.Age = 10;
         e.Energie = Rand.FloatUniform(0, 1);
+        e.CoefAbandonEnergiePerduPendantLesDeplacements = 0.7f;
         //e.Nourriture = 0;
         e.Categorie = CarnivoreCat;
         e.Direction = Angle.FromRadian(Rand.NextFloat(2f * MathF.PI));

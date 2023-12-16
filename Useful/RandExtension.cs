@@ -16,9 +16,9 @@ public static class RandExtension
     /// <summary>
     /// [min, max]
     /// </summary>
-    public static int IntUniform(this Random r, int min, int max)
+    public static int IntUniform(this Random r, int min, int maxIncluded)
     {
-        if (min > max) { return r.IntUniform(max, min); }
-        return r.Next() % (max - min + 1) + min;
+        if (min > maxIncluded) { return r.IntUniform(maxIncluded, min); }
+        return r.Next() % (maxIncluded - min + 1) + min;
     }
 }
