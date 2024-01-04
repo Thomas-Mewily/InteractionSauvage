@@ -8,36 +8,27 @@ namespace InteractionSauvage.Interruptions;
 public class Jamais : Interruption 
 {
     public override bool Interrupt => false;
-
-    public override Interruption Clone()
-    {
-        return new Jamais();
-    }
+    public override Interruption Clone() => new Jamais();
 }
 
 public class Instantanee : Interruption
 {
     public override bool Interrupt => true;
-
-    public override Interruption Clone()
-    {
-        return new Instantanee();
-    }
+    public override Interruption Clone() => new Instantanee();
 }
 
 public class Apres : Interruption
 {
     public Temps Temps;
-    public Apres(Temps  temps) 
-    {
-        Temps = temps;
-    }
+    public Apres(Temps  temps) => Temps = temps;
     public override bool Interrupt => Simu.Time - AssocieA.TempsDebut > Temps;
+    public override Interruption Clone() => new Apres(Temps);
+}
 
-    public override Interruption Clone()
-    {
-        return new Apres(Temps);
-    }
+public class NourritureAtteignable : Interruption
+{
+    public override bool Interrupt => E.Target != null && E.Target.Vivant ? E.Collision(E.Target) : false;
+    public override Interruption Clone() => new NourritureAtteignable();
 }
 
 public class ApresAleatoire : Interruption
@@ -83,16 +74,6 @@ public class ApresAleatoire : Interruption
     public override Interruption Clone()
     {
         return new ApresAleatoire(TempsMin, TempsMax);
-    }
-}
-
-public class NourritureAtteignable : Interruption
-{
-    public override bool Interrupt => E.Target != null && E.Target.Vivant ? E.Collision(E.Target) : false;
-
-    public override Interruption Clone()
-    {
-        return new NourritureAtteignable();
     }
 }
 
@@ -189,7 +170,7 @@ public class Repu : Interruption
 
 
 
-public abstract class InterrupComposition : Interruption 
+public abstract class InterrupComposition : Interruption
 {
     public List<Interruption> Composites;
     public InterrupComposition(params Interruption[] ou) : this(ou.ToList()) { }
@@ -197,6 +178,7 @@ public abstract class InterrupComposition : Interruption
     {
         Composites = ou;
     }
+
     public override void CheckPointAdd()
     {
         Composites.ForEach(t => t.CheckPointAdd());
@@ -231,21 +213,13 @@ public abstract class InterrupComposition : Interruption
 public class InterrupOU : InterrupComposition 
 {
     public override bool Interrupt => Composites.Any(t => t.Interrupt);
-
-    public override Interruption Clone()
-    {
-        return new InterrupOU();
-    }
+    public override Interruption Clone() => new InterrupOU();
 }
 
 public class InterrupET : InterrupComposition
 {
     public override bool Interrupt => Composites.All(t => t.Interrupt);
-
-    public override Interruption Clone()
-    {
-        return new InterrupET();
-    }
+    public override Interruption Clone() => new InterrupET();
 }
 
 public class EnergieMax : InterrupComposition
