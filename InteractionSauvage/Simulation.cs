@@ -31,14 +31,14 @@ public class Simulation : CheckPointable
         ToutesLesEntites.Add(e);
     }
 
-    public Simulation()
+    public Simulation(int longeur = 160*2, int largeur = 90*2, int tailleChunck = 4)
     {
         Time = new Temps();
 
         Actuel.Time = 0;
         Actuel.Entites = new List<Entite>();
 
-        Grille = new Grille(192/2/5, 108/2 / 5, 4);
+        Grille = new Grille(longeur/10, largeur/10, tailleChunck);
         Rand = new Random();
     }
 

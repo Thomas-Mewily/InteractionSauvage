@@ -63,9 +63,14 @@ public class Entite : SimulationComposante
     
     public int Age { get => Actuel.Age; set => Actuel.Age = value; }
 
+    public float NutritionCoef { get => Actuel.NutritionCoef; set => Actuel.NutritionCoef = value; }
+
     // Taille & Rayon : même chose
     public float Taille { get => Actuel.Rayon; set => Actuel.Rayon = value; }
     public float Rayon { get => Actuel.Rayon; set => Actuel.Rayon = value; }
+
+    public float TailleMax { get => Actuel.RayonMax; set => Actuel.RayonMax = value; }
+    public float RayonMax { get => Actuel.RayonMax; set => Actuel.RayonMax = value; }
 
     public float CoefAbandonEnergiePerduPendantLesDeplacements { get => Actuel.CoefAbandonEnergiePerduPendantLesDeplacements; set => Actuel.CoefAbandonEnergiePerduPendantLesDeplacements = value; }
     public float RayonVision { get => Actuel.RayonVision; set => Actuel.RayonVision = value; }
@@ -74,6 +79,7 @@ public class Entite : SimulationComposante
     public Angle RotationParSeconde { get => Actuel.RotationParSeconde; set => Actuel.RotationParSeconde = value; }
 
     public Entite? Target { get => Actuel.Target; set => Actuel.Target = value; }
+    public Entite? Predateur { get => Actuel.Predateur; set => Actuel.Predateur = value; }
     public Categories Categorie { get => Actuel.Categorie; set => Actuel.Categorie = value; }
 
     public bool Dors => Etat.Passif is Dormir;
@@ -123,15 +129,26 @@ public class Entite : SimulationComposante
 
     public void Replication()
     {
-        if(Rand.Next(0, Grille.Get(GrilleIndiceX, GrilleIndiceY).Count * Grille.Get(GrilleIndiceX, GrilleIndiceY).Count) > 10) 
+        if(Rand.Next(0, Grille.Get(GrilleIndiceX, GrilleIndiceY).Count * Grille.Get(GrilleIndiceX, GrilleIndiceY).Count) > 10 || Simu.ToutesLesEntites.Count > 4000) 
         {
             return;
         }
+
+        Energie *= 0.1f;
+
         float newX = X + Taille * Rand.FloatUniform(-1, 1) * 4;
         float newY = Y + Taille * Rand.FloatUniform(-1, 1) * 4;
 
-        newX = (newX + Grille.Longueur) % Grille.Longueur;
-        newY = (newY + Grille.Hauteur) % Grille.Hauteur;
+        if (newX > Grille.Longueur) newX = Grille.Longueur - Rand.FloatUniform(1, 2);
+        if (newY > Grille.Hauteur) newY = Grille.Hauteur - Rand.FloatUniform(1, 2);
+
+        if (newX < 0) newX = Rand.FloatUniform(0, 1);
+        if (newY < 0) newY = Rand.FloatUniform(0, 1);
+
+        if(Grille.Get(Grille.GetIndiceX(newX), Grille.GetIndiceY(newY)).Count > 50)
+        {
+            return;
+        }
 
         Entite newEntite = new Entite(Simu, Nom, MachineEtat.Clone());
         newEntite.Actuel = Actuel;
@@ -141,12 +158,13 @@ public class Entite : SimulationComposante
         newEntite.WithPosition(newX, newY);
         newEntite.Target = null;
         newEntite.Taille *= Rand.FloatUniform(0.8f, 1.2f);
-        //if(newEntite.Taille < 0) newEntite.Taille = -newEntite.Taille;
+        if(newEntite.Taille > TailleMax) { newEntite.Taille = TailleMax; }
         newEntite.Categorie = Categorie;
         newEntite.EtatNom = newEntite.MachineEtat.EtatSuggererParDefaut;
-        newEntite.Animation = Animation;
+        newEntite.Animation = Animation? .Clone();
 
         newEntite.Load();
+
         Simu.ToutesLesEntites.Add(newEntite);
     }
 
@@ -278,6 +296,26 @@ public class Entite : SimulationComposante
         return plusProche; // déjà dessus
     }
 
+    public Entite? PredateurDirection()
+    {
+        var plusProche = TrouverPredateur();
+
+        if (plusProche != null && plusProche.Vivant)
+        {
+            Predateur = plusProche;
+            DirectionTarget = new Vec2(Position, plusProche.Position).Angle;
+            DirectionTarget += (float) Math.PI;
+        }
+        else
+        {
+            if (Rand.NextDouble() <= 0.02)
+            {
+                RngDirection();
+            }
+        }
+        return plusProche; // déjà dessus
+    }
+
     public Entite? TrouverNouritureDirection()
     {
         float distancePlusProche = float.MaxValue;
@@ -289,6 +327,26 @@ public class Entite : SimulationComposante
             var distance = info.Distance;
 
             if (distance < distancePlusProche && PeutManger(entite) && PeutVoir(entite))
+            {
+                distancePlusProche = info.Distance;
+                plusProche = info.E;
+            }
+        }
+
+        return plusProche;
+    }
+
+    public Entite? TrouverPredateur()
+    {
+        float distancePlusProche = float.MaxValue;
+        Entite? plusProche = null;
+
+        foreach (var info in EntitesProcheAvecDistance(RayonVision))
+        {
+            var entite = info.E;
+            var distance = info.Distance;
+
+            if (distance < distancePlusProche && entite.PeutManger(this) /*&& PeutVoir(entite)*/)
             {
                 distancePlusProche = info.Distance;
                 plusProche = info.E;
@@ -373,15 +431,17 @@ public class Entite : SimulationComposante
         float cible_rayon_absorber = e.Rayon * pourcentage;
         e.Rayon -= cible_rayon_absorber;
 
-        if (e.Rayon < 0.1f) 
+        if (e.Rayon < e.RayonMax*0.4f) 
         {
             cible_rayon_absorber += e.Rayon;
             e.Rayon = 0;
         }
 
         float radius_add = float.Sqrt(Rayon * Rayon + cible_rayon_absorber * cible_rayon_absorber) - Rayon;
-        Rayon += radius_add/5;
-        float energie_gagne = radius_add / Rayon * 10;
+        Rayon += radius_add / 5;
+        if (Rayon > RayonMax) Rayon = RayonMax;
+
+        float energie_gagne = radius_add * e.NutritionCoef;
         Energie += energie_gagne;
 
         if (e.Rayon == 0f)

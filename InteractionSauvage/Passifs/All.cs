@@ -17,9 +17,10 @@ public class Attendre : Passif
 
 public class Dormir : Passif
 {
+    public Dormir(float coef = 30) : base(coef) { }
     public override void Execute()
     {
-        E.Energie += Entite.EnergiePerduParTour + 300 * Entite.EnergiePerduParTour;
+        E.Energie += Entite.EnergiePerduParTour + Coef * Entite.EnergiePerduParTour;
     }
 
     public override Passif Clone()
@@ -113,6 +114,39 @@ public class MarcherVersNouriture : Passif
     public override Passif Clone()
     {
         return new MarcherVersNouriture(Coef);
+    }
+}
+
+public class Fuir : Passif
+{
+    public Fuir(float coef = 1) : base(coef) { }
+    public override void Debut()
+    {
+        E.PredateurDirection();
+    }
+
+    public override void Execute()
+    {
+        if (E.Predateur != null && !E.Predateur.Vivant)
+        {
+            E.Predateur = null;
+        }
+
+        if (E.Predateur == null || E.DistanceVisionTo(E.Predateur) > E.RayonVision)
+        {
+            E.PredateurDirection();
+        }
+        else
+        {
+            E.DirectionTarget = (E.Predateur.Position - E.Position).Angle + (float) Math.PI;
+        }
+
+        E.Avancer(Coef);
+    }
+
+    public override Passif Clone()
+    {
+        return new Fuir(Coef);
     }
 }
 

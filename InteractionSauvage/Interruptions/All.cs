@@ -96,6 +96,16 @@ public class NourritureAtteignable : Interruption
     }
 }
 
+public class PredateurVisible : Interruption
+{
+    public override bool Interrupt => E.TrouverPredateur() != null;
+
+    public override Interruption Clone()
+    {
+        return new PredateurVisible();
+    }
+}
+
 public class VoitNourritureJusteDevant : Interruption 
 {
     public float CoefRayonVision;
@@ -235,5 +245,15 @@ public class InterrupET : InterrupComposition
     public override Interruption Clone()
     {
         return new InterrupET();
+    }
+}
+
+public class EnergieMax : InterrupComposition
+{
+    public override bool Interrupt => E.Energie > 0.99;
+
+    public override Interruption Clone()
+    {
+        return new EnergieMax();
     }
 }

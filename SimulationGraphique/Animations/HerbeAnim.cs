@@ -10,6 +10,11 @@ namespace SimulationGraphique.Animations;
 
 public class HerbeAnim : Animation
 {
+    public override AnimationBase Clone()
+    {
+        HerbeAnim anim = new HerbeAnim();
+        return anim;
+    }
     public override void Draw(Entite e)
     {
         Draw(e, All.Assets.Grass, null, Vec2.Zero, Color.White);
